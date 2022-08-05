@@ -193,12 +193,5 @@ List<FeatureItem> getStudentFeatures() {
       color: Colors.orange,
       value: '',
     ),
-    FeatureItem(
-      id: 13,
-      icon: Icons.assignment_sharp,
-      title: 'Xem lịch sử thanh toán',
-      color: Colors.amber,
-      value: '',
-    ),
   ];
 }

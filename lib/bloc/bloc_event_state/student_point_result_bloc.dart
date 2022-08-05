@@ -21,9 +21,7 @@ class StudentPointResultBloc
     emit(StudentPointStateLoading());
 
     try {
-      final response = await _service.getPointResult({
-        'chuyenNganh': event.chuyenNganh,
-      });
+      final response = await _service.getPointResult();
 
       if (response.isSuccessful && response.body != null) {
         final body = response.body;

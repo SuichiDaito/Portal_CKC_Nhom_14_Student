@@ -1,19 +1,17 @@
 class Subject {
   final String tenMon;
-  final int? soTinChi;
+  final String? soTinChi;
   final String diemTongKet;
 
-  Subject({
-    required this.tenMon,
-    required this.soTinChi,
-    required this.diemTongKet,
-  });
+  Subject({required this.tenMon, this.soTinChi, required this.diemTongKet});
 
   factory Subject.fromJson(Map<String, dynamic> json) {
     return Subject(
       tenMon: json['ten_mon'] ?? '',
-      soTinChi: json['so_tin_chi'],
-      diemTongKet: json['diem_tong_ket'] ?? '-',
+      soTinChi: json['so_tin_chi']?.toString(), // Có thể null
+      diemTongKet:
+          json['diem_tong_ket']?.toString() ??
+          '-', // Dù là double hay string đều convert sang string
     );
   }
 
@@ -33,24 +31,27 @@ class MainModel {
   MainModel({required this.success, required this.monTheoHocKy});
 
   factory MainModel.fromJson(Map<String, dynamic> json) {
-    final rawMap = json['monTheoHocKy'] as Map<String, dynamic>;
+    final rawMap = json['monTheoHocKy'] as Map<String, dynamic>? ?? {};
 
-    final mapped = rawMap.map((ky, list) {
-      final subjects = (list as List)
-          .map((item) => Subject.fromJson(item))
+    final Map<String, List<Subject>> parsedMap = {};
+    rawMap.forEach((ky, monList) {
+      parsedMap[ky] = (monList as List)
+          .map((mon) => Subject.fromJson(mon as Map<String, dynamic>))
           .toList();
-      return MapEntry(ky, subjects);
     });
 
-    return MainModel(success: json['success'] ?? false, monTheoHocKy: mapped);
+    return MainModel(
+      success: json['success'] ?? false,
+      monTheoHocKy: parsedMap,
+    );
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'success': success,
-      'monTheoHocKy': monTheoHocKy.map(
-        (ky, list) => MapEntry(ky, list.map((item) => item.toJson()).toList()),
-      ),
-    };
+    final Map<String, dynamic> mapped = {};
+    monTheoHocKy.forEach((ky, monList) {
+      mapped[ky] = monList.map((mon) => mon.toJson()).toList();
+    });
+
+    return {'success': success, 'monTheoHocKy': mapped};
   }
 }

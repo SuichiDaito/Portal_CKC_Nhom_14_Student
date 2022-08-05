@@ -71,16 +71,14 @@ class PaymentScreen extends State<StatefulWidget> {
                     padding: EdgeInsets.all(16),
                     children: [
                       TuitionFeeCard(
-                        studentName: '${student!.sinhVien.maSv}' ?? '',
+                        studentName: '${student?.sinhVien?.maSv}' ?? '',
                         className:
-                            '${student!.sinhVien.danhSachSinhVien!.last.lop!.tenLop}' ??
+                            '${student?.sinhVien?.danhSachSinhVien?.last.lop?.tenLop}' ??
                             '',
-                        semester:
-                            '${student!.hocKyHienTai.tenHocKy} ?? '
-                            ' - Năm học 2025',
-                        amount: '${student!.hocPhi.tongTien} VNĐ' ?? '',
-                        startDate: '${student!.hocKyHienTai.ngayBatDau}' ?? '',
-                        endDate: '${student!.hocKyHienTai.ngayKetThuc}' ?? '',
+                        semester: '${student?.hocKyHienTai?.tenHocKy}',
+                        amount: '${student?.hocPhi?.tongTien} VNĐ' ?? '',
+                        startDate: '${student?.hocKyHienTai?.ngayBatDau}' ?? '',
+                        endDate: '${student?.hocKyHienTai?.ngayKetThuc}' ?? '',
                         isPaid: false,
                       ),
                     ],

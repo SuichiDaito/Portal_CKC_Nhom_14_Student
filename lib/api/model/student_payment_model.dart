@@ -1,7 +1,7 @@
 class MainResponse {
-  final StudentInfoModel sinhVien;
-  final HocKy hocKyHienTai;
-  final HocPhi hocPhi;
+  final SinhVien? sinhVien;
+  final HocKyHienTai? hocKyHienTai;
+  final HocPhi? hocPhi;
 
   MainResponse({
     required this.sinhVien,
@@ -11,44 +11,42 @@ class MainResponse {
 
   factory MainResponse.fromJson(Map<String, dynamic> json) {
     return MainResponse(
-      sinhVien: StudentInfoModel.fromJson(json['sinhVien']),
-      hocKyHienTai: HocKy.fromJson(json['hocKyHienTai']),
-      hocPhi: HocPhi.fromJson(json['hocPhi']),
+      sinhVien: json['sinhVien'] != null
+          ? SinhVien.fromJson(json['sinhVien'])
+          : null,
+      hocKyHienTai: json['hocKyHienTai'] != null
+          ? HocKyHienTai.fromJson(json['hocKyHienTai'])
+          : null,
+      hocPhi: json['hocPhi'] != null ? HocPhi.fromJson(json['hocPhi']) : null,
     );
   }
 }
 
-class StudentInfoModel {
+class SinhVien {
   final int id;
   final String maSv;
   final int idHoSo;
   final String password;
   final int trangThai;
-  final String? createdAt;
-  final String? updatedAt;
   final List<DanhSachSinhVien> danhSachSinhVien;
 
-  StudentInfoModel({
+  SinhVien({
     required this.id,
     required this.maSv,
     required this.idHoSo,
     required this.password,
     required this.trangThai,
-    this.createdAt,
-    this.updatedAt,
     required this.danhSachSinhVien,
   });
 
-  factory StudentInfoModel.fromJson(Map<String, dynamic> json) {
-    return StudentInfoModel(
+  factory SinhVien.fromJson(Map<String, dynamic> json) {
+    return SinhVien(
       id: json['id'],
       maSv: json['ma_sv'],
       idHoSo: json['id_ho_so'],
       password: json['password'],
       trangThai: json['trang_thai'],
-      createdAt: json['created_at'],
-      updatedAt: json['updated_at'],
-      danhSachSinhVien: (json['danh_sach_sinh_vien'] as List)
+      danhSachSinhVien: (json['danh_sach_sinh_vien'] as List<dynamic>)
           .map((e) => DanhSachSinhVien.fromJson(e))
           .toList(),
     );
@@ -60,18 +58,14 @@ class DanhSachSinhVien {
   final int idLop;
   final int idSinhVien;
   final int chucVu;
-  final String? createdAt;
-  final String? updatedAt;
-  final Lop? lop;
+  final Lop lop;
 
   DanhSachSinhVien({
     required this.id,
     required this.idLop,
     required this.idSinhVien,
     required this.chucVu,
-    this.createdAt,
-    this.updatedAt,
-    this.lop,
+    required this.lop,
   });
 
   factory DanhSachSinhVien.fromJson(Map<String, dynamic> json) {
@@ -80,9 +74,7 @@ class DanhSachSinhVien {
       idLop: json['id_lop'],
       idSinhVien: json['id_sinh_vien'],
       chucVu: json['chuc_vu'],
-      createdAt: json['created_at'],
-      updatedAt: json['updated_at'],
-      lop: json['lop'] != null ? Lop.fromJson(json['lop']) : null,
+      lop: Lop.fromJson(json['lop']),
     );
   }
 }
@@ -94,8 +86,6 @@ class Lop {
   final int idGvcn;
   final int idChuyenNganh;
   final int siSo;
-  final String? createdAt;
-  final String? updatedAt;
   final NienKhoa? nienKhoa;
 
   Lop({
@@ -105,8 +95,6 @@ class Lop {
     required this.idGvcn,
     required this.idChuyenNganh,
     required this.siSo,
-    this.createdAt,
-    this.updatedAt,
     this.nienKhoa,
   });
 
@@ -118,8 +106,6 @@ class Lop {
       idGvcn: json['id_gvcn'],
       idChuyenNganh: json['id_chuyen_nganh'],
       siSo: json['si_so'],
-      createdAt: json['created_at'],
-      updatedAt: json['updated_at'],
       nienKhoa: json['nien_khoa'] != null
           ? NienKhoa.fromJson(json['nien_khoa'])
           : null,
@@ -133,8 +119,8 @@ class NienKhoa {
   final String namBatDau;
   final String namKetThuc;
   final int trangThai;
-  final String createdAt;
-  final String updatedAt;
+  final String? createdAt;
+  final String? updatedAt;
 
   NienKhoa({
     required this.id,
@@ -142,8 +128,8 @@ class NienKhoa {
     required this.namBatDau,
     required this.namKetThuc,
     required this.trangThai,
-    required this.createdAt,
-    required this.updatedAt,
+    this.createdAt,
+    this.updatedAt,
   });
 
   factory NienKhoa.fromJson(Map<String, dynamic> json) {
@@ -159,7 +145,7 @@ class NienKhoa {
   }
 }
 
-class HocKy {
+class HocKyHienTai {
   final int id;
   final int idNienKhoa;
   final String tenHocKy;
@@ -168,7 +154,7 @@ class HocKy {
   final String createdAt;
   final String updatedAt;
 
-  HocKy({
+  HocKyHienTai({
     required this.id,
     required this.idNienKhoa,
     required this.tenHocKy,
@@ -178,8 +164,8 @@ class HocKy {
     required this.updatedAt,
   });
 
-  factory HocKy.fromJson(Map<String, dynamic> json) {
-    return HocKy(
+  factory HocKyHienTai.fromJson(Map<String, dynamic> json) {
+    return HocKyHienTai(
       id: json['id'],
       idNienKhoa: json['id_nien_khoa'],
       tenHocKy: json['ten_hoc_ky'],
@@ -197,9 +183,9 @@ class HocPhi {
   final int idSinhVien;
   final String tongTien;
   final int trangThai;
-  final String ngayDong;
-  final String createdAt;
-  final String updatedAt;
+  final String? ngayDong;
+  final String? createdAt;
+  final String? updatedAt;
 
   HocPhi({
     required this.id,
@@ -207,9 +193,9 @@ class HocPhi {
     required this.idSinhVien,
     required this.tongTien,
     required this.trangThai,
-    required this.ngayDong,
-    required this.createdAt,
-    required this.updatedAt,
+    this.ngayDong,
+    this.createdAt,
+    this.updatedAt,
   });
 
   factory HocPhi.fromJson(Map<String, dynamic> json) {

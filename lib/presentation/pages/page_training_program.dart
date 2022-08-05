@@ -52,9 +52,21 @@ class _TrainingProgramScreenState extends State<TrainingProgramScreen> {
                     physics: NeverScrollableScrollPhysics(),
                     itemCount: trainingProgram.length,
                     itemBuilder: (context, index) {
-                      final innerList =
-                          trainingProgram[index].chiTietChuongTrinhDaoTao;
-                      if (trainingProgram[index].idChuyenNganh == 1) {
+                      final filteredProgram = trainingProgram.firstWhere(
+                        (e) => e.id == 1 && e.idChuyenNganh == 1,
+                        orElse: () => trainingProgram.isNotEmpty
+                            ? trainingProgram[0]
+                            : throw Exception('No training program found'),
+                      );
+
+                      if (filteredProgram == null) {
+                        return Center(
+                          child: Text('Không tìm thấy chương trình đào tạo'),
+                        );
+                      }
+                      if (filteredProgram != null) {
+                        final innerList =
+                            filteredProgram.chiTietChuongTrinhDaoTao;
                         return Column(
                           children: [
                             // Header Card
@@ -217,6 +229,7 @@ class _TrainingProgramScreenState extends State<TrainingProgramScreen> {
                           ],
                         );
                       }
+                      return SizedBox.shrink();
                     },
                   ),
                 ],

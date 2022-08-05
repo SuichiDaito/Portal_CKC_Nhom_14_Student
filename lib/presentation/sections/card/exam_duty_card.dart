@@ -111,11 +111,31 @@ class ExamDutyCard extends StatelessWidget {
             children: [
               Icon(Icons.check_circle, size: 16, color: Colors.grey[600]),
               SizedBox(width: 6),
-              Text('Trạng thái: chưa có'),
+              Text('Trạng thái: ${checkDate(dateExam)}'),
             ],
           ),
         ],
       ),
     );
+  }
+}
+
+String checkDate(String dateString) {
+  // Chuyển đổi chuỗi sang DateTime
+  final inputDate = DateTime.tryParse(dateString);
+
+  // Nếu không chuyển được thì có thể xử lý tùy ý (ở đây return -1)
+  if (inputDate == null) {
+    return 'Lỗi';
+  }
+
+  // Lấy thời điểm hiện tại
+  final now = DateTime.now();
+
+  // So sánh ngày (không tính giờ phút giây)
+  if (inputDate.isBefore(now)) {
+    return 'Đã thi xong'; // Đã vượt qua ngày hiện tại
+  } else {
+    return 'Chưa thi'; // Vẫn còn sau hoặc bằng ngày hiện tại
   }
 }

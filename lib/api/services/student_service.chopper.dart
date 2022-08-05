@@ -72,12 +72,9 @@ final class _$StudentService extends StudentService {
   }
 
   @override
-  Future<Response<Map<String, dynamic>>> getPointResult(
-    Map<String, dynamic> body,
-  ) {
+  Future<Response<Map<String, dynamic>>> getPointResult() {
     final Uri $url = Uri.parse('/sinhvien/ket-qua-hoc-tap');
-    final $body = body;
-    final Request $request = Request('GET', $url, client.baseUrl, body: $body);
+    final Request $request = Request('GET', $url, client.baseUrl);
     return client.send<Map<String, dynamic>, Map<String, dynamic>>($request);
   }
 
@@ -202,8 +199,8 @@ final class _$StudentService extends StudentService {
   }
 
   @override
-  Future<Response<dynamic>> getListClassSubject(int id) {
-    final Uri $url = Uri.parse('/sinhvien/dang-ky-hoc-ghep/lop/${id}');
+  Future<Response<dynamic>> getListClassSubject(int id_mon_hoc) {
+    final Uri $url = Uri.parse('/sinhvien/dang-ky-hoc-ghep/lop/${id_mon_hoc}');
     final Request $request = Request('GET', $url, client.baseUrl);
     return client.send<dynamic, dynamic>($request);
   }

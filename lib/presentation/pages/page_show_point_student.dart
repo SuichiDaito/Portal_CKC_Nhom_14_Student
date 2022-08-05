@@ -10,13 +10,22 @@ class StudentGradeScreen extends StatefulWidget {
 }
 
 class GradeScreen extends State<StudentGradeScreen> {
+  // int total = 0;
+  // int totalCredit(String credit) {
+  //   int e = int.parse(credit);
+  //   if (e > 0) {
+  //     total += e;
+  //   } else {
+  //     return total;
+  //   }
+  //   return total;
+  // }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    context.read<StudentPointResultBloc>().add(
-      FetchPointResultEvent(chuyenNganh: 7),
-    );
+    context.read<StudentPointResultBloc>().add(FetchPointResultEvent());
   }
 
   @override
@@ -41,7 +50,7 @@ class GradeScreen extends State<StudentGradeScreen> {
               padding: EdgeInsets.all(16),
               itemCount: 6,
               itemBuilder: (context, index) {
-                final subjects = result["${index + 1}"];
+                final subjects = result["${index + 1}"] ?? [];
                 return Card(
                   margin: EdgeInsets.only(bottom: 16),
                   elevation: 3,
@@ -183,10 +192,9 @@ class GradeScreen extends State<StudentGradeScreen> {
                         ListView.builder(
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
-                          itemCount: subjects!.length,
+                          itemCount: subjects.length,
                           itemBuilder: (context, subjectIndex) {
-                            final subject = subjects![subjectIndex];
-
+                            final subject = subjects?[subjectIndex];
                             return Container(
                               padding: EdgeInsets.symmetric(
                                 vertical: 8,
@@ -208,7 +216,7 @@ class GradeScreen extends State<StudentGradeScreen> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          subject!.tenMon,
+                                          '${subject?.tenMon}' ?? '',
                                           style: TextStyle(
                                             fontSize: 12,
                                             fontWeight: FontWeight.bold,
@@ -232,7 +240,7 @@ class GradeScreen extends State<StudentGradeScreen> {
                                   Expanded(
                                     flex: 1,
                                     child: Text(
-                                      '${9.0}',
+                                      '${subject!.diemTongKet}',
                                       style: TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.bold,
