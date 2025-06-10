@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:portal_ckc/api/controller/call_api.dart';
 import 'package:portal_ckc/l10n/app_localizations.dart';
+import 'package:portal_ckc/api/model/comment.dart';
 
 void main() {
   runApp(const MyApp());
@@ -35,23 +37,46 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  Future<List<dynamic>> getApi() async {
+    // comments: Response<List<Comment>>
+    final List<dynamic> list;
+    final response = await CallApi.postServices.getComments();
+    if (response.statusCode == 200) {
+      final jsonData = response.body;
+      list = jsonData.map((comment) => Comment.fromJson(comment)).toList();
+      return list;
+    } else {
+      throw Exception('Failed to load');
+    }
+  }
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext? context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        backgroundColor: Theme.of(context!).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text('You have pushed the button this many times:'),
-            Text(
-              AppLocalizations.of(context)!.hello,
-              style: TextStyle(fontSize: 30),
-            ),
-          ],
+        child: FutureBuilder(
+          future: getApi(),
+          builder: (BuildContext context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return CircularProgressIndicator();
+            } else if (snapshot.hasData) {
+              final data = snapshot.data! ;
+              return ListView.builder(
+                itemCount: data.length,
+                itemBuilder: (context, index) {
+                  return Text(data[index].id);
+                },
+              );
+            } else if (snapshot.hasError) {
+              return Text('Error Data');
+            } else {
+              return Text("No data");
+            }
+          },
         ),
       ),
     );
