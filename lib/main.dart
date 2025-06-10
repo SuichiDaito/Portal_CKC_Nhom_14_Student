@@ -37,22 +37,16 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  Future<void> getApi() async {
-    // try {
-    //   final response = await CallApi.postServices.getPosts();
-    //   if (response.isSuccessful) {
-    //     print(response.body);
-    //   } else {
-    //     print(response.error);
-    //   }
-    // } catch (Ex) {
-    //   Error.safeToString(Ex);
-    // }
-
+  Future<List<dynamic>> getApi() async {
     // comments: Response<List<Comment>>
+    final List<dynamic> list;
     final response = await CallApi.postServices.getComments();
     if (response.statusCode == 200) {
-      print(response.body);
+      final jsonData = response.body;
+      list = jsonData.map((comment) => Comment.fromJson(comment)).toList();
+      return list;
+    } else {
+      throw Exception('Failed to load');
     }
   }
 
@@ -70,8 +64,13 @@ class _MyHomePageState extends State<MyHomePage> {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return CircularProgressIndicator();
             } else if (snapshot.hasData) {
-              print(snapshot);
-              return Text('Data: Has data');
+              final data = snapshot.data! ;
+              return ListView.builder(
+                itemCount: data.length,
+                itemBuilder: (context, index) {
+                  return Text(data[index].id);
+                },
+              );
             } else if (snapshot.hasError) {
               return Text('Error Data');
             } else {
