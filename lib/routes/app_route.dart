@@ -1,7 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:portal_ckc/main.dart';
 
-class AppRoute {
+class RouteName {
   static final route = GoRouter(
     routerNeglect: true,
     routes: [
