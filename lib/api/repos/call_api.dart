@@ -6,7 +6,7 @@ class CallApi {
   static final chopper = ChopperClient(
     baseUrl: Uri.parse('https://jsonplaceholder.typicode.com'),
     services: [JsonService.create()],
-    converter: JsonConverter(),
+    converter: ModelConverter(),
   );
   static JsonService get postServices => chopper.getService<JsonService>();
 }

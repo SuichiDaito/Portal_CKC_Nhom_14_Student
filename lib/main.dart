@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:portal_ckc/api/controller/call_api.dart';
+import 'package:portal_ckc/api/repos/call_api.dart';
 import 'package:portal_ckc/l10n/app_localizations.dart';
 import 'package:portal_ckc/api/model/comment.dart';
 
@@ -37,18 +37,19 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  Future<List<dynamic>> getApi() async {
-    // comments: Response<List<Comment>>
-    final List<dynamic> list;
-    final response = await CallApi.postServices.getComments();
-    if (response.statusCode == 200) {
-      final jsonData = response.body;
-      list = jsonData.map((comment) => Comment.fromJson(comment)).toList();
-      return list;
-    } else {
-      throw Exception('Failed to load');
-    }
-  }
+
+  // Future<List<dynamic>> getApi() async {
+  //   // comments: Response<List<Comment>>
+  //   final List<dynamic> list;
+  //   final response = await CallApi.postServices.getComments();
+  //   if (response.statusCode == 200) {
+  //     final jsonData = response.body;
+  //     list = jsonData.map((comment) => Comment.fromJson(comment)).toList();
+  //     return list;
+  //   } else {
+  //     throw Exception('Failed to load');
+  //   }
+  // }
 
   @override
   Widget build(BuildContext? context) {
