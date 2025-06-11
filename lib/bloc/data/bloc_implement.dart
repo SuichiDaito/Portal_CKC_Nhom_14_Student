@@ -1,4 +1,4 @@
-import 'package:portal_ckc/api/repos/call_api.dart';
+import 'package:portal_ckc/api/controller/call_api.dart';
 import 'package:portal_ckc/bloc/data/bloc_data.dart';
 import 'package:portal_ckc/bloc/data/bloc_event.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
