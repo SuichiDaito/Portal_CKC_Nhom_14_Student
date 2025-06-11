@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:portal_ckc/api/controller/call_api.dart';
+import 'package:portal_ckc/bloc/data/bloc_data.dart';
+import 'package:portal_ckc/bloc/data/bloc_event.dart';
+import 'package:portal_ckc/bloc/data/bloc_implement.dart';
 import 'package:portal_ckc/l10n/app_localizations.dart';
 import 'package:portal_ckc/api/model/comment.dart';
+import 'package:portal_ckc/presentation/sections/button_login.dart';
+import 'package:portal_ckc/routes/app_route.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,15 +22,16 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
+      routerConfig: RouteName.route,
       debugShowCheckedModeBanner: false,
       title: 'Portal_CKC',
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       theme: ThemeData(
+        textTheme: GoogleFonts.robotoTextTheme(),
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
@@ -37,45 +46,44 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  Future<List<dynamic>> getApi() async {
-    // comments: Response<List<Comment>>
-    final List<dynamic> list;
-    final response = await CallApi.postServices.getComments();
-    if (response.statusCode == 200) {
-      final jsonData = response.body;
-      list = jsonData.map((comment) => Comment.fromJson(comment)).toList();
-      return list;
-    } else {
-      throw Exception('Failed to load');
-    }
-  }
-
   @override
-  Widget build(BuildContext? context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context!).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: FutureBuilder(
-          future: getApi(),
-          builder: (BuildContext context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return CircularProgressIndicator();
-            } else if (snapshot.hasData) {
-              final data = snapshot.data! ;
-              return ListView.builder(
-                itemCount: data.length,
-                itemBuilder: (context, index) {
-                  return Text(data[index].id);
+  Widget build(BuildContext context) {
+    return BlocProvider<BlocImplement>(
+      create: (_) => BlocImplement()..add(FetchData()),
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Theme.of(context!).colorScheme.inversePrimary,
+          title: Text(widget.title),
+        ),
+        body: BlocBuilder<BlocImplement, Data>(
+          builder: (context, state) {
+            if (state is LoadingData) {
+              return Center(child: CircularProgressIndicator());
+            } else if (state is LoadedData) {
+              final data = state.comments.body;
+              return RefreshIndicator(
+                child: ListView.builder(
+                  itemCount: data!.length,
+                  itemBuilder: (context, index) {
+                    return Column(
+                      children: [
+                        ListTile(title: Text('Id: ${data[index].id}')),
+                        ButtonLogin(
+                          nameButton: 'Login',
+                          onPressed: () => { context.go('/page/demo') },
+                        ),
+                      ],
+                    );
+                  },
+                ),
+                onRefresh: () async {
+                  context.read<BlocImplement>().add(RefreshData());
                 },
               );
-            } else if (snapshot.hasError) {
-              return Text('Error Data');
-            } else {
-              return Text("No data");
+            } else if (state is ErroData) {
+              return Center(child: Text("Error: ${state.message}"));
             }
+            return Text('NOT FOUND | 404');
           },
         ),
       ),

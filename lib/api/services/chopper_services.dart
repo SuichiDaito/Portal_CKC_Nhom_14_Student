@@ -13,6 +13,6 @@ part 'chopper_services.chopper.dart';
 @ChopperApi(baseUrl: '/comments')
 abstract class JsonService extends ChopperService {
   @GET()
-  Future<Response> getComments();
+  Future<Response<List<Comment>>> getComments();
   static JsonService create() => _$JsonService();
 }
