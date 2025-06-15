@@ -22,8 +22,7 @@ samples, guidance on mobile development, and a full API reference.
 
 ![My GitHub stats](https://github-readme-stats.vercel.app/api?username=SuichiDaito&show_icons=true&theme=radical)
 ![My GitHub stats](https://github-readme-stats.vercel.app/api?username=LeTrang-1112&show_icons=true&theme=radical)
-![GitHub Streak](https://github-readme-streak-stats.herokuapp.com?user=LeTrang-1112&theme=radical)
-![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=SuichiDaito&layout=compact&theme=radical)
+
 
 
 
