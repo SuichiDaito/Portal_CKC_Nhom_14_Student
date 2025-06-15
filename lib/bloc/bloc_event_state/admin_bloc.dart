@@ -32,9 +32,10 @@ class AdminBloc extends Bloc<AdminEvent, AdminState> {
           if (body.containsKey('user')) {
             final userJson = body['user'] as Map<String, dynamic>;
             final user = User.fromJson(userJson);
-
             emit(AdminLoaded(user));
-            print('AdminBloc: Emitted AdminLoaded'); // Debug log
+            print(
+              'AdminBloc: Emitted AdminLoaded ${AdminLoaded(user)}',
+            ); // Debug log
           } else {
             emit(AdminError('Phản hồi không hợp lệ: Không có key "user"'));
           }
