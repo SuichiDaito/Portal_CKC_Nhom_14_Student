@@ -2,8 +2,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:portal_ckc/main.dart';
 import 'package:portal_ckc/presentation/pages/appbar_bottombar/page_app_bar.dart';
+import 'package:portal_ckc/presentation/pages/page_class_book_admin.dart';
+import 'package:portal_ckc/presentation/pages/page_class_detail_admin.dart';
+import 'package:portal_ckc/presentation/pages/page_class_management_admin.dart';
+import 'package:portal_ckc/presentation/pages/page_class_roster_admin.dart';
+import 'package:portal_ckc/presentation/pages/page_conduct_evaluation_admin.dart';
+import 'package:portal_ckc/presentation/pages/page_course_section_student_list.dart';
 import 'package:portal_ckc/presentation/pages/page_login.dart';
+import 'package:portal_ckc/presentation/pages/page_meeting_minutes_admin.dart';
 import 'package:portal_ckc/presentation/pages/page_notification_detail_admin.dart';
+import 'package:portal_ckc/presentation/pages/page_report_detail_admin.dart';
+import 'package:portal_ckc/presentation/pages/page_exam_schedule_admin.dart';
+import 'package:portal_ckc/presentation/pages/page_teaching_schedule_admin.dart';
 import 'package:portal_ckc/presentation/pages/page_user_detail_information.dart';
 import 'package:portal_ckc/presentation/pages/page_main_layout_home_admin.dart';
 import 'package:portal_ckc/presentation/references/dashboard_admin.dart';
@@ -69,17 +79,59 @@ class RouteName {
         builder: (context, state) => const PageThongtinAdmin(),
       ),
       GoRoute(
-        path: '/admin/solenlop',
-        builder: (context, state) => const PageSolenlopAdmin(),
+        path: '/admin/class_book_admin',
+        builder: (context, state) => const PageClassBookAdmin(),
       ),
       GoRoute(
-        path: '/admin/quanlyphong',
+        path: '/admin/management_group_admin',
         builder: (context, state) => const PageQuanlyphongAdmin(),
       ),
       GoRoute(
         path: '/doimatkhau',
         builder: (context, state) => const PageDoimatkhauAdmin(),
       ),
+      GoRoute(
+        path: '/admin/class_management_admin',
+        builder: (context, state) => PageClassManagementAdmin(),
+      ),
+      GoRoute(
+        path: '/admin/class_detail_admin',
+        builder: (context, state) => PageClassDetailAdmin(),
+      ),
+      GoRoute(
+        path: '/admin/conduct_evaluation_admin',
+        builder: (context, state) => PageConductEvaluationAdmin(),
+      ),
+
+      GoRoute(
+        path: '/admin/class_roster_admin',
+        builder: (context, state) => PageClassRosterAdmin(),
+      ),
+      GoRoute(
+        path: '/admin/meeting_minutes_admin',
+        builder: (context, state) => PageMeetingMinutesAdmin(),
+      ),
+      GoRoute(
+        path: '/admin/teaching_schedule_admin',
+        builder: (context, state) => PageTeachingScheduleAdmin(),
+      ),
+
+      GoRoute(
+        path: '/admin/course_student_list',
+        builder: (context, state) => PageCourseSectionStudentList(),
+      ),
+      GoRoute(
+        path: '/admin/exam_schedule_admin',
+        builder: (context, state) => PageExamScheduleAdmin(),
+      ),
+      GoRoute(
+        path: '/admin/report_detail_admin',
+        builder: (context, state) {
+          final args = state.extra as Map<String, dynamic>;
+          return PageReportDetailAdmin(isApproved: args['isApproved'] as bool);
+        },
+      ),
+
       GoRoute(
         path: '/notifications/detail',
         builder: (context, state) {
