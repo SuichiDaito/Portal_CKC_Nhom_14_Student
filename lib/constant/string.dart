@@ -1,5 +1,6 @@
 class ApiString {
-  static String urlApi = 'http://192.168.207.107:8000/api';
+  // run in macOs. plese don't remove it url. 
+  static String urlApi = 'http://0.0.0.0:8000/api';
 }
 
 class BottomBarString {
