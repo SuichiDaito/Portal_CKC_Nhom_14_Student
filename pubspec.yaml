@@ -44,6 +44,7 @@ dependencies:
   google_fonts: ^6.2.1
   shared_preferences: ^2.5.3
   flutter_screenutil: ^5.9.3
+  flutter_bloc: ^9.1.1
 dev_dependencies:
   flutter_gen_runner: ^5.10.0 
   build_runner: ^2.4.15
@@ -70,7 +71,6 @@ flutter:
   generate: true
   assets:
     - assets/images/
-    - assets/icons/
   # l10n:
   #   arb-dir: lib/l10n
   #   template-arb-file: intl_en.arb

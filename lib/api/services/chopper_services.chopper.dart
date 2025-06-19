@@ -19,9 +19,9 @@ final class _$JsonService extends JsonService {
   final Type definitionType = JsonService;
 
   @override
-  Future<Response<dynamic>> getComments() {
-    final Uri $url = Uri.parse('/comments');
+  Future<Response<List<Comment>>> getComments() {
+    final Uri $url = Uri.parse('/admin');
     final Request $request = Request('GET', $url, client.baseUrl);
-    return client.send<dynamic, dynamic>($request);
+    return client.send<List<Comment>, Comment>($request);
   }
 }
