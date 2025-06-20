@@ -22,16 +22,6 @@ class ApplicationsAdminPage extends StatelessWidget {
           ),
 
           const SizedBox(height: 24),
-
-          // Section for Teachers
-          _buildSection(
-            title: 'Dành cho Giảng viên',
-            icon: Icons.person,
-            iconColor: Colors.blue,
-            backgroundColor: Colors.blue.withOpacity(0.05),
-            borderColor: Colors.blue.withOpacity(0.2),
-            gridItems: _getTeacherFeatures(),
-          ),
         ],
       ),
     );
@@ -87,8 +77,8 @@ class ApplicationsAdminPage extends StatelessWidget {
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 3,
               childAspectRatio: 1.1,
-              crossAxisSpacing: 12,
-              mainAxisSpacing: 12,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
             ),
             itemCount: gridItems.length,
             itemBuilder: (context, index) {
@@ -164,20 +154,26 @@ class ApplicationsAdminPage extends StatelessWidget {
         value: '',
       ),
       _FeatureItem(
+        icon: Icons.school,
+        title: 'Điểm học tập',
+        color: Colors.lightGreen,
+        value: '',
+      ),
+      _FeatureItem(
         icon: Icons.notifications,
         title: 'Thông báo',
         color: Colors.orange,
         value: '',
       ),
       _FeatureItem(
-        icon: Icons.videocam,
-        title: 'KPKP',
+        icon: Icons.description,
+        title: 'Xin cấp giấy tờ',
         color: Colors.green,
         value: '',
       ),
       _FeatureItem(
         icon: Icons.description,
-        title: 'SKCH',
+        title: 'Sinh hoạt chủ nhiệm',
         color: Colors.purple,
         value: 'SKCH',
       ),
@@ -200,105 +196,40 @@ class ApplicationsAdminPage extends StatelessWidget {
         value: '',
       ),
       _FeatureItem(
-        icon: Icons.star,
-        title: 'Đánh giá',
-        color: Colors.amber,
+        icon: Icons.calendar_today,
+        title: 'Lịch thi',
+        color: Colors.cyan,
         value: '',
-      ),
-      _FeatureItem(
-        icon: Icons.assignment,
-        title: 'Bài tập',
-        color: Colors.deepOrange,
-        value: '',
-      ),
-    ];
-  }
-
-  List<_FeatureItem> _getTeacherFeatures() {
-    return [
-      _FeatureItem(
-        icon: Icons.class_,
-        title: 'Quản lý lớp chủ nhiệm',
-        color: Colors.blueAccent,
-        value: 'class_management_admin',
-      ),
-      _FeatureItem(
-        icon: Icons.menu_book,
-        title: 'Sổ lên lớp',
-        color: Colors.green,
-        value: 'class_book_admin',
       ),
       _FeatureItem(
         icon: Icons.list_alt,
-        title: 'Danh sách lớp học phần',
+        title: 'Đăng ký học phần',
         color: Colors.teal,
-        value: 'class_roster_admin',
-      ),
-      _FeatureItem(
-        icon: Icons.event_seat,
-        title: 'Lịch gác thi',
-        color: Colors.deepPurple,
-        value: 'exam_schedule_admin',
-      ),
-      _FeatureItem(
-        icon: Icons.schedule,
-        title: 'Lịch giảng dạy',
-        color: Colors.orange,
-        value: 'teaching_schedule_admin',
-      ),
-      _FeatureItem(
-        icon: Icons.calendar_today,
-        title: 'Quản lý lịch tuần',
-        color: Colors.cyan,
-        value: 'lich_tuan',
-      ),
-      _FeatureItem(
-        icon: Icons.school,
-        title: 'Quản lý lớp học phần',
-        color: Colors.lightGreen,
-        value: 'quan_ly_lhp',
-      ),
-      _FeatureItem(
-        icon: Icons.timelapse,
-        title: 'Quản lý lịch học',
-        color: Colors.pink,
-        value: 'lich_hoc',
+        value: '',
       ),
       _FeatureItem(
         icon: Icons.alarm,
-        title: 'Quản lý lịch thi',
+        title: 'Đăng ký thi lại',
         color: Colors.redAccent,
-        value: 'lich_thi',
+        value: '',
       ),
       _FeatureItem(
-        icon: Icons.meeting_room,
-        title: 'Quản lý phòng học',
-        color: Colors.deepOrange,
-        value: 'management_group_admin',
+        icon: Icons.menu_book,
+        title: 'Tra cứu học phí',
+        color: Colors.green,
+        value: '',
       ),
       _FeatureItem(
-        icon: Icons.person,
-        title: 'Quản lý sinh viên',
-        color: Colors.indigo,
-        value: 'sinh_vien',
+        icon: Icons.account_circle,
+        title: 'Thông tin giáo viên',
+        color: Colors.green,
+        value: '',
       ),
       _FeatureItem(
-        icon: Icons.description,
-        title: 'Quản lý cấp giấy tờ',
+        icon: Icons.edit,
+        title: 'Viết biên bản sinh hoạt',
         color: Colors.brown,
-        value: 'cap_giay_to',
-      ),
-      _FeatureItem(
-        icon: Icons.settings,
-        title: 'Quản lý tham số',
-        color: Colors.blueGrey,
-        value: 'tham_so',
-      ),
-      _FeatureItem(
-        icon: Icons.security,
-        title: 'Quản lý phân quyền',
-        color: Colors.grey,
-        value: 'phan_quyen',
+        value: '',
       ),
     ];
   }

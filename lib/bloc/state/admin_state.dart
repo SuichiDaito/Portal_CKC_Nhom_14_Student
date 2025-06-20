@@ -1,25 +1,25 @@
 import 'package:portal_ckc/api/model/admin_thongtin.dart';
 
-abstract class AdminState {}
+abstract class StudentState {}
 
-class AdminInitial extends AdminState {}
+class StudentInitial extends StudentState {}
 
-class AdminLoading extends AdminState {}
+class StudentLoading extends StudentState {}
 
-class AdminSuccess extends AdminState {
+class StudentSuccess extends StudentState {
   final User user;
 
-  AdminSuccess(this.user);
+  StudentSuccess(this.user);
 }
 
-class AdminLoaded extends AdminState {
+class StudentLoaded extends StudentState {
   final User user;
 
-  AdminLoaded(this.user);
+  StudentLoaded(this.user);
 }
 
-class AdminError extends AdminState {
+class StudentError extends StudentState {
   final String message;
 
-  AdminError(this.message);
+  StudentError(this.message);
 }

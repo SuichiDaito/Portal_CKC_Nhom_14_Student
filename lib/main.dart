@@ -5,9 +5,9 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:portal_ckc/api/controller/call_api.dart';
-import 'package:portal_ckc/api/controller/call_api_admin.dart';
-import 'package:portal_ckc/api/services/admin_service.dart';
-import 'package:portal_ckc/bloc/bloc_event_state/admin_bloc.dart';
+import 'package:portal_ckc/api/controller/call_api_student.dart';
+import 'package:portal_ckc/api/services/student_service.dart';
+import 'package:portal_ckc/bloc/bloc_event_state/student_bloc.dart';
 import 'package:portal_ckc/bloc/state/bloc_state.dart';
 import 'package:portal_ckc/bloc/event/bloc_event.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/bloc_example.dart';
@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => BlocImplement()..add(FetchData())),
-        BlocProvider(create: (_) => AdminBloc()),
+        BlocProvider(create: (_) => StudentBloc()),
       ],
       child: MaterialApp.router(
         routerConfig: RouteName.route,

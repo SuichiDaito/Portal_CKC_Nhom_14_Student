@@ -20,7 +20,6 @@ class UserDetailInformationPage extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             child: Column(
               children: [
-                ButtonEditInformationInUser(),
                 const SizedBox(height: 15),
                 Row(
                   children: [

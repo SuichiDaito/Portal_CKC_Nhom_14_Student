@@ -8,23 +8,19 @@ class GridAppHomeAdmin extends StatefulWidget {
 
 class _GridAppHomeAdmin extends State<GridAppHomeAdmin> {
   final functions = [
-    {
-      'icon': Icons.assignment,
-      'title': 'Kết quả\nrèn luyện',
-      'color': Colors.blue,
-    },
+    {'icon': Icons.assessment, 'title': 'Điểm rèn luyện', 'color': Colors.blue},
     {
       'icon': Icons.notifications,
       'title': 'Thông\nbáo',
       'color': Colors.orange,
     },
-    {'icon': Icons.video_call, 'title': 'KPKP', 'color': Colors.green},
-    {'icon': Icons.description, 'title': 'SKCH', 'color': Colors.purple},
+    {'icon': Icons.school, 'title': 'Điểm học tập', 'color': Colors.lightGreen},
     {'icon': Icons.calendar_today, 'title': 'Lịch học', 'color': Colors.red},
+    {'icon': Icons.calendar_today, 'title': 'Lịch thi', 'color': Colors.blue},
     {
-      'icon': Icons.library_books,
-      'title': 'Tài liệu\nhọc tập',
-      'color': Colors.teal,
+      'icon': Icons.access_time,
+      'title': 'Thời khóa biểu',
+      'color': Colors.indigo,
     },
   ];
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:portal_ckc/bloc/bloc_event_state/admin_bloc.dart';
+import 'package:portal_ckc/bloc/bloc_event_state/student_bloc.dart';
 import 'package:portal_ckc/bloc/state/admin_state.dart';
 import 'package:portal_ckc/constant/string.dart';
 
@@ -99,9 +99,9 @@ class _PageDoimatkhauAdminState extends State<PageDoimatkhauAdmin> {
                 ),
 
                 // Tên bên dưới avatar
-                BlocBuilder<AdminBloc, AdminState>(
+                BlocBuilder<StudentBloc, StudentState>(
                   builder: (context, state) {
-                    if (state is AdminLoaded) {
+                    if (state is StudentLoaded) {
                       final hoTen = state.user.hoSo?.hoTen ?? 'Chưa có tên';
                       return Padding(
                         padding: const EdgeInsets.only(top: 12.0, bottom: 12),

@@ -35,8 +35,12 @@ class _HeaderHomeAdminSection extends State<HeaderHomeAdminSection> {
           ),
           CircleAvatar(
             radius: 25,
-            backgroundColor: Colors.grey[300],
-            child: Icon(Icons.person, color: Colors.grey[600], size: 30),
+            backgroundColor: Colors.blue.withOpacity(0.1),
+            child: Icon(
+              Icons.notifications_active,
+              color: Colors.blue[600],
+              size: 30,
+            ),
           ),
         ],
       ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:portal_ckc/bloc/bloc_event_state/admin_bloc.dart';
+import 'package:portal_ckc/bloc/bloc_event_state/student_bloc.dart';
 import 'package:portal_ckc/bloc/state/admin_state.dart';
 
 class PageHomeAdmin extends StatelessWidget {
@@ -17,11 +17,11 @@ class PageHomeAdmin extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: BlocBuilder<AdminBloc, AdminState>(
+        child: BlocBuilder<StudentBloc, StudentState>(
           builder: (context, state) {
-            if (state is AdminLoading) {
+            if (state is StudentLoading) {
               return const Center(child: CircularProgressIndicator());
-            } else if (state is AdminLoaded) {
+            } else if (state is StudentLoaded) {
               final user = state.user;
               final hoSo = user.hoSo;
 
@@ -115,7 +115,7 @@ class PageHomeAdmin extends StatelessWidget {
                   ],
                 ),
               );
-            } else if (state is AdminError) {
+            } else if (state is StudentError) {
               return Center(child: Text('❌ Lỗi: ${state.message}'));
             }
             return const Center(child: Text('Vui lòng đăng nhập'));

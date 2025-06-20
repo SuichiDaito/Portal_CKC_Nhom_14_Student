@@ -16,7 +16,6 @@ import 'package:portal_ckc/presentation/pages/page_exam_schedule_admin.dart';
 import 'package:portal_ckc/presentation/pages/page_teaching_schedule_admin.dart';
 import 'package:portal_ckc/presentation/pages/page_user_detail_information.dart';
 import 'package:portal_ckc/presentation/pages/page_main_layout_home_admin.dart';
-import 'package:portal_ckc/presentation/references/dashboard_admin.dart';
 import 'package:portal_ckc/presentation/references/page_change_password_admin.dart';
 import 'package:portal_ckc/presentation/pages/appbar_bottombar/page_home_admin.dart';
 import 'package:portal_ckc/presentation/pages/page_applications_admin.dart';

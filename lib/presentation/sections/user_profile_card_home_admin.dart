@@ -4,11 +4,14 @@ class UserProfileCardHomeAdmin extends StatefulWidget {
   final String nameUser;
   final String idStudent;
   final String email;
+  // final VoidCallbackAction resultStudy;
+
   const UserProfileCardHomeAdmin({
     super.key,
     required this.nameUser,
     required this.idStudent,
     required this.email,
+    // required this.resultStudy,
   });
   State<UserProfileCardHomeAdmin> createState() => _UserCardHomeAdmin();
 }
@@ -79,7 +82,9 @@ class _UserCardHomeAdmin extends State<UserProfileCardHomeAdmin> {
             children: [
               Expanded(
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/admin/information/user');
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white.withOpacity(0.2),
                     foregroundColor: Colors.white,
@@ -94,7 +99,9 @@ class _UserCardHomeAdmin extends State<UserProfileCardHomeAdmin> {
               SizedBox(width: 12),
               Expanded(
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/admin/information/user');
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white.withOpacity(0.2),
                     foregroundColor: Colors.white,

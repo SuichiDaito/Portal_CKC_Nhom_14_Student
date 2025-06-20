@@ -1,15 +1,15 @@
 import 'package:equatable/equatable.dart';
 
-abstract class AdminEvent {}
+abstract class StudentEvent {}
 
-class AdminLoginEvent extends AdminEvent {
-  final String taiKhoan;
+class StudentLoginEvent extends StudentEvent {
+  final String ma_sv;
   final String password;
 
-  AdminLoginEvent({required this.taiKhoan, required this.password});
+  StudentLoginEvent({required this.ma_sv, required this.password});
 }
 
-class FetchAdminDetail extends AdminEvent {
+class FetchAdminDetail extends StudentEvent {
   final int userId;
 
   FetchAdminDetail({required this.userId});
