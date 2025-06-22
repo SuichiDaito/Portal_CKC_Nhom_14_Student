@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:portal_ckc/presentation/sections/card/class_management_teacher_info_card.dart';
 import 'package:portal_ckc/presentation/sections/card/exam_schedule_view.dart';
+import 'package:portal_ckc/presentation/sections/card/student_card_info.dart';
 import 'package:portal_ckc/presentation/sections/card/teaching_schedule_print_schedule_dialog.dart';
 
 class ExamDuty {
@@ -64,9 +65,9 @@ class PageExamScheduleAdmin extends StatefulWidget {
 
 class _PageExamScheduleAdminState extends State<PageExamScheduleAdmin> {
   String? selectedStatus;
-  final String teacherName = "TS. Nguyễn Văn An";
-  final String teacherId = "GV001";
-  final String department = "Khoa Công Nghệ Thông Tin";
+  // final String teacherName = "TS. Nguyễn Văn An";
+  // final String teacherId = "GV001";
+  // final String department = "Khoa Công Nghệ Thông Tin";
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +82,7 @@ class _PageExamScheduleAdminState extends State<PageExamScheduleAdmin> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Quản lý Lịch Gác Thi',
+          'Lịch thi sinh viên',
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
         ),
         backgroundColor: Colors.blue,
@@ -98,10 +99,9 @@ class _PageExamScheduleAdminState extends State<PageExamScheduleAdmin> {
         ),
         child: Column(
           children: [
-            TeacherInfoCard(
-              teacherName: teacherName,
-              teacherId: teacherId,
-              department: department,
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: StudentCardInfo(),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),

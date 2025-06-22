@@ -74,7 +74,7 @@ class _PageTeachingScheduleAdminState extends State<PageTeachingScheduleAdmin> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Quản lý Thời Khóa Biểu',
+          'Thời Khóa Biểu',
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
         ),
         backgroundColor: Colors.blue,

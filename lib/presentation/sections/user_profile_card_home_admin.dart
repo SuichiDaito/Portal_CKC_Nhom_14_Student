@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class UserProfileCardHomeAdmin extends StatefulWidget {
   final String nameUser;
@@ -83,7 +84,7 @@ class _UserCardHomeAdmin extends State<UserProfileCardHomeAdmin> {
               Expanded(
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, '/admin/information/user');
+                    context.go('/admin/information/user');
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white.withOpacity(0.2),
@@ -94,23 +95,6 @@ class _UserCardHomeAdmin extends State<UserProfileCardHomeAdmin> {
                     ),
                   ),
                   child: Text('Kết quả học tập'),
-                ),
-              ),
-              SizedBox(width: 12),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/admin/information/user');
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white.withOpacity(0.2),
-                    foregroundColor: Colors.white,
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  child: Text('Thông tin'),
                 ),
               ),
             ],

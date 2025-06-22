@@ -13,6 +13,9 @@ import 'package:portal_ckc/presentation/pages/page_meeting_minutes_admin.dart';
 import 'package:portal_ckc/presentation/pages/page_notification_detail_admin.dart';
 import 'package:portal_ckc/presentation/pages/page_report_detail_admin.dart';
 import 'package:portal_ckc/presentation/pages/page_exam_schedule_admin.dart';
+import 'package:portal_ckc/presentation/pages/page_search_info_general_student.dart';
+import 'package:portal_ckc/presentation/pages/page_show_point_student.dart';
+import 'package:portal_ckc/presentation/pages/page_signup_certificates.dart';
 import 'package:portal_ckc/presentation/pages/page_teaching_schedule_admin.dart';
 import 'package:portal_ckc/presentation/pages/page_user_detail_information.dart';
 import 'package:portal_ckc/presentation/pages/page_main_layout_home_admin.dart';
@@ -125,12 +128,23 @@ class RouteName {
       ),
       GoRoute(
         path: '/admin/report_detail_admin',
-        builder: (context, state) {
-          final args = state.extra as Map<String, dynamic>;
-          return PageReportDetailAdmin(isApproved: args['isApproved'] as bool);
-        },
+        builder: (context, state) => PageReportDetailAdmin(),
+      ),
+      // CertificateRegistrationScreen
+      GoRoute(
+        path: '/student/signup/certificates',
+        builder: (context, state) => CertificateRegistrationScreen(),
+      ),
+      GoRoute(
+        path: '/student/show/point',
+        builder: (context, state) => StudentGradeScreen(),
       ),
 
+      //PageSearchInfoGeneralStudent
+       GoRoute(
+        path: '/student/search/tuition',
+        builder: (context, state) => PageSearchInfoGeneralStudent(),
+      ),
       GoRoute(
         path: '/notifications/detail',
         builder: (context, state) {

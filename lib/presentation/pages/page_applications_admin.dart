@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:portal_ckc/presentation/sections/card/feature_card_application.dart';
 
-class ApplicationsAdminPage extends StatelessWidget {
-  const ApplicationsAdminPage({Key? key}) : super(key: key);
+class ApplicationsAdminPage extends StatefulWidget {
+  const ApplicationsAdminPage({super.key});
 
+  State<ApplicationsAdminPage> createState() => Application();
+}
+
+class Application extends State<ApplicationsAdminPage> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -18,7 +23,7 @@ class ApplicationsAdminPage extends StatelessWidget {
             iconColor: Colors.green,
             backgroundColor: Colors.green.withOpacity(0.05),
             borderColor: Colors.green.withOpacity(0.2),
-            gridItems: _getStudentFeatures(),
+            gridItems: getStudentFeatures(),
           ),
 
           const SizedBox(height: 24),
@@ -33,7 +38,7 @@ class ApplicationsAdminPage extends StatelessWidget {
     required Color iconColor,
     required Color backgroundColor,
     required Color borderColor,
-    required List<_FeatureItem> gridItems,
+    required List<FeatureItem> gridItems,
   }) {
     return Container(
       decoration: BoxDecoration(
@@ -83,167 +88,105 @@ class ApplicationsAdminPage extends StatelessWidget {
             itemCount: gridItems.length,
             itemBuilder: (context, index) {
               final feature = gridItems[index];
-              return _buildFeatureCard(context, feature);
+              return Builder(
+                builder: (innerContext) => FeatureCardApplication(
+                  context: innerContext,
+                  feature: feature,
+                ),
+              );
             },
           ),
         ],
       ),
     );
   }
-
-  Widget _buildFeatureCard(context, _FeatureItem feature) {
-    return GestureDetector(
-      onTap: () {
-        GoRouter.of(context).push('/admin/${feature.value}');
-
-        print('Tapped on ${feature.title}');
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Icon Container
-            Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                color: feature.color.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Icon(feature.icon, color: feature.color, size: 24),
-            ),
-            const SizedBox(height: 10),
-            // Title
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: Text(
-                feature.title,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.black87,
-                ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  List<_FeatureItem> _getStudentFeatures() {
-    return [
-      _FeatureItem(
-        icon: Icons.assessment,
-        title: 'Điểm rèn luyện',
-        color: Colors.blue,
-        value: '',
-      ),
-      _FeatureItem(
-        icon: Icons.school,
-        title: 'Điểm học tập',
-        color: Colors.lightGreen,
-        value: '',
-      ),
-      _FeatureItem(
-        icon: Icons.notifications,
-        title: 'Thông báo',
-        color: Colors.orange,
-        value: '',
-      ),
-      _FeatureItem(
-        icon: Icons.description,
-        title: 'Xin cấp giấy tờ',
-        color: Colors.green,
-        value: '',
-      ),
-      _FeatureItem(
-        icon: Icons.description,
-        title: 'Sinh hoạt chủ nhiệm',
-        color: Colors.purple,
-        value: 'SKCH',
-      ),
-      _FeatureItem(
-        icon: Icons.calendar_today,
-        title: 'Lịch học',
-        color: Colors.red,
-        value: '',
-      ),
-      _FeatureItem(
-        icon: Icons.folder,
-        title: 'Tài liệu',
-        color: Colors.teal,
-        value: '',
-      ),
-      _FeatureItem(
-        icon: Icons.access_time,
-        title: 'Thời khóa biểu',
-        color: Colors.indigo,
-        value: '',
-      ),
-      _FeatureItem(
-        icon: Icons.calendar_today,
-        title: 'Lịch thi',
-        color: Colors.cyan,
-        value: '',
-      ),
-      _FeatureItem(
-        icon: Icons.list_alt,
-        title: 'Đăng ký học phần',
-        color: Colors.teal,
-        value: '',
-      ),
-      _FeatureItem(
-        icon: Icons.alarm,
-        title: 'Đăng ký thi lại',
-        color: Colors.redAccent,
-        value: '',
-      ),
-      _FeatureItem(
-        icon: Icons.menu_book,
-        title: 'Tra cứu học phí',
-        color: Colors.green,
-        value: '',
-      ),
-      _FeatureItem(
-        icon: Icons.account_circle,
-        title: 'Thông tin giáo viên',
-        color: Colors.green,
-        value: '',
-      ),
-      _FeatureItem(
-        icon: Icons.edit,
-        title: 'Viết biên bản sinh hoạt',
-        color: Colors.brown,
-        value: '',
-      ),
-    ];
-  }
 }
 
-class _FeatureItem {
-  final IconData icon;
-  final String title;
-  final Color color;
-  final value;
-  _FeatureItem({
-    required this.icon,
-    required this.title,
-    required this.color,
-    required this.value,
-  });
+List<FeatureItem> getStudentFeatures() {
+  return [
+    FeatureItem(
+      id: 0,
+      icon: Icons.school,
+      title: 'Điểm học tập',
+      color: Colors.lightGreen,
+      value: '',
+    ),
+    FeatureItem(
+      id: 1,
+      icon: Icons.assessment,
+      title: 'Điểm rèn luyện',
+      color: Colors.blue,
+      value: '',
+    ),
+    FeatureItem(
+      id: 2,
+      icon: Icons.calendar_today,
+      title: 'Lịch thi',
+      color: Colors.cyan,
+      value: '',
+    ),
+    FeatureItem(
+      id: 3,
+      icon: Icons.access_time,
+      title: 'Thời khóa biểu',
+      color: Colors.indigo,
+      value: '',
+    ),
+    FeatureItem(
+      id: 4,
+      icon: Icons.list_alt,
+      title: 'Đăng ký học phần',
+      color: Colors.teal,
+      value: '',
+    ),
+    FeatureItem(
+      id: 5,
+      icon: Icons.alarm,
+      title: 'Đăng ký thi lại',
+      color: Colors.redAccent,
+      value: '',
+    ),
+    FeatureItem(
+      id: 6,
+      icon: Icons.description,
+      title: 'Sinh hoạt chủ nhiệm',
+      color: Colors.purple,
+      value: 'SKCH',
+    ),
+    FeatureItem(
+      id: 7,
+      icon: Icons.description,
+      title: 'Xin cấp giấy tờ',
+      color: Colors.green,
+      value: '',
+    ),
+    FeatureItem(
+      id: 8,
+      icon: Icons.edit,
+      title: 'Viết biên bản sinh hoạt',
+      color: Colors.brown,
+      value: '',
+    ),
+    FeatureItem(
+      id: 9,
+      icon: Icons.menu_book,
+      title: 'Tra cứu học phí',
+      color: Colors.green,
+      value: '',
+    ),
+    FeatureItem(
+      id: 10,
+      icon: Icons.person_pin,
+      title: 'Tra thông tin giảng viên',
+      color: Colors.pink,
+      value: '',
+    ),
+    FeatureItem(
+      id: 11,
+      icon: Icons.folder,
+      title: 'Tài liệu',
+      color: Colors.teal,
+      value: '',
+    ),
+  ];
 }

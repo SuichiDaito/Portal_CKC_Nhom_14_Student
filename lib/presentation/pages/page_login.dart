@@ -268,13 +268,13 @@ class _LoginScreenState extends State<LoginScreen>
                 SizedBox(height: 30),
                 ButtonLogin(
                   nameButton: 'Lấy lại mật khẩu',
-                  onPressed: () {
-                    if (state is! StudentLoading) {
-                      // request information (account, password) api
-                      _handleResetPasswordLogin();
-                      Center(child: CircularProgressIndicator());
-                    }
-                  },
+                  // onPressed: () {
+                  //   // if (state is! StudentLoading) {
+                  //   //   // request information (account, password) api
+                  //   //   _handleResetPasswordLogin();
+                  //   //   Center(child: CircularProgressIndicator());
+                  //   // }
+                  // },
                 ),
 
                 SizedBox(height: 15),
@@ -373,15 +373,15 @@ class _LoginScreenState extends State<LoginScreen>
                 SizedBox(height: 30),
                 ButtonLogin(
                   nameButton: 'Đăng nhập sinh viên',
-                  onPressed: () {
-                    // if (state is! StudentLoading) {
-                    //   // request information (account, password) api
-                    _handleStudentLogin();
-                    //   Center(child: CircularProgressIndicator());
-                    // }
-                    // _handleStudentLogin();
-                    // GoRouter.of(context).go('/home/admin');
-                  },
+                  // onPressed: () {
+                  //   // if (state is! StudentLoading) {
+                  //   //   // request information (account, password) api
+                  //   _handleStudentLogin();
+                  //   //   Center(child: CircularProgressIndicator());
+                  //   // }
+                  //   // _handleStudentLogin();
+                  //   // GoRouter.of(context).go('/home/admin');
+                  // },
                 ),
 
                 SizedBox(height: 15),
@@ -408,10 +408,9 @@ class _LoginScreenState extends State<LoginScreen>
     String password = _studentPasswordController.text.trim();
 
     if (account.isEmpty || password.isEmpty) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        context.go('/home/admin');
-      });
-
+      // WidgetsBinding.instance.addPostFrameCallback((_) {
+      //   context.go('/home/admin');
+      // });
       return;
     }
 

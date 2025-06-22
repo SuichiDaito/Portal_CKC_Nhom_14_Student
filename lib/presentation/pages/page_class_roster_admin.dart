@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:portal_ckc/presentation/sections/card/class_roster_class_item_card.dart';
 import 'package:portal_ckc/presentation/sections/card/class_roster_teacher_info_card.dart';
 import 'package:portal_ckc/presentation/sections/class_roster_filter_section.dart';
+import 'package:portal_ckc/presentation/sections/search_section_in_class_roster.dart';
 
 class PageClassRosterAdmin extends StatefulWidget {
   const PageClassRosterAdmin({Key? key}) : super(key: key);
@@ -150,9 +151,11 @@ class _PageClassRosterAdminState extends State<PageClassRosterAdmin> {
         },
         child: CustomScrollView(
           slivers: [
-            // Teacher Info
-            SliverToBoxAdapter(child: TeacherInfoCard(teacher: teacher)),
-
+            SliverToBoxAdapter(
+              child: SearchSectionInClassRoster(
+                controller: TextEditingController(),
+              ),
+            ),
             // Filter Section
             SliverToBoxAdapter(
               child: FilterSection(
