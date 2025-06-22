@@ -51,6 +51,7 @@ class ModelConverter implements Converter {
       chopperLogger.warning('❌ JSON decode error: $e');
       return response.copyWith<BodyType>(body: body);
     }
+
   }
 
   // Response<BodyType> decodeJsonGogo<BodyType, InnerType>(Response response) {
