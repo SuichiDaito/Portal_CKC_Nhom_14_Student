@@ -5,6 +5,7 @@ class UserProfileCardHomeAdmin extends StatefulWidget {
   final String nameUser;
   final String idStudent;
   final String email;
+  final String classStudent;
   // final VoidCallbackAction resultStudy;
 
   const UserProfileCardHomeAdmin({
@@ -12,6 +13,7 @@ class UserProfileCardHomeAdmin extends StatefulWidget {
     required this.nameUser,
     required this.idStudent,
     required this.email,
+    required this.classStudent,
     // required this.resultStudy,
   });
   State<UserProfileCardHomeAdmin> createState() => _UserCardHomeAdmin();
@@ -78,13 +80,20 @@ class _UserCardHomeAdmin extends State<UserProfileCardHomeAdmin> {
               fontSize: 14,
             ),
           ),
+          Text(
+            'Lớp: ${widget.classStudent}',
+            style: TextStyle(
+              color: Colors.white.withOpacity(0.9),
+              fontSize: 14,
+            ),
+          ),
           SizedBox(height: 16),
           Row(
             children: [
               Expanded(
                 child: ElevatedButton(
                   onPressed: () {
-                    context.go('/admin/information/user');
+                    context.push('/student/show/point');
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white.withOpacity(0.2),

@@ -1,6 +1,5 @@
 import 'package:chopper/chopper.dart';
 import 'package:flutter/rendering.dart';
-import 'package:portal_ckc/api/model/comment.dart';
 import 'dart:convert';
 
 class ModelConverter implements Converter {

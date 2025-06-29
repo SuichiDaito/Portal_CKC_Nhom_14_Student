@@ -361,7 +361,7 @@ class _StudentGradeScreenState extends State<StudentGradeScreen> {
     final semesterData = currentSemesterData;
 
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: Colors.grey[50],
       appBar: AppBar(
         backgroundColor: Colors.blue[600],
         title: Text(
@@ -371,7 +371,7 @@ class _StudentGradeScreenState extends State<StudentGradeScreen> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
-            context.pop('/home/admin');
+            GoRouter.of(context).go('/home/admin');
           },
         ),
         elevation: 0,

@@ -14,3 +14,7 @@ class FetchAdminDetail extends StudentEvent {
 
   FetchAdminDetail({required this.userId});
 }
+
+class StudentLogout extends StudentEvent {
+  StudentLogout();
+}

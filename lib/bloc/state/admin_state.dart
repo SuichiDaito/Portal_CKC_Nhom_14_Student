@@ -1,4 +1,5 @@
 import 'package:portal_ckc/api/model/admin_thongtin.dart';
+import 'package:portal_ckc/api/model/student_login.dart';
 
 abstract class StudentState {}
 
@@ -7,19 +8,25 @@ class StudentInitial extends StudentState {}
 class StudentLoading extends StudentState {}
 
 class StudentSuccess extends StudentState {
-  final User user;
+  final SinhVien student;
 
-  StudentSuccess(this.user);
+  StudentSuccess(this.student);
 }
 
 class StudentLoaded extends StudentState {
-  final User user;
+  final SinhVien student;
 
-  StudentLoaded(this.user);
+  StudentLoaded(this.student);
 }
 
 class StudentError extends StudentState {
   final String message;
 
   StudentError(this.message);
+}
+
+class StudentLogoutSuccess extends StudentState {
+  final String message;
+
+  StudentLogoutSuccess(this.message);
 }

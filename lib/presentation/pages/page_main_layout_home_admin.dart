@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:portal_ckc/bloc/bloc_event_state/student_bloc.dart';
+import 'package:portal_ckc/bloc/state/admin_state.dart';
 import 'package:portal_ckc/presentation/pages/page_notification_detail_admin.dart';
 import 'package:portal_ckc/presentation/sections/grid_app_home_admin.dart';
 import 'package:portal_ckc/presentation/sections/header_home_admin_section.dart';
@@ -15,39 +18,55 @@ class MainLayoutHomeAdminPage extends StatefulWidget {
 class _MainLayoutHomeAdminPage extends State<MainLayoutHomeAdminPage> {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Header Section
-            HeaderHomeAdminSection(nameLogin: "Admin"),
-            SizedBox(height: 20),
+    return BlocConsumer<StudentBloc, StudentState>(
+      listener: (context, state) {},
+      builder: (context, state) {
+        if (state is StudentLoading) {
+          return Center(child: CircularProgressIndicator());
+        } else if (state is StudentError) {
+          return Text(state.message);
+        } else if (state is StudentLoaded) {
+          final student = state.student;
 
-            // User Profile Card
-            UserProfileCardHomeAdmin(
-              nameUser: "Nguyễn Văn A",
-              idStudent: '030621389',
-              email: "040493737@gmail.com",
+          return SafeArea(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              padding: EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Header Section
+                  HeaderHomeAdminSection(nameLogin: student.hoSo!.hoTen),
+                  SizedBox(height: 20),
+
+                  // User Profile Card
+                  UserProfileCardHomeAdmin(
+                    nameUser: student.hoSo!.hoTen,
+                    idStudent: student.maSv,
+                    email: student.hoSo!.email,
+                    classStudent: student.lop!.tenLop,
+                  ),
+                  SizedBox(height: 20),
+
+                  // Function Grid
+                  GridAppHomeAdmin(),
+                  SizedBox(height: 20),
+
+                  // Latest Notifications Section
+                  NotificationsHomeAdmin(
+                    typeNotification: 'Thông báo khoa',
+                    contentNotification: 'Thông báo mới nhất',
+                    date: '24/06/2025',
+                  ),
+                ],
+              ),
             ),
-            SizedBox(height: 20),
-
-            // Function Grid
-            GridAppHomeAdmin(),
-            SizedBox(height: 20),
-
-            // Latest Notifications Section
-            NotificationsHomeAdmin(
-              typeNotification: 'Thông báo khoa',
-              contentNotification: 'Thông báo mới nhất',
-              date: '24/06/2025',
-            ),
-          ],
-        ),
-      ),
+          );
+        } else {
+          return Center(child: Text('NOT FOUND | 404'));
+        }
+      },
     );
   }
 }

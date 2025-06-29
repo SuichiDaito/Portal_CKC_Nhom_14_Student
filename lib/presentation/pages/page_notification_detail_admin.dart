@@ -31,7 +31,7 @@ class _NotificationDetailPageState extends State<NotificationDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[50],
-      appBar: _buildAppBar(),
+      appBar: _buildAppBar(context),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -50,7 +50,7 @@ class _NotificationDetailPageState extends State<NotificationDetailPage> {
     );
   }
 
-  PreferredSizeWidget _buildAppBar() {
+  PreferredSizeWidget _buildAppBar(BuildContext context) {
     return AppBar(
       elevation: 0,
       flexibleSpace: Container(
@@ -64,7 +64,13 @@ class _NotificationDetailPageState extends State<NotificationDetailPage> {
       ),
       leading: IconButton(
         icon: const Icon(Icons.arrow_back, color: Colors.white),
-        onPressed: () => context.go('/notifications'),
+        onPressed: () {
+          if (context.canPop()) {
+            context.pop();
+          } else {
+            context.go('notifications');
+          }
+        },
       ),
       title: const Text(
         'Chi Tiết Thông Báo',

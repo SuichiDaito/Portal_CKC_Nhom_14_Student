@@ -28,7 +28,7 @@ class _HeaderHomeAdminSection extends State<HeaderHomeAdminSection> {
                 ),
               ),
               Text(
-                'Chào mừng đến với hệ thống quản lý',
+                'Chào mừng đến với hệ thống thông tin sinh viên',
                 style: TextStyle(fontSize: 14, color: Colors.grey[600]),
               ),
             ],

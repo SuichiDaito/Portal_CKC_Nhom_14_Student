@@ -1,14 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:portal_ckc/bloc/bloc_event_state/student_bloc.dart';
+import 'package:portal_ckc/bloc/event/admin_event.dart';
 import 'package:portal_ckc/constant/style_of_widget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:portal_ckc/presentation/sections/dialogs/snack_bar_scaffold.dart';
 
 class ButtonLogin extends StatefulWidget {
-  // final Function onPressed;
+  final String account;
+  final String password;
   final String nameButton;
 
-  const ButtonLogin({super.key, required this.nameButton});
+  ButtonLogin({
+    super.key,
+    required this.nameButton,
+    required this.account,
+    required this.password,
+  });
 
   @override
   State<ButtonLogin> createState() => _ButtonLogin();
@@ -34,7 +44,18 @@ class _ButtonLogin extends State<ButtonLogin> {
       ),
       child: ElevatedButton(
         onPressed: () {
-          context.go('/home/admin');
+          if (widget.account.isEmpty || widget.password.isEmpty) {
+            SnackBarScaffold.showToast(
+              'Vui lòng nhập đầy đủ thông tin!',
+              true,
+              context,
+            );
+            return;
+          }
+
+          context.read<StudentBloc>().add(
+            StudentLoginEvent(ma_sv: widget.account, password: widget.password),
+          );
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.transparent,
