@@ -1,10 +1,13 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:portal_ckc/api/controller/call_api_student.dart';
-import 'package:portal_ckc/api/model/admin_thongtin.dart';
+import 'package:portal_ckc/api/model/student_certificates.dart';
 import 'package:portal_ckc/api/model/student_login.dart';
 import 'package:portal_ckc/api/services/student_service.dart';
-import 'package:portal_ckc/bloc/event/admin_event.dart';
-import 'package:portal_ckc/bloc/state/admin_state.dart';
+import 'package:portal_ckc/bloc/event/student_event.dart';
+import 'package:portal_ckc/bloc/state/student_state.dart';
+import 'package:portal_ckc/constant/token.dart';
+import 'package:portal_ckc/presentation/pages/page_class_detail_admin.dart';
+
 
 class StudentBloc extends Bloc<StudentEvent, StudentState> {
   final StudentService service;
@@ -12,9 +15,64 @@ class StudentBloc extends Bloc<StudentEvent, StudentState> {
   StudentBloc()
     : service = CallApiStudent.adminService,
       super(StudentInitial()) {
+    print('🟡 StudentBloc CREATED');
     on<StudentLoginEvent>(_onLogin);
     on<StudentLogout>(_onLogout);
-    // on<FetchAdminDetail>(_onFetchDetail);
+    on<StudentRequestChangePasswordEvent>(_onRequestChangePassword);
+  }
+
+  Future<void> _onRequestChangePassword(
+    StudentRequestChangePasswordEvent event,
+    Emitter emit,
+  ) async {
+    print('➡️ Đang xử lý yêu cầu đổi mật khẩu');
+    emit(StudentLoading());
+    try {
+      final response = await service.requestPasswordReset({
+        'ma_sv': event.idStudent,
+        'loai': event.typeAccount,
+      });
+
+      if (response.isSuccessful && response.body != null) {
+        final body = response.body;
+        print('📦 Status: ${response.statusCode}');
+        print('📦 Body: ${response.body}');
+        print('📦 Error: ${response.error}');
+
+        if (body is Map<String, dynamic>) {
+          if (body.containsKey('message')) {
+            final message = body['message'];
+            emit(StudentRequestChangePasswordSuccess(message));
+            print(
+              'AdminBloc: Emitted StudentRequestChangePasswordSuccess ${StudentRequestChangePasswordSuccess(message)}',
+            ); // Debug log
+          } else {
+            emit(
+              StudentRequestChangePasswordFail(
+                'Yêu cầu đổi mật khẩu không thành công',
+              ),
+            );
+          }
+        } else {
+          emit(
+            StudentRequestChangePasswordFail('Phản hồi không hợp lệ từ server'),
+          );
+        }
+      } else {
+        final error = response.error;
+        if (error is Map<String, dynamic> && error.containsKey('message')) {
+          emit(StudentRequestChangePasswordFail(error['message']));
+        } else {
+          emit(
+            StudentRequestChangePasswordFail('Yêu cầu đổi mật khẩu thất bại'),
+          );
+        }
+      }
+    } catch (e, stackTrace) {
+      print('❌ Lỗi yêu cầu đổi mật khẩu: $e');
+      print('📌 StackTrace: $stackTrace');
+      emit(StudentError('Lỗi hệ thống: $e'));
+    }
   }
 
   Future<void> _onLogin(StudentLoginEvent event, Emitter emit) async {
@@ -33,6 +91,10 @@ class StudentBloc extends Bloc<StudentEvent, StudentState> {
         print('📦 Error: ${response.error}');
 
         if (body is Map<String, dynamic>) {
+          if (body.containsKey('token')) {
+            final token = body['token'] as String;
+            ConstraintToken.setToken(token);
+          }
           if (body.containsKey('sinh_vien')) {
             final studentJson = body['sinh_vien'] as Map<String, dynamic>;
             final student = SinhVien.fromJson(studentJson);

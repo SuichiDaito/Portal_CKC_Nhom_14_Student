@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/student_bloc.dart';
-import 'package:portal_ckc/bloc/state/admin_state.dart';
+import 'package:portal_ckc/bloc/state/student_state.dart';
 import 'package:portal_ckc/main.dart';
 import 'package:portal_ckc/presentation/sections/button/button_change_password_in_user.dart';
 import 'package:portal_ckc/presentation/sections/button/button_edit_information_in_user.dart';
@@ -19,7 +19,6 @@ class UserDetailInformationPage extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          const DebugContextWidget(name: 'Logout Screen'),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
             child: Column(children: [AccountInfoSection()]),

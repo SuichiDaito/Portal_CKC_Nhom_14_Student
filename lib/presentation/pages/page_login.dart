@@ -1,9 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/student_bloc.dart';
-import 'package:portal_ckc/bloc/event/admin_event.dart';
-import 'package:portal_ckc/bloc/state/admin_state.dart';
+import 'package:portal_ckc/bloc/event/student_event.dart';
+import 'package:portal_ckc/bloc/state/student_state.dart';
 import 'package:portal_ckc/gen/assets.gen.dart';
 import 'package:portal_ckc/main.dart';
 import 'package:portal_ckc/presentation/sections/button/button_login.dart';
@@ -16,30 +18,26 @@ class LoginScreen extends StatefulWidget {
   _LoginScreenState createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen>
-    with SingleTickerProviderStateMixin {
-  late TabController _tabController;
+class _LoginScreenState extends State<LoginScreen> {
   final _studentAccountController = TextEditingController();
+  final _studentAccountChangePasswordController = TextEditingController();
   final _studentPasswordController = TextEditingController();
   final _studentEmailController = TextEditingController();
-  final _typeAccountController = TextEditingController();
 
   bool _isTeacherPasswordVisible = false;
-  bool _isAdminPasswordVisible = false;
 
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: 2, vsync: this);
-  }
+  // Dropdown value cho quên mật khẩu
+  String _selectedEmailType = 'Portal';
+  final List<String> _emailTypes = ['Portal', 'Gmail'];
+
+  // Biến để kiểm soát việc hiển thị form quên mật khẩu
+  static bool _showForgotPasswordForm = false;
 
   @override
   void dispose() {
-    _tabController.dispose();
     _studentAccountController.dispose();
     _studentPasswordController.dispose();
     _studentEmailController.dispose();
-    _typeAccountController.dispose();
     super.dispose();
   }
 
@@ -50,11 +48,36 @@ class _LoginScreenState extends State<LoginScreen>
 
   Widget _buildFormLogin() {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       body: BlocConsumer<StudentBloc, StudentState>(
         listener: (context, state) {
+          if (state is StudentRequestChangePasswordSuccess) {
+            SnackBarScaffold.showToast(
+              '"Yêu cầu cấp mật khẩu thành công. Mật khẩu sẽ sớm được gửi qua Email của bạn.!',
+              false,
+              context,
+            );
+            _showForgotPasswordForm = false;
+            Timer(Duration(seconds: 2), () {
+              _studentAccountChangePasswordController.text = '';
+              _selectedEmailType = 'Portal';
+            });
+          } else if (state is StudentRequestChangePasswordFail) {
+            SnackBarScaffold.showToast(
+              '"Yêu cầu cấp mật khẩu thất bại. Vui lòng thử lại!',
+              false,
+              context,
+            );
+          }
+
           if (state is StudentLoaded) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
               context.go('/home/admin');
+              SnackBarScaffold.showToast(
+                'Đăng nhập thành công!',
+                false,
+                context,
+              );
             });
           } else if (state is StudentError) {
             SnackBarScaffold.showToast(
@@ -66,6 +89,7 @@ class _LoginScreenState extends State<LoginScreen>
         },
         builder: (context, state) {
           return Container(
+            height: MediaQuery.of(context).size.height,
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
@@ -78,49 +102,38 @@ class _LoginScreenState extends State<LoginScreen>
               ),
             ),
             child: SafeArea(
-              child: Column(
-                children: [
-                  const DebugContextWidget(name: 'Main Login Screen'),
-                  // Header với logo và thông tin trường
-                  _buildHeader(),
-                  // Phần form đăng nhập
-                  Expanded(
-                    child: Container(
-                      margin: EdgeInsets.only(top: 20),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(30),
-                          topRight: Radius.circular(30),
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black26,
-                            blurRadius: 10,
-                            offset: Offset(0, -2),
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        children: [
-                          // Tab bar
-                          _buildTabBar(),
-
-                          // Tab content
-                          Expanded(
-                            child: TabBarView(
-                              controller: _tabController,
-                              children: [
-                                _buildStudentLoginForm(),
-                                _buildForgetPasswordForm(),
-                              ],
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  return Column(
+                    children: [
+                      // Header với logo và thông tin trường
+                      _buildHeader(),
+                      // Phần form đăng nhập
+                      Expanded(
+                        child: Container(
+                          margin: EdgeInsets.only(top: 20),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(30),
+                              topRight: Radius.circular(30),
                             ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black26,
+                                blurRadius: 10,
+                                offset: Offset(0, -2),
+                              ),
+                            ],
                           ),
-                        ],
+                          child: _showForgotPasswordForm
+                              ? _buildForgetPasswordForm()
+                              : _buildStudentLoginForm(),
+                        ),
                       ),
-                    ),
-                  ),
-                ],
+                    ],
+                  );
+                },
               ),
             ),
           );
@@ -189,59 +202,22 @@ class _LoginScreenState extends State<LoginScreen>
     );
   }
 
-  Widget _buildTabBar() {
-    return Container(
-      margin: EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.grey[100],
-        borderRadius: BorderRadius.circular(25),
-      ),
-      child: TabBar(
-        controller: _tabController,
-        indicator: BoxDecoration(
-          borderRadius: BorderRadius.circular(25),
-          color: Color(0xFF1976D2),
-        ),
-        labelColor: Colors.white,
-        unselectedLabelColor: Colors.grey[600],
-        labelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-        tabs: [
-          Tab(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.person, size: 20),
-                SizedBox(width: 8),
-                Text('Sinh Viên'),
-              ],
-            ),
-          ),
-          Tab(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.admin_panel_settings, size: 20),
-                SizedBox(width: 8),
-                Text('Lấy lại mật khẩu'),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildForgetPasswordForm() {
-    return Scaffold(
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(20),
+    return SafeArea(
+      child: SingleChildScrollView(
+        padding: EdgeInsets.fromLTRB(
+          20,
+          30,
+          20,
+          MediaQuery.of(context).viewInsets.bottom + 20,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              '',
+              'Quên Mật Khẩu',
               style: TextStyle(
-                fontSize: 24,
+                fontSize: 22,
                 fontWeight: FontWeight.bold,
                 color: Color(0xFF1976D2),
               ),
@@ -251,48 +227,70 @@ class _LoginScreenState extends State<LoginScreen>
             SizedBox(height: 30),
 
             TextfieldInputLogin(
-              controller: _studentEmailController,
-              label: 'Account',
+              controller: _studentAccountChangePasswordController,
+              label: 'Tài khoản',
               icon: Icons.email,
               keyboardType: TextInputType.emailAddress,
             ),
 
-            SizedBox(height: 20),
+            SizedBox(height: 16),
 
-            TextfieldPasswordLogin(
-              controller: _typeAccountController,
-              label: 'Mật khẩu',
-              isVisible: _isTeacherPasswordVisible,
-              onToggleVisibility: () {
-                setState(() {
-                  _isTeacherPasswordVisible = !_isTeacherPasswordVisible;
-                });
-              },
+            // Dropdown cho loại email
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: Colors.grey[300]!),
+              ),
+              child: DropdownButtonFormField<String>(
+                value: _selectedEmailType,
+                decoration: InputDecoration(
+                  labelText: 'Loại Tài Khoản',
+                  prefixIcon: Icon(Icons.domain, color: Color(0xFF1976D2)),
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
+                ),
+                items: _emailTypes.map((String type) {
+                  return DropdownMenuItem<String>(
+                    value: type,
+                    child: Text(type),
+                  );
+                }).toList(),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    _selectedEmailType = newValue!;
+                  });
+                },
+              ),
             ),
 
-            SizedBox(height: 30),
+            SizedBox(height: 24),
 
-            // ButtonLogin(
-            //   nameButton: 'Lấy lại mật khẩu',
-            //   // onPressed: () {
-            //   //   // if (state is! StudentLoading) {
-            //   //   //   // request information (account, password) api
-            //   //   //   _handleResetPasswordLogin();
-            //   //   //   Center(child: CircularProgressIndicator());
-            //   //   // }
-            //   // },
-            // ),
-            SizedBox(height: 15),
+            ButtonLogin(
+              nameButton: 'Lấy lại mật khẩu',
+              account: _studentAccountChangePasswordController.text.trim(),
+              password: '',
+              typeAccount: _selectedEmailType == 'Portal' ? 1 : 0,
+            ),
+
+            SizedBox(height: 12),
 
             TextButton(
               onPressed: () {
-                // Xử lý quên mật khẩu
+                setState(() {
+                  _showForgotPasswordForm = false;
+                });
               },
               child: Text(
-                'Quên mật khẩu?',
+                'Quay lại đăng nhập',
                 style: TextStyle(color: Color(0xFF1976D2), fontSize: 16),
               ),
             ),
+
+            // Thêm khoảng cách bottom
+            SizedBox(height: 50),
           ],
         ),
       ),
@@ -300,16 +298,21 @@ class _LoginScreenState extends State<LoginScreen>
   }
 
   Widget _buildStudentLoginForm() {
-    return Scaffold(
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(20),
+    return SafeArea(
+      child: SingleChildScrollView(
+        padding: EdgeInsets.fromLTRB(
+          20,
+          30,
+          20,
+          MediaQuery.of(context).viewInsets.bottom + 20,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
               'Đăng Nhập Sinh Viên',
               style: TextStyle(
-                fontSize: 24,
+                fontSize: 22,
                 fontWeight: FontWeight.bold,
                 color: Color(0xFF1976D2),
               ),
@@ -320,12 +323,12 @@ class _LoginScreenState extends State<LoginScreen>
 
             TextfieldInputLogin(
               controller: _studentAccountController,
-              label: 'Account',
+              label: 'Tài khoản',
               icon: Icons.email,
               keyboardType: TextInputType.emailAddress,
             ),
 
-            SizedBox(height: 20),
+            SizedBox(height: 16),
 
             TextfieldPasswordLogin(
               controller: _studentPasswordController,
@@ -338,18 +341,21 @@ class _LoginScreenState extends State<LoginScreen>
               },
             ),
 
-            SizedBox(height: 30),
+            SizedBox(height: 24),
             ButtonLogin(
               nameButton: 'Đăng nhập sinh viên',
               account: _studentAccountController.text.trim(),
               password: _studentPasswordController.text.trim(),
+              typeAccount: 0,
             ),
 
-            SizedBox(height: 15),
+            SizedBox(height: 12),
 
             TextButton(
               onPressed: () {
-                // Xử lý quên mật khẩu
+                setState(() {
+                  _showForgotPasswordForm = true;
+                });
               },
               child: Text(
                 'Quên mật khẩu?',
@@ -361,22 +367,4 @@ class _LoginScreenState extends State<LoginScreen>
       ),
     );
   }
-
-  // void _handleResetPasswordLogin() {
-  //   String account = _studentEmailController.text.trim();
-  //   String password = _typeAccountController.text.trim();
-
-  //   if (account.isEmpty || password.isEmpty) {
-  //     SnackBarScaffold.showToast(
-  //       'Vui lòng nhập đầy đủ thông tin!',
-  //       true,
-  //       context,
-  //     );
-  //     return;
-  //   }
-
-  //   context.read<StudentBloc>().add(
-  //     StudentLoginEvent(ma_sv: account, password: password),
-  //   );
-  // }
 }

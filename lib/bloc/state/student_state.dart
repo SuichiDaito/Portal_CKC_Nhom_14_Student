@@ -1,5 +1,6 @@
-import 'package:portal_ckc/api/model/admin_thongtin.dart';
+import 'package:portal_ckc/api/model/student_certificates.dart';
 import 'package:portal_ckc/api/model/student_login.dart';
+import 'package:portal_ckc/api/model/student_request_password.dart';
 
 abstract class StudentState {}
 
@@ -30,3 +31,17 @@ class StudentLogoutSuccess extends StudentState {
 
   StudentLogoutSuccess(this.message);
 }
+
+class StudentRequestChangePasswordSuccess extends StudentState {
+  final String message;
+
+  StudentRequestChangePasswordSuccess(this.message);
+}
+
+class StudentRequestChangePasswordFail extends StudentState {
+  final String message;
+
+  StudentRequestChangePasswordFail(this.message);
+}
+
+

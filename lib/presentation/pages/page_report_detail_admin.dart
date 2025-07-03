@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:portal_ckc/bloc/bloc_event_state/student_report_response_bloc.dart';
+import 'package:portal_ckc/bloc/event/certificates_event.dart';
+import 'package:portal_ckc/bloc/event/student_report_response_event.dart';
+import 'package:portal_ckc/bloc/state/student_report_response.dart';
 import 'package:portal_ckc/presentation/sections/card/report_detail_absent_student_manager.dart';
 import 'package:portal_ckc/presentation/sections/card/report_detail_build_content_input.dart';
 import 'package:portal_ckc/presentation/sections/card/report_detail_fixed_info_card.dart';
 import 'package:portal_ckc/presentation/sections/card/report_detail_readonly_summary_card.dart';
 import 'package:portal_ckc/presentation/sections/card/report_detail_editable_section.dart';
+import 'package:portal_ckc/utils/formatter_datetime.dart';
 
 class PageReportDetailAdmin extends StatefulWidget {
   const PageReportDetailAdmin({super.key});
@@ -13,17 +19,12 @@ class PageReportDetailAdmin extends StatefulWidget {
   State<PageReportDetailAdmin> createState() => _PageReportDetailAdminState();
 }
 
-String formatTime(DateTime date) {
-  String formatted = DateFormat('h:mm a').format(date);
-  return formatted;
-}
-
-String formatDate(DateTime date) {
-  String formatted = DateFormat('dd-MM-yyyy').format(date);
-  return formatted;
-}
-
 class _PageReportDetailAdminState extends State<PageReportDetailAdmin> {
+  void initState() {
+    super.initState();
+    context.read<StudentReportResponseBloc>().add(FetchReportResponseEvent());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,25 +47,63 @@ class _PageReportDetailAdminState extends State<PageReportDetailAdmin> {
 
   Widget _buildApprovedView() {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ReportDetailReadonlySummaryCard(
-            week: 1,
-            beginDate: formatDate(DateTime.now()),
-            endDate: formatDate(DateTime.now()),
-            roomNumber: 'CDTH22DDE',
-            startHour: formatTime(DateTime.now()),
-            endHour: formatTime(DateTime.now()),
-            teacher: 'Nguyễn Văn A',
-            totalStudent: 40,
-            absentStudent: 2,
-            content: 'content',
-            absentStudentIds: [],
-            studentList: [],
-          ),
-        ],
+      padding: const EdgeInsets.all(10),
+      child: BlocBuilder<StudentReportResponseBloc, StudentReportResponseState>(
+        builder: (context, state) {
+          if (state is StudentReportResponseLoading) {
+            return Center(child: CircularProgressIndicator(color: Colors.blue));
+          } else if (state is StudentReportResponseLoaded) {
+            final reports = state.reportResponseList;
+            if (reports.isEmpty) {
+              return Center(
+                child: Text(
+                  'Không có biên bản nào.',
+                  style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+                ),
+              );
+            }
+            return SizedBox(
+              height: 1000,
+              child: ListView.builder(
+                itemCount: reports.length,
+                itemBuilder: (context, index) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ReportDetailReadonlySummaryCard(
+                        week: reports[index].tuan.tuan,
+                        beginDate: DateFormatter.formatDate(
+                          reports[index].thoiGianBatDau,
+                        ),
+                        endDate: DateFormatter.formatDate(
+                          reports[index].thoiGianKetThuc,
+                        ),
+                        roomNumber: reports[index].lop.tenLop,
+                        startHour: DateFormatter.formatTime(
+                          reports[index].thoiGianBatDau,
+                        ),
+                        endHour: DateFormatter.formatTime(
+                          reports[index].thoiGianKetThuc,
+                        ),
+                        teacher: reports[index].gvcn.taiKhoan,
+                        secretary: reports[index].thuky.hoSo.hoTen,
+                        totalStudent: reports[index].soLuongSinhVien,
+                        absentStudent: reports[index].vangMat,
+                        content: reports[index].noiDung,
+                        absentStudentIds: [],
+                        studentList: [],
+                      ),
+                    ],
+                  );
+                },
+              ),
+            );
+          } else if (state is StudentReportResponseError) {
+            return Center(child: Text(state.message));
+          } else {
+            return Center(child: Text('NOT FOUND | 404'));
+          }
+        },
       ),
     );
   }

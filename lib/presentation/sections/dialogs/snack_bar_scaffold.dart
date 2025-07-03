@@ -22,7 +22,7 @@ class SnackBarScaffold {
           ],
         ),
         backgroundColor: isError ? Colors.red[600] : Colors.green[600],
-        duration: Duration(seconds: 3),
+        duration: Duration(seconds: 1),
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         margin: EdgeInsets.all(16),

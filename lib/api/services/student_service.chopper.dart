@@ -32,4 +32,42 @@ final class _$StudentService extends StudentService {
     final Request $request = Request('POST', $url, client.baseUrl);
     return client.send<Map<String, dynamic>, Map<String, dynamic>>($request);
   }
+
+  @override
+  Future<Response<Map<String, dynamic>>> requestPasswordReset(
+    Map<String, dynamic> body,
+  ) {
+    final Uri $url = Uri.parse('/sinhvien/sinh-vien-yeu-cau-cap-mat-khau');
+    final $body = body;
+    final Request $request = Request('POST', $url, client.baseUrl, body: $body);
+    return client.send<Map<String, dynamic>, Map<String, dynamic>>($request);
+  }
+
+  @override
+  Future<Response<Map<String, dynamic>>> getRegisteredCertificates() {
+    final Uri $url = Uri.parse('/sinhvien/danh-sach-giay-da-dang-ky');
+    final Request $request = Request('GET', $url, client.baseUrl);
+    return client.send<Map<String, dynamic>, Map<String, dynamic>>($request);
+  }
+
+  @override
+  Future<Response<Map<String, dynamic>>> getTrainingPoints() {
+    final Uri $url = Uri.parse('/sinhvien/diem-ren-luyen');
+    final Request $request = Request('GET', $url, client.baseUrl);
+    return client.send<Map<String, dynamic>, Map<String, dynamic>>($request);
+  }
+
+  @override
+  Future<Response<Map<String, dynamic>>> getReportResponse() {
+    final Uri $url = Uri.parse('/sinhvien/bienbanshcn');
+    final Request $request = Request('GET', $url, client.baseUrl);
+    return client.send<Map<String, dynamic>, Map<String, dynamic>>($request);
+  }
+
+  @override
+  Future<Response<Map<String, dynamic>>> getPaperCertificates() {
+    final Uri $url = Uri.parse('/sinhvien/giay-xac-nhan');
+    final Request $request = Request('GET', $url, client.baseUrl);
+    return client.send<Map<String, dynamic>, Map<String, dynamic>>($request);
+  }
 }

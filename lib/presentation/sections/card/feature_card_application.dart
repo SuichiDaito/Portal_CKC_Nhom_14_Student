@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:portal_ckc/bloc/bloc_event_state/student_bloc.dart';
+import 'package:portal_ckc/bloc/event/student_event.dart';
 
 class FeatureCardApplication extends StatefulWidget {
   final BuildContext context;
@@ -52,13 +55,13 @@ class FeatureCard extends State<FeatureCardApplication> {
           GoRouter.of(context).push('/admin/${widget.feature.value}');
         } else if (widget.feature.id == 9) {
           // Tra cứu học phí
-          GoRouter.of(context).push('/student/search/tuition');
+          GoRouter.of(context).push('/student/training/program');
         } else if (widget.feature.id == 10) {
           // Tra cứu thông tin giảng viên
           GoRouter.of(context).push('/student/search/tuition');
         } else if (widget.feature.id == 11) {
-          // Tài liệu
-          GoRouter.of(context).push('/student/search/tuition');
+          // Xem danh sách giấy xác nhận đã đăng ký
+          GoRouter.of(context).push('/student/list/certificates');
         }
       },
       child: Container(

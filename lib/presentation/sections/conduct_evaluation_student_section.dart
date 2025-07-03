@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:portal_ckc/presentation/sections/divider_year_section.dart';
 
 class ConductEvaluationStudentSection extends StatefulWidget {
-  final String studentName;
-  final String point;
+  final int month;
+  final int year;
+  final String typePoint;
   const ConductEvaluationStudentSection({
     super.key,
-    required this.studentName,
-    required this.point,
+    required this.month,
+    required this.year,
+    required this.typePoint,
   });
 
   @override
@@ -23,7 +25,7 @@ class ConductEvaluation extends State<ConductEvaluationStudentSection> {
       child: Column(
         children: [
           const SizedBox(height: 10),
-          MonthYearDivider(date: DateTime.now()),
+          MonthYearDivider(date: DateTime(widget.year, widget.month)),
           const SizedBox(height: 8),
           Container(
             margin: const EdgeInsets.only(bottom: 12),
@@ -45,32 +47,24 @@ class ConductEvaluation extends State<ConductEvaluationStudentSection> {
                 vertical: 12,
               ),
               title: Text(
-                widget.studentName,
+                'Tháng ${widget.month} - Năm ${widget.year}',
                 style: const TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 16,
                 ),
               ),
-              subtitle: Text('Tháng: ${1} - Năm: 2025'),
               trailing: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    'Điểm: ${widget.point}',
-                    style: const TextStyle(
+                    'Điểm: ${widget.typePoint}',
+                    style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
-                    ),
-                  ),
-                  Text(
-                    'Xếp loại: Giỏi',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.amber,
-                      // color: widget.point == 'A'
-                      //     ? Colors.green
-                      //     : Colors.grey,
+                      color: widget.typePoint == 'A'
+                          ? Colors.green
+                          : Colors.grey,
                     ),
                   ),
                 ],

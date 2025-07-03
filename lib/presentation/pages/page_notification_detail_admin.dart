@@ -68,7 +68,7 @@ class _NotificationDetailPageState extends State<NotificationDetailPage> {
           if (context.canPop()) {
             context.pop();
           } else {
-            context.go('notifications');
+            context.go('/notifications');
           }
         },
       ),

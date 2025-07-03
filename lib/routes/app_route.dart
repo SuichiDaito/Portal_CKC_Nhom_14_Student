@@ -1,6 +1,10 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:portal_ckc/bloc/bloc_event_state/student_bloc.dart';
+import 'package:portal_ckc/bloc/event/student_event.dart';
 import 'package:portal_ckc/main.dart';
+import 'package:portal_ckc/presentation/page_training_program.dart';
 import 'package:portal_ckc/presentation/pages/appbar_bottombar/page_app_bar.dart';
 import 'package:portal_ckc/presentation/pages/page_class_book_admin.dart';
 import 'package:portal_ckc/presentation/pages/page_class_detail_admin.dart';
@@ -8,6 +12,7 @@ import 'package:portal_ckc/presentation/pages/page_class_management_admin.dart';
 import 'package:portal_ckc/presentation/pages/page_class_roster_admin.dart';
 import 'package:portal_ckc/presentation/pages/page_conduct_evaluation_admin.dart';
 import 'package:portal_ckc/presentation/pages/page_course_section_student_list.dart';
+import 'package:portal_ckc/presentation/pages/page_list_certificates_for_student.dart';
 import 'package:portal_ckc/presentation/pages/page_login.dart';
 import 'package:portal_ckc/presentation/pages/page_meeting_minutes_admin.dart';
 import 'package:portal_ckc/presentation/pages/page_notification_detail_admin.dart';
@@ -26,8 +31,6 @@ import 'package:portal_ckc/presentation/references/page_management_group_admin.d
 import 'package:portal_ckc/presentation/references/page_class_book_admin.dart';
 import 'package:portal_ckc/presentation/pages/page_notification_admin.dart';
 import 'package:portal_ckc/presentation/sections/notifications_home_admin.dart';
-
-
 
 class RouteName {
   static final GlobalKey<NavigatorState> rootNavigatorKey =
@@ -131,7 +134,16 @@ class RouteName {
         path: '/student/show/point',
         builder: (context, state) => StudentGradeScreen(),
       ),
-
+      GoRoute(
+        path: '/student/training/program',
+        builder: (context, state) => TrainingProgramScreen(),
+      ),
+      GoRoute(
+        path: '/student/list/certificates',
+        builder: (context, state) {
+          return DocumentListPage();
+        },
+      ),
       GoRoute(
         path: '/student/search/tuition',
         builder: (context, state) => PageSearchInfoGeneralStudent(),

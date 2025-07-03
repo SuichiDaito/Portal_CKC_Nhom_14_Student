@@ -2,7 +2,7 @@ class ApiString {
   // static String urlApi = 'http://127.0.0.1:8000/api';
   // run in macOs. plese don't remove it url.
   // static String urlApi = 'http://0.0.0.0:8000/api';
-  static String urlApi = 'http://192.168.122.107:8000/api';
+  static String urlApi = 'http://192.168.32.107:8000/api';
 }
 
 class BottomBarString {

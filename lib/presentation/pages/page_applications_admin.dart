@@ -72,9 +72,7 @@ class Application extends State<ApplicationsAdminPage> {
               ),
             ],
           ),
-
           const SizedBox(height: 20),
-
           // Grid View
           GridView.builder(
             shrinkWrap: true,
@@ -170,7 +168,7 @@ List<FeatureItem> getStudentFeatures() {
     FeatureItem(
       id: 9,
       icon: Icons.menu_book,
-      title: 'Tra cứu học phí',
+      title: 'Chương trình đào tạo',
       color: Colors.green,
       value: '',
     ),
@@ -183,9 +181,30 @@ List<FeatureItem> getStudentFeatures() {
     ),
     FeatureItem(
       id: 11,
-      icon: Icons.folder,
-      title: 'Tài liệu',
-      color: Colors.teal,
+      icon: Icons.contact_page,
+      title: 'Xem danh sách giấy xác nhận',
+      color: Colors.blueGrey,
+      value: '',
+    ),
+    FeatureItem(
+      id: 12,
+      icon: Icons.monetization_on,
+      title: 'Đóng học phí',
+      color: Colors.orange,
+      value: '',
+    ),
+    FeatureItem(
+      id: 12,
+      icon: Icons.assignment_sharp,
+      title: 'Đăng ký thi lại',
+      color: Colors.red,
+      value: '',
+    ),
+    FeatureItem(
+      id: 12,
+      icon: Icons.assignment_sharp,
+      title: 'Xem lịch sử thanh toán',
+      color: Colors.amber,
       value: '',
     ),
   ];

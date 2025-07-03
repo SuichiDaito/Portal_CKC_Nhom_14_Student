@@ -371,7 +371,7 @@ class _StudentGradeScreenState extends State<StudentGradeScreen> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
-            GoRouter.of(context).go('/home/admin');
+            context.pop();
           },
         ),
         elevation: 0,

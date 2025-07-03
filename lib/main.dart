@@ -6,9 +6,13 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:portal_ckc/api/controller/call_api_student.dart';
 import 'package:portal_ckc/api/services/student_service.dart';
+import 'package:portal_ckc/bloc/bloc_event_state/certificates_bloc.dart';
+import 'package:portal_ckc/bloc/bloc_event_state/paper_certificates_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/student_bloc.dart';
-import 'package:portal_ckc/bloc/state/bloc_state.dart';
-import 'package:portal_ckc/bloc/event/bloc_event.dart';
+import 'package:portal_ckc/bloc/bloc_event_state/student_report_response_bloc.dart';
+import 'package:portal_ckc/bloc/bloc_event_state/training_point_bloc.dart';
+import 'package:portal_ckc/bloc/state/student_state.dart';
+import 'package:portal_ckc/bloc/event/student_event.dart';
 import 'package:portal_ckc/l10n/app_localizations.dart';
 import 'package:portal_ckc/api/model/comment.dart';
 import 'package:portal_ckc/presentation/sections/button/button_login.dart';
@@ -25,7 +29,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-      providers: [BlocProvider(create: (_) => StudentBloc())],
+      providers: [
+        BlocProvider(create: (_) => StudentBloc()),
+        BlocProvider(create: (_) => CertificatesBloc()),
+        BlocProvider(create: (_) => TrainingPointBloc()),
+        BlocProvider(create: (_) => StudentReportResponseBloc()),
+        BlocProvider(create: (_) => PaperCertificatesBloc()),
+      ],
       child: MaterialApp.router(
         routerConfig: RouteName.route,
         debugShowCheckedModeBanner: false,
@@ -38,23 +48,5 @@ class MyApp extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-class DebugContextWidget extends StatelessWidget {
-  final String name;
-  const DebugContextWidget({super.key, required this.name});
-
-  @override
-  Widget build(BuildContext context) {
-    print('[$name] Navigator hash: ${Navigator.of(context)}');
-    print(
-      '[Logout Screen] rootNavigatorKey context: ${RouteName.rootNavigatorKey.currentContext}',
-    );
-    print(
-      '[Logout Screen] rootNavigator Navigator: ${Navigator.of(RouteName.rootNavigatorKey.currentContext!)}',
-    );
-
-    return Container();
   }
 }

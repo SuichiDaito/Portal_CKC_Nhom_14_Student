@@ -3,7 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/student_bloc.dart';
-import 'package:portal_ckc/bloc/state/admin_state.dart';
+import 'package:portal_ckc/bloc/event/student_event.dart';
+import 'package:portal_ckc/bloc/state/student_state.dart';
 import 'package:portal_ckc/presentation/pages/page_notification_detail_admin.dart';
 import 'package:portal_ckc/presentation/sections/grid_app_home_admin.dart';
 import 'package:portal_ckc/presentation/sections/header_home_admin_section.dart';
@@ -22,12 +23,11 @@ class _MainLayoutHomeAdminPage extends State<MainLayoutHomeAdminPage> {
       listener: (context, state) {},
       builder: (context, state) {
         if (state is StudentLoading) {
-          return Center(child: CircularProgressIndicator());
+          return Center(child: CircularProgressIndicator(color: Colors.blue));
         } else if (state is StudentError) {
           return Text(state.message);
         } else if (state is StudentLoaded) {
           final student = state.student;
-
           return SafeArea(
             child: SingleChildScrollView(
               scrollDirection: Axis.vertical,
@@ -50,7 +50,7 @@ class _MainLayoutHomeAdminPage extends State<MainLayoutHomeAdminPage> {
                   SizedBox(height: 20),
 
                   // Function Grid
-                  GridAppHomeAdmin(),
+                  // GridAppHomeAdmin(),
                   SizedBox(height: 20),
 
                   // Latest Notifications Section

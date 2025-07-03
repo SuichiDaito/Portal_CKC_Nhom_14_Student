@@ -1,1 +1,26 @@
-{}
+"sinh_vien": {
+    "id": 1,
+    "ma_sv": "0306221",
+    "id_lop": 1,
+    "id_ho_so": 4,
+    "id_lop_chuyen_nganh": null,
+    "chuc_vu": 0,
+    "password": "$2y$12$GZT6b9QVBhBeDCwfo4JOH.M0HXn7kOc43cXvIZD3SrDQPEakthpMy",
+    "trang_thai": 0,
+    "created_at": null,
+    "updated_at": null,
+    "ho_so": {
+        "id": 4,
+        "ho_ten": "Sinh Viên 1",
+        "email": "sv_1@fe.edu.vn",
+        "password": "$2y$12$8u.28wCzXNX.KhTXtsn8TeN1j9V20pdk5elGoe2A1cjxhbLZ5Nmfy",
+        "so_dien_thoai": "0123456700",
+        "ngay_sinh": "2000-01-01",
+        "gioi_tinh": "Nam",
+        "cccd": "06901234001",
+        "dia_chi": "999 Vo Nguyen Giap, Hanoi",
+        "anh": "assets/fe/images/ho_so/profile.jpg",
+        "created_at": null,
+        "updated_at": null
+    }
+}

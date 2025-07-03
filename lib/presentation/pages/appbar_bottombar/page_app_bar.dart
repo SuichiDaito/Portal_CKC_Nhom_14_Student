@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/student_bloc.dart';
-import 'package:portal_ckc/bloc/state/admin_state.dart';
+import 'package:portal_ckc/bloc/state/student_state.dart';
 import 'package:portal_ckc/presentation/sections/dialogs/snack_bar_scaffold.dart';
 
 class AppBarNavigationHomePage extends StatefulWidget {
