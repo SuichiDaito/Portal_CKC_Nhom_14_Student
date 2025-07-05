@@ -69,8 +69,12 @@ class AccountInfoSection extends StatelessWidget {
                     // Student information details
                     _buildInfoItem('Mã sinh viên: ${student.maSv}'),
                     _buildInfoItem('Họ và tên: ${student.hoSo!.hoTen}'),
-                    _buildInfoItem('Lớp: ${student.lop!.tenLop}'),
-                    _buildInfoItem('Chức vụ: ${student.chucVu}'),
+                    _buildInfoItem(
+                      'Lớp: ${student.danhSachSinhVien.last.lop.tenLop}',
+                    ),
+                    _buildInfoItem(
+                      'Chức vụ: ${student.danhSachSinhVien.last.chucVu}',
+                    ),
                     _buildInfoItem('Ngày sinh: ${student.hoSo!.ngaySinh}'),
 
                     SizedBox(height: 20),

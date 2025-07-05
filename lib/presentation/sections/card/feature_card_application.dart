@@ -54,14 +54,17 @@ class FeatureCard extends State<FeatureCardApplication> {
           // Viết biên bản sinh hoạt (Thư ký)
           GoRouter.of(context).push('/admin/${widget.feature.value}');
         } else if (widget.feature.id == 9) {
-          // Tra cứu học phí
+          // Chương trình đào tạo
           GoRouter.of(context).push('/student/training/program');
         } else if (widget.feature.id == 10) {
           // Tra cứu thông tin giảng viên
-          GoRouter.of(context).push('/student/search/tuition');
+          GoRouter.of(context).push('/student/info/teacher');
         } else if (widget.feature.id == 11) {
           // Xem danh sách giấy xác nhận đã đăng ký
           GoRouter.of(context).push('/student/list/certificates');
+        } else if (widget.feature.id == 12) {
+          // Xem danh sách giấy xác nhận đã đăng ký
+          GoRouter.of(context).push('/student/payment');
         }
       },
       child: Container(

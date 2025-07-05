@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/paper_certificates_bloc.dart';
+import 'package:portal_ckc/bloc/bloc_event_state/sign_up_certificates_bloc.dart';
+import 'package:portal_ckc/bloc/event/certificates_event.dart';
 import 'package:portal_ckc/bloc/event/student_paper_certificates_event.dart';
 import 'package:portal_ckc/bloc/state/student_paper_certificates_state.dart';
+import 'package:portal_ckc/presentation/sections/dialogs/snack_bar_scaffold.dart';
+import 'package:portal_ckc/bloc/event/sign_up_certificates_event.dart';
 
 class CertificatesOptionCard extends StatefulWidget {
-  CertificatesOptionCard({super.key});
+  final List<int> selectedId;
+  CertificatesOptionCard({super.key, required this.selectedId});
   @override
   State<CertificatesOptionCard> createState() => CertificatesCard();
 }
@@ -18,8 +23,6 @@ class CertificatesCard extends State<CertificatesOptionCard> {
     context.read<PaperCertificatesBloc>().add(PaperCertificatesEvent());
   }
 
-  final Set<int> selectedId = {};
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PaperCertificatesBloc, StudentPaperCertificatesState>(
@@ -27,102 +30,113 @@ class CertificatesCard extends State<CertificatesOptionCard> {
         if (state is StudentPaperCertificatesLoading) {
           return Center(child: CircularProgressIndicator(color: Colors.blue));
         } else if (state is StudentPaperCertificatesLoaded) {
-          final papers = state.papers;
+          final papers = state!.papers;
           if (papers.isEmpty) {
             return Center(child: Text('Không có danh sách'));
           }
-          return SizedBox(
-            height: 900,
+          return SingleChildScrollView(
             child: Column(
               children: [
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: papers.length,
-                    itemBuilder: (context, index) {
-                      final isSelected = selectedId.contains(papers[index].id);
-                      return Column(
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(12),
-                              border: Border.all(
-                                color: Colors.grey[300]!,
-                                width: 2,
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: papers.length,
+                  itemBuilder: (context, index) {
+                    final isSelected = widget.selectedId.contains(
+                      papers[index].id,
+                    );
+                    return Column(
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: Colors.grey[300]!,
+                              width: 2,
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.1),
+                                blurRadius: 4,
+                                offset: Offset(0, 2),
                               ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.1),
-                                  blurRadius: 4,
-                                  offset: Offset(0, 2),
+                            ],
+                          ),
+                          child: CheckboxListTile(
+                            value: isSelected,
+                            onChanged: (bool? value) {
+                              setState(() {
+                                if (value == true) {
+                                  widget.selectedId.add(papers[index].id);
+                                } else {
+                                  widget.selectedId.remove(papers[index].id);
+                                }
+                              });
+                              print(
+                                'loai giay được chọn: ${widget.selectedId}',
+                              );
+                            },
+                            activeColor: Colors.blue[600],
+                            checkColor: Colors.white,
+                            controlAffinity: ListTileControlAffinity.trailing,
+                            contentPadding: EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 8,
+                            ),
+                            title: Row(
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey[300],
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Icon(
+                                    Icons.my_library_books,
+                                    color: Colors.blueGrey[100],
+                                    size: 24,
+                                  ),
+                                ),
+                                SizedBox(width: 12),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        papers[index].tenGiay,
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.grey[800],
+                                        ),
+                                      ),
+                                      SizedBox(height: 4),
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
-                            child: CheckboxListTile(
-                              value: isSelected,
-                              onChanged: (bool? value) {
-                                setState(() {
-                                  if (value == true) {
-                                    selectedId.add(papers[index].id);
-                                  } else {
-                                    selectedId.remove(papers[index].id);
-                                  }
-                                });
-                              },
-                              activeColor: Colors.blue[600],
-                              checkColor: Colors.white,
-                              controlAffinity: ListTileControlAffinity.trailing,
-                              contentPadding: EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 8,
-                              ),
-                              title: Row(
-                                children: [
-                                  Container(
-                                    padding: EdgeInsets.all(8),
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey[300],
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    child: Icon(
-                                      Icons.my_library_books,
-                                      color: Colors.blueGrey[100],
-                                      size: 24,
-                                    ),
-                                  ),
-                                  SizedBox(width: 12),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          papers[index].tenGiay,
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w600,
-                                            color: Colors.grey[800],
-                                          ),
-                                        ),
-                                        SizedBox(height: 4),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
                           ),
-                          SizedBox(height: 10),
-                        ],
-                      );
-                    },
-                  ),
+                        ),
+                        SizedBox(height: 10),
+                      ],
+                    );
+                  },
                 ),
                 Container(
                   width: double.infinity,
                   height: 56,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      // xử lý gửi request
+                      context.read<SignUpCertificatesBloc>().add(
+                        RequestSignupCertificatesEvent(widget.selectedId),
+                      );
+
+                      // selectedId.clear();
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue[600],
                       shape: RoundedRectangleBorder(
@@ -140,6 +154,7 @@ class CertificatesCard extends State<CertificatesOptionCard> {
                     ),
                   ),
                 ),
+                SizedBox(height: 20),
               ],
             ),
           );

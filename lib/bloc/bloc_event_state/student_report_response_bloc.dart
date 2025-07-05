@@ -32,14 +32,20 @@ class StudentReportResponseBloc
 
         if (body is Map<String, dynamic>) {
           if (body.containsKey('bienBanSHCN')) {
-            final listData = body['bienBanSHCN'] as List<dynamic>;
-            final reportResponses = listData
-                .map(
-                  (item) => BienBanSHCN.fromJson(item as Map<String, dynamic>),
-                )
-                .toList();
+            final report = body['bienBanSHCN'];
+            if (report is Map<String, dynamic>) {
+              if (report.containsKey('data')) {
+                final json = report['data'] as List<dynamic>;
+                final reportResponses = json
+                    .map(
+                      (item) =>
+                          BienBanShcn.fromJson(item as Map<String, dynamic>),
+                    )
+                    .toList();
 
-            emit(StudentReportResponseLoaded(reportResponses));
+                emit(StudentReportResponseLoaded(reportResponses));
+              }
+            }
           } else {
             emit(
               StudentReportResponseError(

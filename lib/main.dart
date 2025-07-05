@@ -7,10 +7,17 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:portal_ckc/api/controller/call_api_student.dart';
 import 'package:portal_ckc/api/services/student_service.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/certificates_bloc.dart';
+import 'package:portal_ckc/bloc/bloc_event_state/exam_bloc.dart';
+import 'package:portal_ckc/bloc/bloc_event_state/info_teacher_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/paper_certificates_bloc.dart';
+import 'package:portal_ckc/bloc/bloc_event_state/payment_bloc.dart';
+import 'package:portal_ckc/bloc/bloc_event_state/sign_up_certificates_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/student_bloc.dart';
+import 'package:portal_ckc/bloc/bloc_event_state/student_point_result_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/student_report_response_bloc.dart';
+import 'package:portal_ckc/bloc/bloc_event_state/time_table_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/training_point_bloc.dart';
+import 'package:portal_ckc/bloc/bloc_event_state/training_program_bloc.dart';
 import 'package:portal_ckc/bloc/state/student_state.dart';
 import 'package:portal_ckc/bloc/event/student_event.dart';
 import 'package:portal_ckc/l10n/app_localizations.dart';
@@ -35,6 +42,13 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => TrainingPointBloc()),
         BlocProvider(create: (_) => StudentReportResponseBloc()),
         BlocProvider(create: (_) => PaperCertificatesBloc()),
+        BlocProvider(create: (_) => StudentPointResultBloc()),
+        BlocProvider(create: (_) => PaymentBloc()),
+        BlocProvider(create: (_) => ExamBloc()),
+        BlocProvider(create: (_) => SignUpCertificatesBloc()),
+        BlocProvider(create: (_) => InfoTeacherBloc()),
+        BlocProvider(create: (_) => TimeTableBloc()),
+        BlocProvider(create: (_) => TrainingProgramBloc()),
       ],
       child: MaterialApp.router(
         routerConfig: RouteName.route,

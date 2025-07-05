@@ -31,7 +31,7 @@ class _AppBarNavigationHomePage extends State<AppBarNavigationHomePage> {
             backgroundColor: Colors.grey[100],
             appBar: _buildAppBarHomePage(
               student.hoSo!.hoTen,
-              student.lop!.tenLop,
+              student.danhSachSinhVien.last.lop.tenLop,
             ),
             body: widget.child,
           );

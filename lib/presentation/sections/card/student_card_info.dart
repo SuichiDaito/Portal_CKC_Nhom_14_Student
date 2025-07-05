@@ -70,9 +70,7 @@ class StudentCardInfo extends StatelessWidget {
                 SizedBox(height: 12),
                 StudentInfoSection(
                   label: 'Lớp',
-                  value: student.lop!.tenLop.isNotEmpty
-                      ? student.lop!.tenLop
-                      : 'Chưa có lớp',
+                  value: student.danhSachSinhVien.last.lop.tenLop,
                 ),
                 SizedBox(height: 12),
                 StudentInfoSection(
@@ -89,3 +87,7 @@ class StudentCardInfo extends StatelessWidget {
     );
   }
 }
+
+// //student.danhSachSinhVien.last.idLop!.isEven
+//                       ? student.danhSachSinhVien.last.idLop!.isOdd
+//                       : ,

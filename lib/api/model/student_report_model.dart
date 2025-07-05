@@ -1,20 +1,68 @@
-class ReportResponse {
+class BienBanShcnResponse {
   final String status;
-  final List<BienBanSHCN> bienBanSHCN;
+  final BienBanShcnPagination bienBanSHCN;
 
-  ReportResponse({required this.status, required this.bienBanSHCN});
+  BienBanShcnResponse({required this.status, required this.bienBanSHCN});
 
-  factory ReportResponse.fromJson(Map<String, dynamic> json) {
-    return ReportResponse(
+  factory BienBanShcnResponse.fromJson(Map<String, dynamic> json) {
+    return BienBanShcnResponse(
       status: json['status'],
-      bienBanSHCN: (json['bienBanSHCN'] as List)
-          .map((e) => BienBanSHCN.fromJson(e))
-          .toList(),
+      bienBanSHCN: BienBanShcnPagination.fromJson(json['bienBanSHCN']),
     );
   }
 }
 
-class BienBanSHCN {
+class BienBanShcnPagination {
+  final int currentPage;
+  final List<BienBanShcn> data;
+  final int from;
+  final int lastPage;
+  final String firstPageUrl;
+  final String lastPageUrl;
+  final List<Link> links;
+  final String? nextPageUrl;
+  final String path;
+  final int perPage;
+  final String? prevPageUrl;
+  final int to;
+  final int total;
+
+  BienBanShcnPagination({
+    required this.currentPage,
+    required this.data,
+    required this.from,
+    required this.lastPage,
+    required this.firstPageUrl,
+    required this.lastPageUrl,
+    required this.links,
+    this.nextPageUrl,
+    required this.path,
+    required this.perPage,
+    this.prevPageUrl,
+    required this.to,
+    required this.total,
+  });
+
+  factory BienBanShcnPagination.fromJson(Map<String, dynamic> json) {
+    return BienBanShcnPagination(
+      currentPage: json['current_page'],
+      data: (json['data'] as List).map((e) => BienBanShcn.fromJson(e)).toList(),
+      from: json['from'],
+      lastPage: json['last_page'],
+      firstPageUrl: json['first_page_url'],
+      lastPageUrl: json['last_page_url'],
+      links: (json['links'] as List).map((e) => Link.fromJson(e)).toList(),
+      nextPageUrl: json['next_page_url'],
+      path: json['path'],
+      perPage: json['per_page'],
+      prevPageUrl: json['prev_page_url'],
+      to: json['to'],
+      total: json['total'],
+    );
+  }
+}
+
+class BienBanShcn {
   final int id;
   final int idLop;
   final int idSv;
@@ -27,12 +75,15 @@ class BienBanSHCN {
   final int soLuongSinhVien;
   final int vangMat;
   final int trangThai;
+  final DateTime createdAt;
+  final DateTime? updatedAt;
   final Lop lop;
-  final ThuKy thuky;
+  final SinhVien thuky;
+  final GiaoVien gvcn;
   final Tuan tuan;
-  final Gvcn gvcn;
+  final List<dynamic> chiTietBienBanShcn;
 
-  BienBanSHCN({
+  BienBanShcn({
     required this.id,
     required this.idLop,
     required this.idSv,
@@ -45,15 +96,17 @@ class BienBanSHCN {
     required this.soLuongSinhVien,
     required this.vangMat,
     required this.trangThai,
-
+    required this.createdAt,
+    this.updatedAt,
     required this.lop,
     required this.thuky,
-    required this.tuan,
     required this.gvcn,
+    required this.tuan,
+    required this.chiTietBienBanShcn,
   });
 
-  factory BienBanSHCN.fromJson(Map<String, dynamic> json) {
-    return BienBanSHCN(
+  factory BienBanShcn.fromJson(Map<String, dynamic> json) {
+    return BienBanShcn(
       id: json['id'],
       idLop: json['id_lop'],
       idSv: json['id_sv'],
@@ -66,10 +119,15 @@ class BienBanSHCN {
       soLuongSinhVien: json['so_luong_sinh_vien'],
       vangMat: json['vang_mat'],
       trangThai: json['trang_thai'],
+      createdAt: DateTime.parse(json['created_at']),
+      updatedAt: json['updated_at'] != null
+          ? DateTime.parse(json['updated_at'])
+          : null,
       lop: Lop.fromJson(json['lop']),
-      thuky: ThuKy.fromJson(json['thuky']),
+      thuky: SinhVien.fromJson(json['thuky']),
+      gvcn: GiaoVien.fromJson(json['gvcn']),
       tuan: Tuan.fromJson(json['tuan']),
-      gvcn: Gvcn.fromJson(json['gvcn']),
+      chiTietBienBanShcn: json['chi_tiet_bien_ban_s_h_c_n'],
     );
   }
 }
@@ -79,7 +137,7 @@ class Lop {
   final String tenLop;
   final int idNienKhoa;
   final int idGvcn;
-  final int idNganhHoc;
+  final int idChuyenNganh;
   final int siSo;
 
   Lop({
@@ -87,7 +145,7 @@ class Lop {
     required this.tenLop,
     required this.idNienKhoa,
     required this.idGvcn,
-    required this.idNganhHoc,
+    required this.idChuyenNganh,
     required this.siSo,
   });
 
@@ -97,7 +155,7 @@ class Lop {
       tenLop: json['ten_lop'],
       idNienKhoa: json['id_nien_khoa'],
       idGvcn: json['id_gvcn'],
-      idNganhHoc: json['id_nganh_hoc'],
+      idChuyenNganh: json['id_chuyen_nganh'],
       siSo: json['si_so'],
     );
   }
@@ -186,8 +244,10 @@ class Tuan {
   final int id;
   final int idNam;
   final int tuan;
-  final String ngayBatDau;
-  final String ngayKetThuc;
+  final DateTime ngayBatDau;
+  final DateTime ngayKetThuc;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
   Tuan({
     required this.id,
@@ -195,6 +255,8 @@ class Tuan {
     required this.tuan,
     required this.ngayBatDau,
     required this.ngayKetThuc,
+    required this.createdAt,
+    required this.updatedAt,
   });
 
   factory Tuan.fromJson(Map<String, dynamic> json) {
@@ -202,8 +264,10 @@ class Tuan {
       id: json['id'],
       idNam: json['id_nam'],
       tuan: json['tuan'],
-      ngayBatDau: json['ngay_bat_dau'],
-      ngayKetThuc: json['ngay_ket_thuc'],
+      ngayBatDau: DateTime.parse(json['ngay_bat_dau']),
+      ngayKetThuc: DateTime.parse(json['ngay_ket_thuc']),
+      createdAt: DateTime.parse(json['created_at']),
+      updatedAt: DateTime.parse(json['updated_at']),
     );
   }
 }
@@ -214,6 +278,7 @@ class Gvcn {
   final int idBoMon;
   final String taiKhoan;
   final int trangThai;
+  final HoSo hoSo;
 
   Gvcn({
     required this.id,
@@ -221,6 +286,7 @@ class Gvcn {
     required this.idBoMon,
     required this.taiKhoan,
     required this.trangThai,
+    required this.hoSo,
   });
 
   factory Gvcn.fromJson(Map<String, dynamic> json) {
@@ -230,6 +296,77 @@ class Gvcn {
       idBoMon: json['id_bo_mon'],
       taiKhoan: json['tai_khoan'],
       trangThai: json['trang_thai'],
+      hoSo: HoSo.fromJson(json['ho_so']),
     );
+  }
+}
+
+class SinhVien {
+  final int id;
+  final String maSv;
+  final int idHoSo;
+  final String password;
+  final int trangThai;
+  final HoSo hoSo;
+
+  SinhVien({
+    required this.id,
+    required this.maSv,
+    required this.idHoSo,
+    required this.password,
+    required this.trangThai,
+    required this.hoSo,
+  });
+
+  factory SinhVien.fromJson(Map<String, dynamic> json) {
+    return SinhVien(
+      id: json['id'],
+      maSv: json['ma_sv'],
+      idHoSo: json['id_ho_so'],
+      password: json['password'],
+      trangThai: json['trang_thai'],
+      hoSo: HoSo.fromJson(json['ho_so']),
+    );
+  }
+}
+
+class GiaoVien {
+  final int id;
+  final int idHoSo;
+  final int idBoMon;
+  final String taiKhoan;
+  final int trangThai;
+  final HoSo hoSo;
+
+  GiaoVien({
+    required this.id,
+    required this.idHoSo,
+    required this.idBoMon,
+    required this.taiKhoan,
+    required this.trangThai,
+    required this.hoSo,
+  });
+
+  factory GiaoVien.fromJson(Map<String, dynamic> json) {
+    return GiaoVien(
+      id: json['id'],
+      idHoSo: json['id_ho_so'],
+      idBoMon: json['id_bo_mon'],
+      taiKhoan: json['tai_khoan'],
+      trangThai: json['trang_thai'],
+      hoSo: HoSo.fromJson(json['ho_so']),
+    );
+  }
+}
+
+class Link {
+  final String? url;
+  final String label;
+  final bool active;
+
+  Link({this.url, required this.label, required this.active});
+
+  factory Link.fromJson(Map<String, dynamic> json) {
+    return Link(url: json['url'], label: json['label'], active: json['active']);
   }
 }

@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/student_bloc.dart';
 import 'package:portal_ckc/bloc/event/student_event.dart';
 import 'package:portal_ckc/main.dart';
-import 'package:portal_ckc/presentation/page_training_program.dart';
+import 'package:portal_ckc/presentation/pages/page_training_program.dart';
 import 'package:portal_ckc/presentation/pages/appbar_bottombar/page_app_bar.dart';
 import 'package:portal_ckc/presentation/pages/page_class_book_admin.dart';
 import 'package:portal_ckc/presentation/pages/page_class_detail_admin.dart';
@@ -12,10 +12,12 @@ import 'package:portal_ckc/presentation/pages/page_class_management_admin.dart';
 import 'package:portal_ckc/presentation/pages/page_class_roster_admin.dart';
 import 'package:portal_ckc/presentation/pages/page_conduct_evaluation_admin.dart';
 import 'package:portal_ckc/presentation/pages/page_course_section_student_list.dart';
+import 'package:portal_ckc/presentation/pages/page_info_teacher.dart';
 import 'package:portal_ckc/presentation/pages/page_list_certificates_for_student.dart';
 import 'package:portal_ckc/presentation/pages/page_login.dart';
 import 'package:portal_ckc/presentation/pages/page_meeting_minutes_admin.dart';
 import 'package:portal_ckc/presentation/pages/page_notification_detail_admin.dart';
+import 'package:portal_ckc/presentation/pages/page_payment_study_fee.dart';
 import 'package:portal_ckc/presentation/pages/page_report_detail_admin.dart';
 import 'package:portal_ckc/presentation/pages/page_exam_schedule_admin.dart';
 import 'package:portal_ckc/presentation/pages/page_search_info_general_student.dart';
@@ -121,6 +123,11 @@ class RouteName {
         path: '/admin/exam_schedule_admin',
         builder: (context, state) => PageExamScheduleAdmin(),
       ),
+      //LecturerInfoScreen
+      GoRoute(
+        path: '/student/info/teacher',
+        builder: (context, state) => LecturerInfoScreen(),
+      ),
       GoRoute(
         path: '/admin/report_detail_admin',
         builder: (context, state) => PageReportDetailAdmin(),
@@ -142,6 +149,13 @@ class RouteName {
         path: '/student/list/certificates',
         builder: (context, state) {
           return DocumentListPage();
+        },
+      ),
+      //TuitionFeeScreen
+      GoRoute(
+        path: '/student/payment',
+        builder: (context, state) {
+          return TuitionFeeScreen();
         },
       ),
       GoRoute(

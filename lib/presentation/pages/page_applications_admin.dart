@@ -194,14 +194,7 @@ List<FeatureItem> getStudentFeatures() {
       value: '',
     ),
     FeatureItem(
-      id: 12,
-      icon: Icons.assignment_sharp,
-      title: 'Đăng ký thi lại',
-      color: Colors.red,
-      value: '',
-    ),
-    FeatureItem(
-      id: 12,
+      id: 13,
       icon: Icons.assignment_sharp,
       title: 'Xem lịch sử thanh toán',
       color: Colors.amber,

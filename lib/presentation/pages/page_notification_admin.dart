@@ -26,12 +26,12 @@ class _NotificationPageState extends State<NotificationPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                  NotificationsHomeAdmin(
-                    typeNotification: 'Thông báo khoa',
-                    contentNotification: 'Thông báo mới nhất',
-                    date: '24/06/2025',
-                  ),
-               
+                NotificationsHomeAdmin(
+                  typeNotification: 'Thông báo khoa',
+                  contentNotification: 'Thông báo mới nhất',
+                  date: '24/06/2025',
+                ),
+
                 SizedBox(height: 20),
                 NotificationsHomeAdmin(
                   typeNotification: 'Thông báo giáo viên',
@@ -53,44 +53,52 @@ class _NotificationPageState extends State<NotificationPage> {
   }
 
   Widget _buildFilterTabs() {
-    final filters = ['Tất cả', 'Khoa', 'Lớp', 'Giảng viên'];
+    final filters = [
+      'Tất cả',
+      'Thông báo khoa',
+      'Thông báo lớp',
+      'Thông báo lớp học phần',
+    ];
     return Container(
       color: Colors.white,
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      child: Row(
-        children: filters.map((filter) {
-          final isSelected = selectedFilter == filter;
-          return Padding(
-            padding: EdgeInsets.only(right: 12),
-            child: GestureDetector(
-              onTap: () {
-                setState(() {
-                  selectedFilter = filter;
-                });
-              },
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                decoration: BoxDecoration(
-                  color: isSelected ? Colors.blue[600] : Colors.grey[200],
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(
-                    color: isSelected ? Colors.blue[600]! : Colors.grey[300]!,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: filters.map((filter) {
+            final isSelected = selectedFilter == filter;
+            return Padding(
+              padding: EdgeInsets.only(right: 12),
+              child: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    selectedFilter = filter;
+                  });
+                },
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: isSelected ? Colors.blue[600] : Colors.grey[200],
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                      color: isSelected ? Colors.blue[600]! : Colors.grey[300]!,
+                    ),
                   ),
-                ),
-                child: Text(
-                  filter,
-                  style: TextStyle(
-                    color: isSelected ? Colors.white : Colors.grey[700],
-                    fontSize: 14,
-                    fontWeight: isSelected
-                        ? FontWeight.w600
-                        : FontWeight.normal,
+                  child: Text(
+                    filter,
+                    style: TextStyle(
+                      color: isSelected ? Colors.white : Colors.grey[700],
+                      fontSize: 14,
+                      fontWeight: isSelected
+                          ? FontWeight.w600
+                          : FontWeight.normal,
+                    ),
                   ),
                 ),
               ),
-            ),
-          );
-        }).toList(),
+            );
+          }).toList(),
+        ),
       ),
     );
   }

@@ -2,9 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:portal_ckc/presentation/pages/page_exam_schedule_admin.dart';
 
 class ExamDutyCard extends StatelessWidget {
-  final ExamDuty duty;
-
-  const ExamDutyCard({required this.duty});
+  final String nameSubject;
+  final String nameLecture1;
+  final String nameLecture2;
+  final String dateExam;
+  final String beginTime;
+  final int distanceTime;
+  final String nameRoom;
+  final int examTimes;
+  const ExamDutyCard({
+    required this.nameSubject,
+    required this.nameLecture1,
+    required this.nameLecture2,
+    required this.dateExam,
+    required this.beginTime,
+    required this.distanceTime,
+    required this.nameRoom,
+    required this.examTimes,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -26,12 +41,28 @@ class ExamDutyCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Container(
+            padding: EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Colors.blue.shade50,
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: Colors.blue),
+            ),
+            child: Text(
+              nameSubject,
+              style: TextStyle(
+                color: Colors.blue,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
           Row(
             children: [
               Icon(Icons.supervisor_account, color: Colors.blue[700], size: 18),
               SizedBox(width: 6),
               Text(
-                '${duty.invigilator1} & ${duty.invigilator2}',
+                '${nameLecture1} & ${nameLecture2}',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: Colors.blue[800],
@@ -44,7 +75,7 @@ class ExamDutyCard extends StatelessWidget {
             children: [
               Icon(Icons.calendar_today, size: 16, color: Colors.grey[600]),
               SizedBox(width: 6),
-              Text('Ngày thi: ${duty.examDate}'),
+              Text('Ngày thi: ${dateExam}'),
             ],
           ),
           SizedBox(height: 4),
@@ -52,7 +83,7 @@ class ExamDutyCard extends StatelessWidget {
             children: [
               Icon(Icons.access_time, size: 16, color: Colors.grey[600]),
               SizedBox(width: 6),
-              Text('Bắt đầu: ${duty.startTime} | ${duty.duration} phút'),
+              Text('Bắt đầu: ${beginTime} | ${distanceTime} phút'),
             ],
           ),
           SizedBox(height: 4),
@@ -60,7 +91,19 @@ class ExamDutyCard extends StatelessWidget {
             children: [
               Icon(Icons.meeting_room, size: 16, color: Colors.grey[600]),
               SizedBox(width: 6),
-              Text('Phòng: ${duty.room}'),
+              Text('Phòng: ${nameRoom}'),
+            ],
+          ),
+          SizedBox(height: 4),
+          Row(
+            children: [
+              Icon(
+                Icons.add_circle_outlined,
+                size: 16,
+                color: Colors.grey[600],
+              ),
+              SizedBox(width: 6),
+              Text('Lần thi: ${examTimes}'),
             ],
           ),
           SizedBox(height: 4),
@@ -68,7 +111,7 @@ class ExamDutyCard extends StatelessWidget {
             children: [
               Icon(Icons.check_circle, size: 16, color: Colors.grey[600]),
               SizedBox(width: 6),
-              Text('Trạng thái: ${duty.status}'),
+              Text('Trạng thái: chưa có'),
             ],
           ),
         ],

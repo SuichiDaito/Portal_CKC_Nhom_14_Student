@@ -65,9 +65,6 @@ class PageExamScheduleAdmin extends StatefulWidget {
 
 class _PageExamScheduleAdminState extends State<PageExamScheduleAdmin> {
   String? selectedStatus;
-  // final String teacherName = "TS. Nguyễn Văn An";
-  // final String teacherId = "GV001";
-  // final String department = "Khoa Công Nghệ Thông Tin";
 
   @override
   Widget build(BuildContext context) {

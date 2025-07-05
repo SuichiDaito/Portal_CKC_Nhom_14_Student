@@ -82,6 +82,8 @@ class _DocumentListPageState extends State<DocumentListPage> {
                 ),
                 Expanded(
                   child: ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
                     itemCount: certificates.length,
                     itemBuilder: (context, index) {
                       final certificate = certificates[index];

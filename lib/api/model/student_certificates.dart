@@ -67,36 +67,27 @@ class LoaiGiay {
 }
 
 class Student {
+  final int id;
+  final String maSv;
+  final int idHoSo;
+  final String password;
+  final int trangThai;
+  final HoSo hoSo;
+
   Student({
     required this.id,
     required this.maSv,
-    required this.idLop,
     required this.idHoSo,
-    required this.idLopChuyenNganh,
-    required this.chucVu,
     required this.password,
     required this.trangThai,
     required this.hoSo,
   });
 
-  final int id;
-  final String maSv;
-  final int idLop;
-  final int idHoSo;
-  final int idLopChuyenNganh;
-  final int chucVu;
-  final String password;
-  final int trangThai;
-  final HoSo hoSo;
-
   factory Student.fromJson(Map<String, dynamic> json) {
     return Student(
       id: json['id'],
       maSv: json['ma_sv'],
-      idLop: json['id_lop'],
       idHoSo: json['id_ho_so'],
-      idLopChuyenNganh: json['id_lop_chuyen_nganh'] ?? 0,
-      chucVu: json['chuc_vu'],
       password: json['password'],
       trangThai: json['trang_thai'],
       hoSo: HoSo.fromJson(json['ho_so']),

@@ -30,4 +30,29 @@ abstract class StudentService extends ChopperService {
 
   @GET(path: '/giay-xac-nhan')
   Future<Response<Map<String, dynamic>>> getPaperCertificates();
+
+  @GET(path: '/ket-qua-hoc-tap')
+  Future<Response<Map<String, dynamic>>> getPointResult();
+
+  @GET(path: '/hocphi')
+  Future<Response<Map<String, dynamic>>> getPaymentStudentFee(
+    @Body() Map<String, dynamic> body,
+  );
+
+  @GET(path: '/thong-tin-giang-vien')
+  Future<Response<Map<String, dynamic>>> getInfoTeacher();
+
+  @GET(path: '/lich-thi')
+  Future<Response<Map<String, dynamic>>> getExamStudent();
+
+  @POST(path: '/dang-ky-giay')
+  Future<Response<Map<String, dynamic>>> signupCertificates(
+    @Body() Map<String, dynamic> body,
+  );
+
+  @GET(path: '/thoi-khoa-bieu')
+  Future<Response<Map<String, dynamic>>> getTimeTable();
+
+  @GET(path: '/khung-dao-tao')
+  Future<Response<Map<String, dynamic>>> getTrainingProgram();
 }

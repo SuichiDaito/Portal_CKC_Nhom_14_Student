@@ -45,7 +45,8 @@ class _MainLayoutHomeAdminPage extends State<MainLayoutHomeAdminPage> {
                     nameUser: student.hoSo!.hoTen,
                     idStudent: student.maSv,
                     email: student.hoSo!.email,
-                    classStudent: student.lop!.tenLop,
+                    classStudent:
+                        '${student.danhSachSinhVien.last!.lop.tenLop}',
                   ),
                   SizedBox(height: 20),
 

@@ -62,41 +62,40 @@ class _PageReportDetailAdminState extends State<PageReportDetailAdmin> {
                 ),
               );
             }
-            return SizedBox(
-              height: 1000,
-              child: ListView.builder(
-                itemCount: reports.length,
-                itemBuilder: (context, index) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ReportDetailReadonlySummaryCard(
-                        week: reports[index].tuan.tuan,
-                        beginDate: DateFormatter.formatDate(
-                          reports[index].thoiGianBatDau,
-                        ),
-                        endDate: DateFormatter.formatDate(
-                          reports[index].thoiGianKetThuc,
-                        ),
-                        roomNumber: reports[index].lop.tenLop,
-                        startHour: DateFormatter.formatTime(
-                          reports[index].thoiGianBatDau,
-                        ),
-                        endHour: DateFormatter.formatTime(
-                          reports[index].thoiGianKetThuc,
-                        ),
-                        teacher: reports[index].gvcn.taiKhoan,
-                        secretary: reports[index].thuky.hoSo.hoTen,
-                        totalStudent: reports[index].soLuongSinhVien,
-                        absentStudent: reports[index].vangMat,
-                        content: reports[index].noiDung,
-                        absentStudentIds: [],
-                        studentList: [],
+            return ListView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: reports.length,
+              itemBuilder: (context, index) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ReportDetailReadonlySummaryCard(
+                      week: reports[index].tuan.tuan,
+                      beginDate: DateFormatter.formatDate(
+                        reports[index].thoiGianBatDau,
                       ),
-                    ],
-                  );
-                },
-              ),
+                      endDate: DateFormatter.formatDate(
+                        reports[index].thoiGianKetThuc,
+                      ),
+                      roomNumber: reports[index].lop.tenLop,
+                      startHour: DateFormatter.formatTime(
+                        reports[index].thoiGianBatDau,
+                      ),
+                      endHour: DateFormatter.formatTime(
+                        reports[index].thoiGianKetThuc,
+                      ),
+                      teacher: reports[index].gvcn.hoSo.hoTen,
+                      secretary: reports[index].thuky.hoSo.hoTen,
+                      totalStudent: reports[index].soLuongSinhVien,
+                      absentStudent: reports[index].vangMat,
+                      content: reports[index].noiDung,
+                      absentStudentIds: [],
+                      studentList: [],
+                    ),
+                  ],
+                );
+              },
             );
           } else if (state is StudentReportResponseError) {
             return Center(child: Text(state.message));
