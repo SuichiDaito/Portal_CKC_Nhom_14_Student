@@ -1,41 +1,56 @@
-class KetQuaModel {
-  final bool success;
-  final Map<String, List<MonHoc>> ketQua;
+class Subject {
+  final String tenMon;
+  final int? soTinChi;
+  final String diemTongKet;
 
-  KetQuaModel({required this.success, required this.ketQua});
+  Subject({
+    required this.tenMon,
+    required this.soTinChi,
+    required this.diemTongKet,
+  });
 
-  factory KetQuaModel.fromJson(Map<String, dynamic> json) {
-    return KetQuaModel(
-      success: json['success'],
-      ketQua: (json['ket_qua'] as Map<String, dynamic>).map(
-        (key, value) => MapEntry(
-          key,
-          (value as List).map((e) => MonHoc.fromJson(e)).toList(),
-        ),
-      ),
+  factory Subject.fromJson(Map<String, dynamic> json) {
+    return Subject(
+      tenMon: json['ten_mon'] ?? '',
+      soTinChi: json['so_tin_chi'],
+      diemTongKet: json['diem_tong_ket'] ?? '-',
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'ten_mon': tenMon,
+      'so_tin_chi': soTinChi,
+      'diem_tong_ket': diemTongKet,
+    };
   }
 }
 
-class MonHoc {
-  final String tenHocKy;
-  final String tenMon;
-  final int tinChi;
-  final String tongKet;
+class MainModel {
+  final bool success;
+  final Map<String, List<Subject>> monTheoHocKy;
 
-  MonHoc({
-    required this.tenHocKy,
-    required this.tenMon,
-    required this.tinChi,
-    required this.tongKet,
-  });
+  MainModel({required this.success, required this.monTheoHocKy});
 
-  factory MonHoc.fromJson(Map<String, dynamic> json) {
-    return MonHoc(
-      tenHocKy: json['ten_hoc_ky'],
-      tenMon: json['ten_mon'],
-      tinChi: json['tin_chi'] ?? 0,
-      tongKet: json['tongket'],
-    );
+  factory MainModel.fromJson(Map<String, dynamic> json) {
+    final rawMap = json['monTheoHocKy'] as Map<String, dynamic>;
+
+    final mapped = rawMap.map((ky, list) {
+      final subjects = (list as List)
+          .map((item) => Subject.fromJson(item))
+          .toList();
+      return MapEntry(ky, subjects);
+    });
+
+    return MainModel(success: json['success'] ?? false, monTheoHocKy: mapped);
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'success': success,
+      'monTheoHocKy': monTheoHocKy.map(
+        (ky, list) => MapEntry(ky, list.map((item) => item.toJson()).toList()),
+      ),
+    };
   }
 }

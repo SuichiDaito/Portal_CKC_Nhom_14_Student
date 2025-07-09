@@ -16,7 +16,7 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
     emit(PaymentStateLoading());
 
     try {
-      final response = await _service.getPaymentStudentFee({'lop': 7});
+      final response = await _service.getPaymentStudentFee();
 
       if (response.isSuccessful && response.body != null) {
         final body = response.body;
@@ -25,7 +25,7 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
         print('📦 Error: ${response.error}');
 
         if (body is Map<String, dynamic>) {
-          final paymentResponse = StudentInfoModel.fromJson(
+          final paymentResponse = MainResponse.fromJson(
             body as Map<String, dynamic>,
           );
 

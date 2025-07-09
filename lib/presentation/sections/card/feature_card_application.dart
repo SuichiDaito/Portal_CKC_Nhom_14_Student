@@ -43,7 +43,7 @@ class FeatureCard extends State<FeatureCardApplication> {
           context.push('/admin/class_roster_admin');
         } else if (widget.feature.id == 5) {
           // Đăng ký thi lại
-          GoRouter.of(context).push('/admin/${widget.feature.value}');
+          GoRouter.of(context).push('/student/exam/second');
         } else if (widget.feature.id == 6) {
           // Sinh hoạt chủ nhiệm
           GoRouter.of(context).push('/admin/report_detail_admin');

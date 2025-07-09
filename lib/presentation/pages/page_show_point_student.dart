@@ -14,7 +14,9 @@ class GradeScreen extends State<StudentGradeScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    context.read<StudentPointResultBloc>().add(FetchPointResultEvent());
+    context.read<StudentPointResultBloc>().add(
+      FetchPointResultEvent(chuyenNganh: 7),
+    );
   }
 
   @override
@@ -219,7 +221,7 @@ class GradeScreen extends State<StudentGradeScreen> {
                                   Expanded(
                                     flex: 1,
                                     child: Text(
-                                      '${subject!.tinChi}',
+                                      '${subject!.soTinChi}',
                                       style: TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w500,

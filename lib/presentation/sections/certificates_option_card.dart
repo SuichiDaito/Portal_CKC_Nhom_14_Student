@@ -134,7 +134,6 @@ class CertificatesCard extends State<CertificatesOptionCard> {
                       context.read<SignUpCertificatesBloc>().add(
                         RequestSignupCertificatesEvent(widget.selectedId),
                       );
-
                       // selectedId.clear();
                     },
                     style: ElevatedButton.styleFrom(

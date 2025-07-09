@@ -72,19 +72,19 @@ final class _$StudentService extends StudentService {
   }
 
   @override
-  Future<Response<Map<String, dynamic>>> getPointResult() {
+  Future<Response<Map<String, dynamic>>> getPointResult(
+    Map<String, dynamic> body,
+  ) {
     final Uri $url = Uri.parse('/sinhvien/ket-qua-hoc-tap');
-    final Request $request = Request('GET', $url, client.baseUrl);
+    final $body = body;
+    final Request $request = Request('GET', $url, client.baseUrl, body: $body);
     return client.send<Map<String, dynamic>, Map<String, dynamic>>($request);
   }
 
   @override
-  Future<Response<Map<String, dynamic>>> getPaymentStudentFee(
-    Map<String, dynamic> body,
-  ) {
+  Future<Response<Map<String, dynamic>>> getPaymentStudentFee() {
     final Uri $url = Uri.parse('/sinhvien/hocphi');
-    final $body = body;
-    final Request $request = Request('GET', $url, client.baseUrl, body: $body);
+    final Request $request = Request('GET', $url, client.baseUrl);
     return client.send<Map<String, dynamic>, Map<String, dynamic>>($request);
   }
 
@@ -122,6 +122,30 @@ final class _$StudentService extends StudentService {
   @override
   Future<Response<Map<String, dynamic>>> getTrainingProgram() {
     final Uri $url = Uri.parse('/sinhvien/khung-dao-tao');
+    final Request $request = Request('GET', $url, client.baseUrl);
+    return client.send<Map<String, dynamic>, Map<String, dynamic>>($request);
+  }
+
+  @override
+  Future<Response<Map<String, dynamic>>> paymentFeeStudy(
+    Map<String, dynamic> body,
+  ) {
+    final Uri $url = Uri.parse('/sinhvien/vnpay_payment');
+    final $body = body;
+    final Request $request = Request('POST', $url, client.baseUrl, body: $body);
+    return client.send<Map<String, dynamic>, Map<String, dynamic>>($request);
+  }
+
+  @override
+  Future<Response<Map<String, dynamic>>> getNotification() {
+    final Uri $url = Uri.parse('/sinhvien/thong-bao');
+    final Request $request = Request('GET', $url, client.baseUrl);
+    return client.send<Map<String, dynamic>, Map<String, dynamic>>($request);
+  }
+
+  @override
+  Future<Response<Map<String, dynamic>>> getExamsSecond() {
+    final Uri $url = Uri.parse('/sinhvien/lich-thi-lan-hai');
     final Request $request = Request('GET', $url, client.baseUrl);
     return client.send<Map<String, dynamic>, Map<String, dynamic>>($request);
   }

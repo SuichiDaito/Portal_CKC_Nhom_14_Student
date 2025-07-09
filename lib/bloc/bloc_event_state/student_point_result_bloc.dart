@@ -21,7 +21,9 @@ class StudentPointResultBloc
     emit(StudentPointStateLoading());
 
     try {
-      final response = await _service.getPointResult();
+      final response = await _service.getPointResult({
+        'chuyenNganh': event.chuyenNganh,
+      });
 
       if (response.isSuccessful && response.body != null) {
         final body = response.body;
@@ -30,12 +32,12 @@ class StudentPointResultBloc
         print('📦 Error: ${response.error}');
 
         if (body is Map<String, dynamic>) {
-          if (body.containsKey('ket_qua')) {
-            final listData = body['ket_qua'] as Map<String, dynamic>;
+          if (body.containsKey('monTheoHocKy')) {
+            final listData = body['monTheoHocKy'] as Map<String, dynamic>;
             final results = listData.map(
               (key, value) => MapEntry(
                 key,
-                (value as List).map((item) => MonHoc.fromJson(item)).toList(),
+                (value as List).map((item) => Subject.fromJson(item)).toList(),
               ),
             );
 

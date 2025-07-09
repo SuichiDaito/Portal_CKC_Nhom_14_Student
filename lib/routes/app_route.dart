@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/student_bloc.dart';
 import 'package:portal_ckc/bloc/event/student_event.dart';
 import 'package:portal_ckc/main.dart';
+import 'package:portal_ckc/presentation/pages/page_change_password_student.dart';
+import 'package:portal_ckc/presentation/pages/page_show_exam_second_student.dart';
 import 'package:portal_ckc/presentation/pages/page_training_program.dart';
 import 'package:portal_ckc/presentation/pages/appbar_bottombar/page_app_bar.dart';
 import 'package:portal_ckc/presentation/pages/page_class_book_admin.dart';
@@ -141,6 +143,16 @@ class RouteName {
         path: '/student/show/point',
         builder: (context, state) => StudentGradeScreen(),
       ),
+      //ExamSchedulePage
+       GoRoute(
+        path: '/student/exam/second',
+        builder: (context, state) => ExamSchedulePage(),
+      ),
+      //ChangePasswordScreen
+      GoRoute(
+        path: '/student/change/password',
+        builder: (context, state) => ChangePasswordScreen(),
+      ),
       GoRoute(
         path: '/student/training/program',
         builder: (context, state) => TrainingProgramScreen(),
@@ -162,17 +174,13 @@ class RouteName {
         path: '/student/search/tuition',
         builder: (context, state) => PageSearchInfoGeneralStudent(),
       ),
-      GoRoute(
-        path: '/notifications/detail',
-        builder: (context, state) {
-          final data = state.extra as Map<String, dynamic>;
-          return NotificationDetailPage(
-            title: data['title'],
-            content: data['content'],
-            date: data['date'],
-          );
-        },
-      ),
+      // GoRoute(
+      //   path: '/notifications/detail/:id',
+      //   builder: (context, state) {
+      //     final id = int.tryParse(state.pathParameters['id'] ?? '') ?? 0;
+      //     return NotificationDetailPage(id: 1);
+      //   },
+      // ),
       //NotificationDetailPage
     ],
   );

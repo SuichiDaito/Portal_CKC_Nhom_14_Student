@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/payment_bloc.dart';
+import 'package:portal_ckc/bloc/bloc_event_state/payment_fee_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/student_bloc.dart';
 import 'package:portal_ckc/bloc/event/payment_event.dart';
+import 'package:portal_ckc/bloc/event/payment_fee_event.dart';
+import 'package:portal_ckc/bloc/state/payment_fee_request_state.dart';
 import 'package:portal_ckc/bloc/state/payment_state.dart';
 import 'package:portal_ckc/bloc/state/student_state.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -17,7 +20,7 @@ class PaymentScreen extends State<StatefulWidget> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    context.read<PaymentBloc>().add(FetchPaymentEvent(lop: 7));
+    context.read<PaymentBloc>().add(FetchPaymentEvent());
   }
 
   @override
@@ -68,14 +71,16 @@ class PaymentScreen extends State<StatefulWidget> {
                     padding: EdgeInsets.all(16),
                     children: [
                       TuitionFeeCard(
-                        studentName: '${student!.sinhVien!.maSv}',
+                        studentName: '${student!.sinhVien.maSv}' ?? '',
                         className:
-                            '${student!.sinhVien!.danhSachSinhVien!.last.lop!.tenLop}',
+                            '${student!.sinhVien.danhSachSinhVien!.last.lop!.tenLop}' ??
+                            '',
                         semester:
-                            '${student!.hocPhi!.hocKy!.tenHocKy} - Năm học 2025',
-                        amount: '${student!.hocPhi!.tongTien} VNĐ',
-                        startDate: '${student!.hocPhi!.hocKy!.ngayBatDau}',
-                        endDate: '${student!.hocPhi!.hocKy!.ngayKetThuc}',
+                            '${student!.hocKyHienTai.tenHocKy} ?? '
+                            ' - Năm học 2025',
+                        amount: '${student!.hocPhi.tongTien} VNĐ' ?? '',
+                        startDate: '${student!.hocKyHienTai.ngayBatDau}' ?? '',
+                        endDate: '${student!.hocKyHienTai.ngayKetThuc}' ?? '',
                         isPaid: false,
                       ),
                     ],
@@ -216,7 +221,12 @@ class TuitionFeeCard extends StatelessWidget {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton.icon(
-                        onPressed: () => _showPaymentOptions(context),
+                        onPressed: () => {
+                          context.read<RequestPaymenFee>().add(
+                            RequestPaymentFee(total_vnpay: 7700000),
+                          ),
+                          _showPaymentOptions(context),
+                        },
                         icon: Icon(Icons.payment, size: 20),
                         label: Text(
                           'Thanh toán học phí',
@@ -281,33 +291,45 @@ class TuitionFeeCard extends StatelessWidget {
       ),
       builder: (context) => Container(
         padding: EdgeInsets.all(20),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              'Chọn phương thức thanh toán',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 20),
-            PaymentOption(
-              icon: Icons.credit_card,
-              title: 'VNPay',
-              subtitle: 'Thanh toán qua VNPay',
-              color: Colors.blue,
-              onTap: () {
-                Navigator.pop(context);
-                _launchPaymentUrl(
-                  'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html?vnp_Amount=770000000&vnp_Command=pay&vnp_CreateDate=20250704094804&vnp_CurrCode=VND&vnp_IpAddr=192.168.32.107&vnp_Locale=vn&vnp_OrderInfo=%7B%22message%22%3A%22Thanh+to%5Cu00e1n+h%5Cu1ecdc+ph%5Cu00ed%22%2C%22type%22%3A%22hoc_phi%22%7D&vnp_OrderType=billpayment&vnp_ReturnUrl=http%3A%2F%2F192.168.32.107%3A8000%2Fapi%2Fsinhvien%2Fvnpay-return&vnp_TmnCode=U4PG4M2O&vnp_TxnRef=2300&vnp_Version=2.1.0&vnp_SecureHash=de15dd41bb7953296fc2bee8611bcf104de08dc933ce0293b6d02a6e57f413b6607c952ed873afa75e63e509407cbc0bb483296e128678d87f731c9a900ee249',
-                );
-              },
-            ),
+        child: BlocBuilder<RequestPaymenFee, PaymentFeeRequestState>(
+          builder: (context, state) {
+            if (state is PaymentFeeRequestStateLoading) {
+              return Center(
+                child: CircularProgressIndicator(color: Colors.blue),
+              );
+            } else if (state is PaymentFeeRequestStateLoaded) {
+              final url = state.url;
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'Chọn phương thức thanh toán',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 20),
+                  PaymentOption(
+                    icon: Icons.credit_card,
+                    title: 'VNPay',
+                    subtitle: 'Thanh toán qua VNPay',
+                    color: Colors.blue,
+                    onTap: () {
+                      Navigator.pop(context);
+                      _launchPaymentUrl(url);
+                    },
+                  ),
 
-            SizedBox(height: 20),
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text('Hủy'),
-            ),
-          ],
+                  SizedBox(height: 20),
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: Text('Hủy'),
+                  ),
+                ],
+              );
+            } else if (state is PaymentFeeRequestStateError) {
+              return Center(child: Text(state.message));
+            }
+            return Center(child: Text('Thanh toán không thành công'));
+          },
         ),
       ),
     );

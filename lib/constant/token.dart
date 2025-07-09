@@ -10,4 +10,14 @@ class ConstraintToken {
     final SharedPreferences _value = await SharedPreferences.getInstance();
     return _value.getString('token') ?? "";
   }
+
+  static Future<void> setPassword(String value) async {
+    final SharedPreferences _value = await SharedPreferences.getInstance();
+    await _value.setString('password', value);
+  }
+
+  static Future<String> getPassword() async {
+    final SharedPreferences _value = await SharedPreferences.getInstance();
+    return _value.getString('password') ?? "";
+  }
 }

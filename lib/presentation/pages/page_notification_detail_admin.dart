@@ -1,19 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:portal_ckc/api/model/comment.dart';
+import 'package:portal_ckc/bloc/bloc_event_state/notificate_bloc.dart';
+import 'package:portal_ckc/bloc/event/student_notificate_event.dart';
 import 'package:portal_ckc/presentation/sections/card/notification_detail_card.dart';
 import 'package:portal_ckc/presentation/sections/notification_comment_section.dart';
 
 class NotificationDetailPage extends StatefulWidget {
-  final String title;
-  final String content;
-  final String date;
+  final int id;
+  final String tuAi;
+  final DateTime ngayGui;
+  final String tieuDe;
+  final String noiDung;
+
   const NotificationDetailPage({
-    Key? key,
-    required this.title,
-    required this.content,
-    required this.date,
-  }) : super(key: key);
+    super.key,
+    required this.id,
+    required this.tuAi,
+    required this.ngayGui,
+    required this.tieuDe,
+    required this.noiDung,
+  });
 
   @override
   State<NotificationDetailPage> createState() => _NotificationDetailPageState();
@@ -21,28 +28,48 @@ class NotificationDetailPage extends StatefulWidget {
 
 class _NotificationDetailPageState extends State<NotificationDetailPage> {
   final TextEditingController _commentController = TextEditingController();
-  final Comment _comments = Comment(
-    userName: 'Minh Anh',
-    content: 'Chào bạn, hôm nay bạn thế nào?',
-    timestamp: '15/06/2025 09:30',
-  );
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[50],
-      appBar: _buildAppBar(context),
+      appBar: _buildAppBar(),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            NotificationDetailCard(),
-            const SizedBox(height: 16),
-            NotificationCommentSection(
-              lengthComment: '2',
-              commentController: _commentController,
-              comment: _comments,
-              onPressed: () {},
+            NotificationDetailCard(
+              typeNotificationSender: widget.tuAi ?? 'Hệ thống',
+              date: _formatDate(widget.ngayGui),
+              headerNotification: widget.tieuDe,
+              contentNotification: widget.noiDung,
+              // lengthComment: tb.chiTiet.length.toString(),
+              // files: tb.files
+              //     .map((f) => {'ten_file': f.tenFile, 'url': f.url})
+              //     .toList(),
             ),
+
+            const SizedBox(height: 16),
+            // NotificationCommentSection(
+            //   lengthComment: '${comments.length}',
+            //   commentController: _commentController,
+            //   idThongBao: tb.id,
+            //   onPressed: () {
+            //     //BÌNH LUẬN MỚI
+            //     final content = _commentController.text.trim();
+            //     if (content.isNotEmpty) {
+            //       context.read<ThongBaoBloc>().add(
+            //         CreateCommentEvent(
+            //           thongBaoId: widget.id,
+            //           noiDung: content,
+            //         ),
+            //       );
+
+            //       _commentController.clear();
+            //     }
+            //   },
+
+            //   comments: comments,
+            // ),
             const SizedBox(height: 20),
           ],
         ),
@@ -50,7 +77,11 @@ class _NotificationDetailPageState extends State<NotificationDetailPage> {
     );
   }
 
-  PreferredSizeWidget _buildAppBar(BuildContext context) {
+  String _formatDate(DateTime date) {
+    return '${date.day}/${date.month}/${date.year}';
+  }
+
+  PreferredSizeWidget _buildAppBar() {
     return AppBar(
       elevation: 0,
       flexibleSpace: Container(
@@ -64,13 +95,7 @@ class _NotificationDetailPageState extends State<NotificationDetailPage> {
       ),
       leading: IconButton(
         icon: const Icon(Icons.arrow_back, color: Colors.white),
-        onPressed: () {
-          if (context.canPop()) {
-            context.pop();
-          } else {
-            context.go('/notifications');
-          }
-        },
+        onPressed: () => context.pop(true),
       ),
       title: const Text(
         'Chi Tiết Thông Báo',
@@ -83,15 +108,11 @@ class _NotificationDetailPageState extends State<NotificationDetailPage> {
       actions: [
         IconButton(
           icon: const Icon(Icons.bookmark_border, color: Colors.white),
-          onPressed: () {
-            // Lưu thông báo
-          },
+          onPressed: () {},
         ),
         IconButton(
           icon: const Icon(Icons.share, color: Colors.white),
-          onPressed: () {
-            // Chia sẻ thông báo
-          },
+          onPressed: () {},
         ),
       ],
     );

@@ -1,4 +1,4 @@
-import 'package:portal_ckc/api/model/student_notifications_model.dart';
+import 'package:portal_ckc/api/model/notification_model.dart';
 
 abstract class NotificateState {}
 
@@ -7,9 +7,9 @@ class NotificateStateInitial extends NotificateState {}
 class NotificateStateLoading extends NotificateState {}
 
 class NotificateStateLoaded extends NotificateState {
-  final List<ThongBao> exams;
+  final List<ThongBao> notifications;
 
-  NotificateStateLoaded(this.exams);
+  NotificateStateLoaded(this.notifications);
 }
 
 class NotificateStateError extends NotificateState {

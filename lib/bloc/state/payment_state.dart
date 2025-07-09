@@ -7,7 +7,7 @@ class PaymentStateInitial extends PaymentState {}
 class PaymentStateLoading extends PaymentState {}
 
 class PaymentStateLoaded extends PaymentState {
-  final StudentInfoModel students;
+  final MainResponse students;
 
   PaymentStateLoaded(this.students);
 }

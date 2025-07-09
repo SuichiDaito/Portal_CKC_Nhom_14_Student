@@ -1,5 +1,6 @@
 abstract class StudentPointEvent {}
 
 class FetchPointResultEvent extends StudentPointEvent {
-  FetchPointResultEvent();
+  final int chuyenNganh;
+  FetchPointResultEvent({required this.chuyenNganh});
 }

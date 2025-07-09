@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/student_bloc.dart';
 import 'package:portal_ckc/bloc/event/student_event.dart';
 import 'package:portal_ckc/bloc/state/student_state.dart';
+import 'package:portal_ckc/constant/token.dart';
 import 'package:portal_ckc/gen/assets.gen.dart';
 import 'package:portal_ckc/main.dart';
 import 'package:portal_ckc/presentation/sections/button/button_login.dart';
@@ -73,6 +74,7 @@ class _LoginScreenState extends State<LoginScreen> {
           if (state is StudentLoaded) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
               context.go('/home/admin');
+              ConstraintToken.setPassword(_studentPasswordController.text);
               SnackBarScaffold.showToast(
                 'Đăng nhập thành công!',
                 false,

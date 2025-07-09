@@ -3,7 +3,7 @@ import 'package:portal_ckc/api/model/student_point_result.dart';
 abstract class StudentResultPointState {}
 
 class StudentPointStateLoaded extends StudentResultPointState {
-  final Map<String, List<MonHoc>> subjects;
+  final Map<String, List<Subject>> subjects;
 
   StudentPointStateLoaded(this.subjects);
 }

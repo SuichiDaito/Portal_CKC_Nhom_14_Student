@@ -32,7 +32,7 @@ class UserDetailInformationPage extends StatelessWidget {
                   children: [
                     Expanded(child: ButtonLogOutInUser()),
                     const SizedBox(width: 12),
-                    // Expanded(child: ButtonChangePasswordInUser()),
+                    Expanded(child: ButtonChangePasswordInUser()),
                   ],
                 ),
                 const SizedBox(height: 12),
