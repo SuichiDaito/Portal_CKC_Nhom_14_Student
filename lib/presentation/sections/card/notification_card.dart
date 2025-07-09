@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:portal_ckc/presentation/pages/page_notification_detail_admin.dart';
-import 'package:portal_ckc/presentation/sections/card/notification_detail_card.dart';
 
 class NotificationCard extends StatefulWidget {
   final String title;
@@ -8,7 +6,7 @@ class NotificationCard extends StatefulWidget {
   final String date;
   final Color bgColor;
   final Color? buttonColor;
-  final Function onPressed;
+  final VoidCallback onPressed;
 
   const NotificationCard({
     super.key,
@@ -28,17 +26,7 @@ class _NotificationCard extends State<NotificationCard> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => NotificationDetailCard(
-              typeNotificationSender: 'Phòng Công Tác Chính Trị',
-              date: widget.date,
-              headerNotification: 'Thông báo',
-              contentNotification: widget.content,
-            ),
-          ),
-        );
+        widget.onPressed();
       },
       child: Container(
         padding: EdgeInsets.all(16),
@@ -76,17 +64,7 @@ class _NotificationCard extends State<NotificationCard> {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => NotificationDetailCard(
-                        typeNotificationSender: 'Phòng Công Tác Chính Trị',
-                        date: widget.date,
-                        headerNotification: 'Thông báo',
-                        contentNotification: widget.content,
-                      ),
-                    ),
-                  );
+                  widget.onPressed();
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: widget.buttonColor,

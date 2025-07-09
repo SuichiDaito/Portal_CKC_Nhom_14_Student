@@ -144,7 +144,7 @@ class RouteName {
         builder: (context, state) => StudentGradeScreen(),
       ),
       //ExamSchedulePage
-       GoRoute(
+      GoRoute(
         path: '/student/exam/second',
         builder: (context, state) => ExamSchedulePage(),
       ),
@@ -174,14 +174,13 @@ class RouteName {
         path: '/student/search/tuition',
         builder: (context, state) => PageSearchInfoGeneralStudent(),
       ),
-      // GoRoute(
-      //   path: '/notifications/detail/:id',
-      //   builder: (context, state) {
-      //     final id = int.tryParse(state.pathParameters['id'] ?? '') ?? 0;
-      //     return NotificationDetailPage(id: 1);
-      //   },
-      // ),
-      //NotificationDetailPage
+      GoRoute(
+        path: '/notifications/detail/:id',
+        builder: (context, state) {
+          final id = int.tryParse(state.pathParameters['id'] ?? '') ?? 0;
+          return NotificationDetailPage(id: 1);
+        },
+      ),
     ],
   );
 }
