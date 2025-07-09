@@ -10,6 +10,7 @@ import 'package:portal_ckc/presentation/sections/dialogs/snack_bar_scaffold.dart
 import 'package:portal_ckc/presentation/sections/textfield/textfield_input_login.dart';
 import 'package:portal_ckc/presentation/sections/textfield/textfield_password_login.dart';
 
+
 class LoginScreen extends StatefulWidget {
   @override
   _LoginScreenState createState() => _LoginScreenState();
@@ -18,11 +19,11 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+
   final _studentAccountController = TextEditingController();
   final _studentPasswordController = TextEditingController();
   final _studentEmailController = TextEditingController();
   final _typeAccountController = TextEditingController();
-
   bool _isTeacherPasswordVisible = false;
   bool _isAdminPasswordVisible = false;
 
@@ -244,7 +245,6 @@ class _LoginScreenState extends State<LoginScreen>
                 ),
 
                 SizedBox(height: 30),
-
                 TextfieldInputLogin(
                   controller: _studentEmailController,
                   label: 'Account',
@@ -253,16 +253,11 @@ class _LoginScreenState extends State<LoginScreen>
                 ),
 
                 SizedBox(height: 20),
-
                 TextfieldPasswordLogin(
                   controller: _typeAccountController,
                   label: 'Mật khẩu',
                   isVisible: _isTeacherPasswordVisible,
-                  onToggleVisibility: () {
                     setState(() {
-                      _isTeacherPasswordVisible = !_isTeacherPasswordVisible;
-                    });
-                  },
                 ),
 
                 SizedBox(height: 30),
@@ -296,6 +291,7 @@ class _LoginScreenState extends State<LoginScreen>
     );
   }
 
+<<<<<<< HEAD
   Widget _buildStudentLoginForm() {
     return Scaffold(
       body: SingleChildScrollView(
@@ -403,6 +399,7 @@ class _LoginScreenState extends State<LoginScreen>
     );
   }
 
+<<<<<<< HEAD
   void _handleStudentLogin() {
     String account = _studentAccountController.text.trim();
     String password = _studentPasswordController.text.trim();
@@ -422,14 +419,186 @@ class _LoginScreenState extends State<LoginScreen>
   void _handleResetPasswordLogin() {
     String account = _studentEmailController.text.trim();
     String password = _typeAccountController.text.trim();
+=======
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String label,
+    required IconData icon,
+    TextInputType keyboardType = TextInputType.text,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.grey[50],
+        borderRadius: BorderRadius.circular(15),
+        border: Border.all(color: Colors.grey[300]!),
+      ),
+      child: TextFormField(
+        controller: controller,
+        keyboardType: keyboardType,
+        decoration: InputDecoration(
+          labelText: label,
+          prefixIcon: Icon(icon, color: Color(0xFF1976D2)),
+          border: InputBorder.none,
+          contentPadding: EdgeInsets.all(20),
+          labelStyle: TextStyle(color: Colors.grey[600]),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPasswordField({
+    required TextEditingController controller,
+    required String label,
+    required bool isVisible,
+    required VoidCallback onToggleVisibility,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.grey[50],
+        borderRadius: BorderRadius.circular(15),
+        border: Border.all(color: Colors.grey[300]!),
+      ),
+      child: TextFormField(
+        controller: controller,
+        obscureText: !isVisible,
+        decoration: InputDecoration(
+          labelText: label,
+          prefixIcon: Icon(Icons.lock, color: Color(0xFF1976D2)),
+          suffixIcon: IconButton(
+            icon: Icon(
+              isVisible ? Icons.visibility : Icons.visibility_off,
+              color: Colors.grey[600],
+            ),
+            onPressed: onToggleVisibility,
+          ),
+          border: InputBorder.none,
+          contentPadding: EdgeInsets.all(20),
+          labelStyle: TextStyle(color: Colors.grey[600]),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLoginButton(String text, VoidCallback onPressed) {
+    return Container(
+      height: 55,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Color(0xFF2196F3), Color(0xFF1976D2)],
+        ),
+        borderRadius: BorderRadius.circular(15),
+        boxShadow: [
+          BoxShadow(
+            color: Color(0xFF1976D2).withOpacity(0.3),
+            blurRadius: 8,
+            offset: Offset(0, 4),
+          ),
+        ],
+      ),
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.transparent,
+          shadowColor: Colors.transparent,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+        ),
+        child: Text(
+          text,
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _handleTeacherLogin() {
+    String account = _teacherEmailController.text.trim();
+    String password = _teacherPasswordController.text.trim();
+
+    if (account.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Row(
+            children: [
+              Icon(Icons.error, color: Colors.white, size: 20),
+              SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  'Vui lòng nhập đầy đủ thông tin',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
+              ),
+            ],
+          ),
+          backgroundColor: Colors.red[600],
+          duration: Duration(seconds: 3),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          margin: EdgeInsets.all(16),
+        ),
+      );
+      return;
+    }
+
+    context.read<AdminBloc>().add(
+      AdminLoginEvent(taiKhoan: account, password: password),
+    );
+  }
+
+  void _handleAdminLogin() {
+    String account = _adminAccountController.text.trim();
+    String password = _adminPasswordController.text.trim();
+>>>>>>> 64dbd7fc6be21b715aad3788a147daf79535b270
 
     if (account.isEmpty || password.isEmpty) {
       // _showToast('Vui lòng nhập đầy đủ thông tin');
       return;
     }
 
+<<<<<<< HEAD
     context.read<StudentBloc>().add(
       StudentLoginEvent(ma_sv: account, password: password),
+=======
+    context.read<AdminBloc>().add(
+      AdminLoginEvent(taiKhoan: account, password: password),
+    );
+    // TODO: Implement admin login logic
+    _showToast('Đăng nhập thành công!', isError: false);
+  }
+
+  void _showToast(String message, {bool isError = true}) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            Icon(
+              isError ? Icons.error : Icons.check_circle,
+              color: Colors.white,
+              size: 20,
+            ),
+            SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                message,
+                style: TextStyle(color: Colors.white, fontSize: 16),
+              ),
+            ),
+          ],
+        ),
+        backgroundColor: isError ? Colors.red[600] : Colors.green[600],
+        duration: Duration(seconds: 3),
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        margin: EdgeInsets.all(16),
+      ),
+>>>>>>> 64dbd7fc6be21b715aad3788a147daf79535b270
     );
   }
 }

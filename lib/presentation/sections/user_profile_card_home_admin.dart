@@ -5,14 +5,12 @@ class UserProfileCardHomeAdmin extends StatefulWidget {
   final String nameUser;
   final String idStudent;
   final String email;
-  // final VoidCallbackAction resultStudy;
 
   const UserProfileCardHomeAdmin({
     super.key,
     required this.nameUser,
     required this.idStudent,
     required this.email,
-    // required this.resultStudy,
   });
   State<UserProfileCardHomeAdmin> createState() => _UserCardHomeAdmin();
 }
@@ -97,6 +95,7 @@ class _UserCardHomeAdmin extends State<UserProfileCardHomeAdmin> {
                   child: Text('Kết quả học tập'),
                 ),
               ),
+
             ],
           ),
         ],

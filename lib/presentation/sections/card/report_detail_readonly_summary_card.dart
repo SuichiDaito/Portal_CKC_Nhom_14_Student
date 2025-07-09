@@ -48,6 +48,7 @@ int caculatedNumberStudent(int totalStudent, int absentStudent) {
 class ReportDetail extends State<ReportDetailReadonlySummaryCard> {
   @override
   Widget build(BuildContext context) {
+
     return SingleChildScrollView(
       child: Card(
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),

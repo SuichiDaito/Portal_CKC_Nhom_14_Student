@@ -8,7 +8,6 @@ import 'package:portal_ckc/presentation/sections/card/report_detail_editable_sec
 
 class PageReportDetailAdmin extends StatefulWidget {
   const PageReportDetailAdmin({super.key});
-
   @override
   State<PageReportDetailAdmin> createState() => _PageReportDetailAdminState();
 }
@@ -69,3 +68,4 @@ class _PageReportDetailAdminState extends State<PageReportDetailAdmin> {
     );
   }
 }
+

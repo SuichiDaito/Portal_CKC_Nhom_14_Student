@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:portal_ckc/presentation/sections/conduct_evaluation_student_section.dart';
 
+
 class PageConductEvaluationAdmin extends StatefulWidget {
   const PageConductEvaluationAdmin({super.key});
 
@@ -18,6 +19,7 @@ class _PageConductEvaluationAdminState
       appBar: AppBar(
         title: const Text(
           'Bảng điểm rèn luyện',
+
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
         backgroundColor: const Color(0xFF1976D2),

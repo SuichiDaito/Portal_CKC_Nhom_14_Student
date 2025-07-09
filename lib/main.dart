@@ -26,14 +26,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      routerConfig: RouteName.route,
-      debugShowCheckedModeBanner: false,
-      title: 'Portal_CKC',
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
-      theme: ThemeData(
-        textTheme: GoogleFonts.robotoTextTheme(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => BlocImplement()..add(FetchData())),
+        BlocProvider(create: (_) => AdminBloc()),
+      ],
+      child: MaterialApp.router(
+        routerConfig: RouteName.route,
+        debugShowCheckedModeBanner: false,
+        title: 'Portal_CKC',
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         theme: ThemeData(

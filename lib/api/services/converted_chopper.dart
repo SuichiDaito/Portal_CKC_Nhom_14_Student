@@ -52,35 +52,4 @@ class ModelConverter implements Converter {
       return response.copyWith<BodyType>(body: body);
     }
   }
-
-  // Response<BodyType> decodeJsonGogo<BodyType, InnerType>(Response response) {
-  //   var contentType = response.headers[contentTypeKey];
-  //   var body = response.body;
-  //   debugPrint("Json: $body");
-  //   if (contentType != null && contentType.contains(jsonHeaders)) {
-  //     body = utf8.decode(response.bodyBytes);
-  //   }
-  //   try {
-  //     var mapData = json.decode(body);
-  //     if (mapData != null) {
-  //       InfoLogin info = mapData.map((info) => InfoLogin.fromJson(info));
-  //       return response.copyWith<BodyType>(body: info as BodyType);
-  //     }
-  //   } catch (e) {
-  //     chopperLogger.warning(e);
-  //     return response.copyWith<BodyType>(body: body);
-  //   }
-  //   return body;
-  // }
-
-  @override
-  Response<BodyType> convertResponse<BodyType, InnerType>(Response response) {
-    return decodeJson<BodyType, InnerType>(response);
-  }
-
-  // Response<BodyType> convertResponseCompany<BodyType, InnerType>(
-  //   Response response,
-  // ) {
-  //   return decodeJsonGogo<BodyType, InnerType>(response);
-  // }
 }

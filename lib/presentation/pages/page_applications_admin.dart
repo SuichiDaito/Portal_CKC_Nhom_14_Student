@@ -39,6 +39,7 @@ class Application extends State<ApplicationsAdminPage> {
     required Color backgroundColor,
     required Color borderColor,
     required List<FeatureItem> gridItems,
+
   }) {
     return Container(
       decoration: BoxDecoration(
@@ -82,8 +83,8 @@ class Application extends State<ApplicationsAdminPage> {
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 3,
               childAspectRatio: 1.1,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
+              crossAxisSpacing: 12,
+              mainAxisSpacing: 12,
             ),
             itemCount: gridItems.length,
             itemBuilder: (context, index) {
@@ -94,12 +95,14 @@ class Application extends State<ApplicationsAdminPage> {
                   feature: feature,
                 ),
               );
+              return _buildFeatureCard(context, feature);
             },
           ),
         ],
       ),
     );
   }
+<<<<<<< HEAD
 }
 
 List<FeatureItem> getStudentFeatures() {
