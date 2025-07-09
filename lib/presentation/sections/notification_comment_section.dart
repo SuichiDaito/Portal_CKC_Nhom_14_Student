@@ -78,7 +78,7 @@ class CommentSection extends State<NotificationCommentSection> {
             NotificationCommentItem(
               idThongBao: widget.idThongBao,
               comments: widget.comments,
-              // currentUserId: currentUserId!,
+              currentUserId: 1,
             ),
             const SizedBox(height: 30),
           ],

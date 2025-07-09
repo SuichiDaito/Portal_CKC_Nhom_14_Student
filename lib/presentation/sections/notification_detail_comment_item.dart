@@ -58,10 +58,9 @@ class _NotificationCommentItemState extends State<NotificationCommentItem> {
     final time = _formatDate(comment.createdAt);
 
     final isOwner =
-        widget.currentUserId != null &&
-        widget.currentUserType != null &&
-        comment.nguoiBinhLuan.id == widget.currentUserId &&
-        comment.nguoiBinhLuan.type.contains(widget.currentUserType!);
+        // widget.currentUserId != null &&
+        // widget.currentUserType != null &&
+        comment.nguoiBinhLuan.id == widget.currentUserId;
 
     final isQuanLy = widget.currentUserChucVu == 1;
 
