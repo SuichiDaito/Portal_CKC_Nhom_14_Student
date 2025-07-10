@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:portal_ckc/api/model/notification_model.dart';
+import 'package:portal_ckc/presentation/pages/page_notification_detail_admin.dart';
 import 'package:portal_ckc/presentation/sections/card/notification_card.dart';
 
 class NotificationsHomeAdmin extends StatefulWidget {
@@ -49,17 +49,16 @@ class _NotificationsHomeAdmin extends State<NotificationsHomeAdmin> {
                   date: _formatDate(tb.ngayGui),
                   bgColor: Colors.blue[100]!,
                   buttonColor: Colors.blue,
-                  onPressed: () async {
-                  
-                    // final shouldReload = await context.push<bool>(
-                    //   '/notifications/detail/${tb.id}',
-                    // );
 
-                    // if (shouldReload == true && widget.onReload != null) {
-                    //   widget.onReload!();
-                    // }
-
-
+                  onPressed: () {
+                    Future.delayed(const Duration(milliseconds: 1), () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              NotificationDetailPage(id: tb.id),
+                        ),
+                      );
+                    });
                   },
                 ),
                 const SizedBox(height: 15),

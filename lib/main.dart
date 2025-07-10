@@ -20,6 +20,7 @@ import 'package:portal_ckc/bloc/bloc_event_state/payment_exam_second_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/payment_fee_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/sign_up_certificates_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/student_bloc.dart';
+import 'package:portal_ckc/bloc/bloc_event_state/student_comment_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/student_point_result_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/student_report_response_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/subject_fail_bloc.dart';
@@ -64,7 +65,8 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => PaymentExamSecondBloc()),
         BlocProvider(create: (_) => SubjectFailBloc()),
         BlocProvider(create: (_) => ClassSubjectBloc()),
-        BlocProvider(create: (_) => PaymentClassSubjectBloc())
+        BlocProvider(create: (_) => PaymentClassSubjectBloc()),
+        BlocProvider(create: (_) => CommentBloc()),
       ],
       child: MaterialApp.router(
         routerConfig: RouteName.route,

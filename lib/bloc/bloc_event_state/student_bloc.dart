@@ -8,7 +8,6 @@ import 'package:portal_ckc/bloc/state/student_state.dart';
 import 'package:portal_ckc/constant/token.dart';
 import 'package:portal_ckc/presentation/pages/page_class_detail_admin.dart';
 
-
 class StudentBloc extends Bloc<StudentEvent, StudentState> {
   final StudentService service;
 
@@ -93,6 +92,7 @@ class StudentBloc extends Bloc<StudentEvent, StudentState> {
         if (body is Map<String, dynamic>) {
           if (body.containsKey('token')) {
             final token = body['token'] as String;
+
             ConstraintToken.setToken(token);
           }
           if (body.containsKey('sinh_vien')) {

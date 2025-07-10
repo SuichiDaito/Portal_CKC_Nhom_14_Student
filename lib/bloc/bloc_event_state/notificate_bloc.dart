@@ -9,47 +9,52 @@ class NotificateBloc extends Bloc<NotificateEvent, NotificateState> {
 
   NotificateBloc() : super(NotificateStateInitial()) {
     on<FetchNotificateEvent>(_onFetchNotificateEvent);
+    on<FetchNotificationDetailEvent>(_onFetchNotificationDetail);
   }
 
   Future<void> _onFetchNotificateEvent(
-    NotificateEvent event,
-    Emitter emit,
+    FetchNotificateEvent event,
+    Emitter<NotificateState> emit,
   ) async {
-    print('➡️ Đang xử lý lấy thông báo');
     emit(NotificateStateLoading());
-
     try {
       final response = await _service.getNotification();
 
       if (response.isSuccessful && response.body != null) {
-        final body = response.body;
-        print('📦 Status: ${response.statusCode}');
-        print('📦 Body: ${response.body}');
-        print('📦 Error: ${response.error}');
+        final body = response.body as Map<String, dynamic>;
+        final listJson = body['data'] as List<dynamic>;
 
-        if (body is Map<String, dynamic>) {
-          if (body.containsKey('data')) {
-            final listJson = body['data'] as List<dynamic>;
-            final notification = listJson
-                .map((item) => ThongBao.fromJson(item as Map<String, dynamic>))
-                .toList();
+        final notifications = listJson
+            .map((e) => ThongBao.fromJson(e as Map<String, dynamic>))
+            .toList();
 
-            emit(NotificateStateLoaded(notification));
-          } else {
-            emit(
-              NotificateStateError(
-                'Dữ liệu không hợp lệ: data không phải danh sách',
-              ),
-            );
-          }
-        }
+        emit(NotificateStateLoaded(notifications));
       } else {
-        final error = response.error;
-        if (error is Map<String, dynamic> && error.containsKey('message')) {
-          emit(NotificateStateError(error['message']));
-        } else {
-          emit(NotificateStateError('Lỗi không xác định khi lấy dữ liệu'));
-        }
+        emit(
+          NotificateStateError('Lỗi API: ${response.error ?? 'Không rõ lỗi'}'),
+        );
+      }
+    } catch (e) {
+      emit(NotificateStateError('Lỗi kết nối: $e'));
+    }
+  }
+
+  Future<void> _onFetchNotificationDetail(
+    FetchNotificationDetailEvent event,
+    Emitter<NotificateState> emit,
+  ) async {
+    emit(NotificateStateLoading());
+    try {
+      final response = await _service.getNotificationDetail(event.id);
+
+      if (response.isSuccessful && response.body != null) {
+        final body = response.body as Map<String, dynamic>;
+        final thongBao = ThongBao.fromJson(body['data']);
+        emit(NotificateDetailStateLoaded(thongBao));
+      } else {
+        emit(
+          NotificateStateError('Lỗi API: ${response.error ?? 'Không rõ lỗi'}'),
+        );
       }
     } catch (e) {
       emit(NotificateStateError('Lỗi kết nối: $e'));

@@ -68,6 +68,21 @@ abstract class StudentService extends ChopperService {
 
   @GET(path: '/thong-bao')
   Future<Response<Map<String, dynamic>>> getNotification();
+  @GET(path: '/thong-bao/{id}')
+  Future<Response<Map<String, dynamic>>> getNotificationDetail(
+    @Path('id') int id,
+  );
+
+  @POST(path: '/thong-bao/binh-luan/{thongbao}')
+  Future<Response<Map<String, dynamic>>> postComment(
+    @Path('thongbao') int thongBaoId,
+    @Body() Map<String, dynamic> data,
+  );
+
+  @DELETE(path: '/thong-bao/xoa-binh-luan/{binhLuan}')
+  Future<Response<Map<String, dynamic>>> deleteComment(
+    @Path('binhLuan') int commentId,
+  );
 
   @GET(path: '/lich-thi-lan-hai')
   Future<Response<Map<String, dynamic>>> getExamsSecond();
