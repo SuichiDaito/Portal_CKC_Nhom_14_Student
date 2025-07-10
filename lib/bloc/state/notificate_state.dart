@@ -12,8 +12,19 @@ class NotificateStateLoaded extends NotificateState {
   NotificateStateLoaded(this.notifications);
 }
 
+class NotificateDetailStateLoaded extends NotificateState {
+  final ThongBao notification;
+
+  NotificateDetailStateLoaded(this.notification);
+}
+
 class NotificateStateError extends NotificateState {
   final String message;
 
   NotificateStateError(this.message);
+}
+
+class NotificateStateDetailLoaded extends NotificateState {
+  final ThongBao detail;
+  NotificateStateDetailLoaded(this.detail);
 }

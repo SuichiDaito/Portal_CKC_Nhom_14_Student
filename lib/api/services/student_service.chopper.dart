@@ -144,6 +144,33 @@ final class _$StudentService extends StudentService {
   }
 
   @override
+  Future<Response<Map<String, dynamic>>> getNotificationDetail(int id) {
+    final Uri $url = Uri.parse('/sinhvien/thong-bao/${id}');
+    final Request $request = Request('GET', $url, client.baseUrl);
+    return client.send<Map<String, dynamic>, Map<String, dynamic>>($request);
+  }
+
+  @override
+  Future<Response<Map<String, dynamic>>> postComment(
+    int thongBaoId,
+    Map<String, dynamic> data,
+  ) {
+    final Uri $url = Uri.parse('/sinhvien/thong-bao/binh-luan/${thongBaoId}');
+    final $body = data;
+    final Request $request = Request('POST', $url, client.baseUrl, body: $body);
+    return client.send<Map<String, dynamic>, Map<String, dynamic>>($request);
+  }
+
+  @override
+  Future<Response<Map<String, dynamic>>> deleteComment(int commentId) {
+    final Uri $url = Uri.parse(
+      '/sinhvien/thong-bao/xoa-binh-luan/${commentId}',
+    );
+    final Request $request = Request('DELETE', $url, client.baseUrl);
+    return client.send<Map<String, dynamic>, Map<String, dynamic>>($request);
+  }
+
+  @override
   Future<Response<Map<String, dynamic>>> getExamsSecond() {
     final Uri $url = Uri.parse('/sinhvien/lich-thi-lan-hai');
     final Request $request = Request('GET', $url, client.baseUrl);

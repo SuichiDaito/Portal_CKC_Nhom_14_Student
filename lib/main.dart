@@ -15,6 +15,7 @@ import 'package:portal_ckc/bloc/bloc_event_state/payment_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/payment_fee_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/sign_up_certificates_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/student_bloc.dart';
+import 'package:portal_ckc/bloc/bloc_event_state/student_comment_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/student_point_result_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/student_report_response_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/time_table_bloc.dart';
@@ -53,6 +54,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => TrainingProgramBloc()),
         BlocProvider(create: (_) => RequestPaymenFee()),
         BlocProvider(create: (_) => NotificateBloc()),
+        BlocProvider(create: (_) => CommentBloc()),
       ],
       child: MaterialApp.router(
         routerConfig: RouteName.route,

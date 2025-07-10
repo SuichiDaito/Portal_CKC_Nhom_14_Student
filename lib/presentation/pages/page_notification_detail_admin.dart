@@ -2,25 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/notificate_bloc.dart';
+import 'package:portal_ckc/bloc/bloc_event_state/student_comment_bloc.dart';
+import 'package:portal_ckc/bloc/event/student_comment_event.dart';
 import 'package:portal_ckc/bloc/event/student_notificate_event.dart';
+import 'package:portal_ckc/bloc/state/notificate_state.dart';
+import 'package:portal_ckc/bloc/state/student_comment_state.dart';
 import 'package:portal_ckc/presentation/sections/card/notification_detail_card.dart';
 import 'package:portal_ckc/presentation/sections/notification_comment_section.dart';
 
 class NotificationDetailPage extends StatefulWidget {
   final int id;
-  final String tuAi;
-  final DateTime ngayGui;
-  final String tieuDe;
-  final String noiDung;
 
-  const NotificationDetailPage({
-    super.key,
-    required this.id,
-    required this.tuAi,
-    required this.ngayGui,
-    required this.tieuDe,
-    required this.noiDung,
-  });
+  const NotificationDetailPage({Key? key, required this.id}) : super(key: key);
 
   @override
   State<NotificationDetailPage> createState() => _NotificationDetailPageState();
@@ -30,48 +23,96 @@ class _NotificationDetailPageState extends State<NotificationDetailPage> {
   final TextEditingController _commentController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    print('Gửi FetchNotificationDetailEvent với id = ${widget.id}');
+    context.read<NotificateBloc>().add(FetchNotificationDetailEvent(widget.id));
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: _buildAppBar(),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            NotificationDetailCard(
-              typeNotificationSender: widget.tuAi ?? 'Hệ thống',
-              date: _formatDate(widget.ngayGui),
-              headerNotification: widget.tieuDe,
-              contentNotification: widget.noiDung,
-              // lengthComment: tb.chiTiet.length.toString(),
-              // files: tb.files
-              //     .map((f) => {'ten_file': f.tenFile, 'url': f.url})
-              //     .toList(),
-            ),
+      body: BlocListener<NotificateBloc, NotificateState>(
+        listener: (context, state) {
+          if (state is NotificateStateError) {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text('❌ ${state.message}')));
+          }
+        },
+        child: BlocListener<CommentBloc, CommentState>(
+          listener: (context, commentState) {
+            if (commentState is CommentSuccess) {
+              context.read<NotificateBloc>().add(
+                FetchNotificationDetailEvent(widget.id),
+              );
+              _commentController.clear();
+            }
+          },
+          child: BlocBuilder<NotificateBloc, NotificateState>(
+            builder: (context, state) {
+              print("======= Bắt đầu BlocBuilder =======");
 
-            const SizedBox(height: 16),
-            // NotificationCommentSection(
-            //   lengthComment: '${comments.length}',
-            //   commentController: _commentController,
-            //   idThongBao: tb.id,
-            //   onPressed: () {
-            //     //BÌNH LUẬN MỚI
-            //     final content = _commentController.text.trim();
-            //     if (content.isNotEmpty) {
-            //       context.read<ThongBaoBloc>().add(
-            //         CreateCommentEvent(
-            //           thongBaoId: widget.id,
-            //           noiDung: content,
-            //         ),
-            //       );
+              if (state is NotificateStateLoading) {
+                print("===========Load==========");
+                return const Center(child: CircularProgressIndicator());
+              } else if (state is NotificateDetailStateLoaded) {
+                final tb = state.notification;
+                final comments = tb.binhLuans;
+                print("=========${tb.binhLuans.first.noiDung}");
+                return SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      NotificationDetailCard(
+                        typeNotificationSender: tb.tuAi ?? 'Hệ thống',
+                        date: _formatDate(tb.ngayGui),
+                        headerNotification: tb.tieuDe,
+                        contentNotification: tb.noiDung,
+                        lengthComment: tb.chiTiet.length.toString(),
+                        files: tb.files
+                            .map((f) => {'ten_file': f.tenFile, 'url': f.url})
+                            .toList(),
+                        id: tb.id,
+                      ),
 
-            //       _commentController.clear();
-            //     }
-            //   },
+                      const SizedBox(height: 16),
+                      NotificationCommentSection(
+                        lengthComment: '${comments.length}',
+                        commentController: _commentController,
+                        idThongBao: tb.id,
+                        onPressed: () {
+                          final content = _commentController.text.trim();
+                          if (content.isNotEmpty) {
+                            context.read<CommentBloc>().add(
+                              AddCommentEvent(
+                                thongBaoId: widget.id,
+                                noiDung: content,
+                              ),
+                            );
 
-            //   comments: comments,
-            // ),
-            const SizedBox(height: 20),
-          ],
+                            _commentController.clear();
+                          }
+                        },
+
+                        comments: comments,
+                      ),
+                      const SizedBox(height: 20),
+                    ],
+                  ),
+                );
+              } else if (state is NotificateStateError) {
+                return Center(child: Text('❌ ${state.message}'));
+              } else {
+                return const Center(
+                  child: Text(
+                    'Không thể truy cập chức năng này, vui lòng thử lại sau.',
+                  ),
+                );
+              }
+            },
+          ),
         ),
       ),
     );

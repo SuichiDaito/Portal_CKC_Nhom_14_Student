@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/notificate_bloc.dart';
 import 'package:portal_ckc/bloc/event/student_notificate_event.dart';
 import 'package:portal_ckc/bloc/state/notificate_state.dart';
@@ -27,8 +26,15 @@ class _NotificationPageState extends State<NotificationPage> {
       body: BlocBuilder<NotificateBloc, NotificateState>(
         builder: (context, state) {
           if (state is NotificateStateLoading) {
+            print('➡️ Đang xử lý lấy thông báo');
+
             return Center(child: CircularProgressIndicator(color: Colors.blue));
           } else if (state is NotificateStateLoaded) {
+            print('Tổng số thông báo: ${state.notifications.length}');
+            for (var e in state.notifications) {
+              print('tuAi: ${e.tuAi}, trangThai: ${e.trangThai}');
+            }
+
             final khoaNoti = state.notifications
                 .where((e) => e.tuAi == 'khoa' && e.trangThai == 1)
                 .toList();
@@ -84,11 +90,7 @@ class _NotificationPageState extends State<NotificationPage> {
   }
 
   Widget _buildFilterTabs() {
-    final filters = [
-      'Tất cả',
-      'Khoa',
-      'Phòng Công Tác Chính Trị',
-    ];
+    final filters = ['Tất cả', 'Khoa', 'Phòng Công Tác Chính Trị'];
 
     return Container(
       color: Colors.white,
