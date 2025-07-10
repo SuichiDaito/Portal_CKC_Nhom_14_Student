@@ -7,16 +7,22 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:portal_ckc/api/controller/call_api_student.dart';
 import 'package:portal_ckc/api/services/student_service.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/certificates_bloc.dart';
+import 'package:portal_ckc/bloc/bloc_event_state/change_password_friendly_bloc.dart';
+import 'package:portal_ckc/bloc/bloc_event_state/class_subject_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/exam_bloc.dart';
+import 'package:portal_ckc/bloc/bloc_event_state/exam_second_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/info_teacher_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/notificate_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/paper_certificates_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/payment_bloc.dart';
+import 'package:portal_ckc/bloc/bloc_event_state/payment_class_subject_bloc.dart';
+import 'package:portal_ckc/bloc/bloc_event_state/payment_exam_second_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/payment_fee_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/sign_up_certificates_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/student_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/student_point_result_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/student_report_response_bloc.dart';
+import 'package:portal_ckc/bloc/bloc_event_state/subject_fail_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/time_table_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/training_point_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/training_program_bloc.dart';
@@ -53,6 +59,12 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => TrainingProgramBloc()),
         BlocProvider(create: (_) => RequestPaymenFee()),
         BlocProvider(create: (_) => NotificateBloc()),
+        BlocProvider(create: (_) => ChangePasswordFriendlyBloc()),
+        BlocProvider(create: (_) => ExamSecondBloc()),
+        BlocProvider(create: (_) => PaymentExamSecondBloc()),
+        BlocProvider(create: (_) => SubjectFailBloc()),
+        BlocProvider(create: (_) => ClassSubjectBloc()),
+        BlocProvider(create: (_) => PaymentClassSubjectBloc())
       ],
       child: MaterialApp.router(
         routerConfig: RouteName.route,

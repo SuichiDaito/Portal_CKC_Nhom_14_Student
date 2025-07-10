@@ -14,7 +14,10 @@ class ExamSecondBloc extends Bloc<ExamSecondEvent, ExamSecondState> {
     on<FetchExamSecondEvent>(_onFetchExamSecondEvent);
   }
 
-  Future<void> _onFetchExamSecondEvent(ExamSecondEvent event, Emitter emit) async {
+  Future<void> _onFetchExamSecondEvent(
+    ExamSecondEvent event,
+    Emitter emit,
+  ) async {
     print('➡️ Đang xử lý lấy lịch thi lần hai');
     emit(ExamSecondStateLoading());
 
@@ -31,7 +34,7 @@ class ExamSecondBloc extends Bloc<ExamSecondEvent, ExamSecondState> {
           if (body.containsKey('data')) {
             final listJson = body['data'] as List<dynamic>;
             final exams = listJson
-                .map((item) => LichThi.fromJson(item as Map<String, dynamic>))
+                .map((item) => ThiData.fromJson(item as Map<String, dynamic>))
                 .toList();
 
             emit(ExamSecondStateLoaded(exams));

@@ -5,6 +5,7 @@ import 'package:portal_ckc/bloc/bloc_event_state/student_bloc.dart';
 import 'package:portal_ckc/bloc/event/student_event.dart';
 import 'package:portal_ckc/main.dart';
 import 'package:portal_ckc/presentation/pages/page_change_password_student.dart';
+import 'package:portal_ckc/presentation/pages/page_show_detail_class_subject.dart';
 import 'package:portal_ckc/presentation/pages/page_show_exam_second_student.dart';
 import 'package:portal_ckc/presentation/pages/page_training_program.dart';
 import 'package:portal_ckc/presentation/pages/appbar_bottombar/page_app_bar.dart';
@@ -106,7 +107,7 @@ class RouteName {
 
       GoRoute(
         path: '/admin/class_roster_admin',
-        builder: (context, state) => PageClassRosterAdmin(),
+        builder: (context, state) => ClassListScreen(),
       ),
       GoRoute(
         path: '/admin/meeting_minutes_admin',
@@ -144,7 +145,7 @@ class RouteName {
         builder: (context, state) => StudentGradeScreen(),
       ),
       //ExamSchedulePage
-       GoRoute(
+      GoRoute(
         path: '/student/exam/second',
         builder: (context, state) => ExamSchedulePage(),
       ),
@@ -152,6 +153,10 @@ class RouteName {
       GoRoute(
         path: '/student/change/password',
         builder: (context, state) => ChangePasswordScreen(),
+      ),
+      GoRoute(
+        path: '/student/signup/class/subject',
+        builder: (context, state) => PageShowDetailClassSubject(),
       ),
       GoRoute(
         path: '/student/training/program',

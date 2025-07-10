@@ -137,6 +137,16 @@ final class _$StudentService extends StudentService {
   }
 
   @override
+  Future<Response<Map<String, dynamic>>> requestChangePassword(
+    Map<String, dynamic> body,
+  ) {
+    final Uri $url = Uri.parse('/sinhvien/bao-mat/doi-mat-khau');
+    final $body = body;
+    final Request $request = Request('POST', $url, client.baseUrl, body: $body);
+    return client.send<Map<String, dynamic>, Map<String, dynamic>>($request);
+  }
+
+  @override
   Future<Response<Map<String, dynamic>>> getNotification() {
     final Uri $url = Uri.parse('/sinhvien/thong-bao');
     final Request $request = Request('GET', $url, client.baseUrl);
@@ -148,5 +158,37 @@ final class _$StudentService extends StudentService {
     final Uri $url = Uri.parse('/sinhvien/lich-thi-lan-hai');
     final Request $request = Request('GET', $url, client.baseUrl);
     return client.send<Map<String, dynamic>, Map<String, dynamic>>($request);
+  }
+
+  @override
+  Future<Response<dynamic>> getPaymentExamSecond(int id) {
+    final Uri $url = Uri.parse('/sinhvien/payment/vnpay/thi-lai/${id}');
+    final Request $request = Request('POST', $url, client.baseUrl);
+    return client.send<dynamic, dynamic>($request);
+  }
+
+  @override
+  Future<Response<Map<String, dynamic>>> requestSignupStudy() {
+    final Uri $url = Uri.parse('/sinhvien/dang-ky-hoc-ghep/lop-hoc-ghep');
+    final Request $request = Request('GET', $url, client.baseUrl);
+    return client.send<Map<String, dynamic>, Map<String, dynamic>>($request);
+  }
+
+  @override
+  Future<Response<dynamic>> getListClassSubject(int id) {
+    final Uri $url = Uri.parse('/sinhvien/dang-ky-hoc-ghep/lop/${id}');
+    final Request $request = Request('GET', $url, client.baseUrl);
+    return client.send<dynamic, dynamic>($request);
+  }
+
+  @override
+  Future<Response<dynamic>> paymentListClassSubject(
+    int id,
+    Map<String, dynamic> body,
+  ) {
+    final Uri $url = Uri.parse('/sinhvien/payment/vnpay/hoc-ghep/${id}');
+    final $body = body;
+    final Request $request = Request('POST', $url, client.baseUrl, body: $body);
+    return client.send<dynamic, dynamic>($request);
   }
 }

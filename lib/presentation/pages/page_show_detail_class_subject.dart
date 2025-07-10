@@ -1,26 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:portal_ckc/bloc/bloc_event_state/class_subject_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/exam_second_bloc.dart';
+import 'package:portal_ckc/bloc/bloc_event_state/payment_class_subject_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/payment_exam_second_bloc.dart';
 import 'package:portal_ckc/bloc/event/exam_second_event.dart';
+import 'package:portal_ckc/bloc/event/payment_class_subject_event.dart';
 import 'package:portal_ckc/bloc/event/payment_exam_second.dart';
+import 'package:portal_ckc/bloc/state/class_subject_state.dart';
 import 'package:portal_ckc/bloc/state/exam_second_state.dart';
+import 'package:portal_ckc/bloc/state/payment_class_subject.dart';
 import 'package:portal_ckc/bloc/state/payment_exam_second_state.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class ExamSchedulePage extends StatefulWidget {
+class PageShowDetailClassSubject extends StatefulWidget {
   @override
-  _ExamSchedulePageState createState() => _ExamSchedulePageState();
+  State<PageShowDetailClassSubject> createState() => DetailClassSubject();
 }
 
-class _ExamSchedulePageState extends State<ExamSchedulePage> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    context.read<ExamSecondBloc>().add(FetchExamSecondEvent());
-  }
-
+class DetailClassSubject extends State<PageShowDetailClassSubject> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,7 +26,7 @@ class _ExamSchedulePageState extends State<ExamSchedulePage> {
       appBar: AppBar(
         backgroundColor: Color(0xFF3B82F6),
         title: Text(
-          'Lịch thi sinh viên',
+          'Danh sách lớp học phần',
           style: TextStyle(
             color: Colors.white,
             fontSize: 20,
@@ -41,89 +39,67 @@ class _ExamSchedulePageState extends State<ExamSchedulePage> {
         ),
         elevation: 0,
       ),
-      body: BlocConsumer<ExamSecondBloc, ExamSecondState>(
+      body: BlocConsumer<ClassSubjectBloc, ClassSubjectState>(
         listener: (context, state) {},
         builder: (context, state) {
-          if (state is ExamSecondStateLoading) {
+          if (state is ClassSubjectStateLoading) {
             return Center(child: CircularProgressIndicator(color: Colors.blue));
-          } else if (state is ExamSecondStateLoaded) {
-            final point = state.exams;
+          } else if (state is ClassSubjectStateLoaded) {
+            final subjects = state.classSubject;
             return Container(
               padding: EdgeInsets.all(16),
               child: ListView.builder(
-                itemCount: point.length,
+                itemCount: subjects.lopHocPhanDangMo.length,
                 itemBuilder: (context, index) {
-                  if (point[index]
-                              .lopHocPhan
-                              .danhSachHocPhan
-                              .last
-                              .diemThiLan1 !=
-                          null ||
-                      point[index]
-                              .lopHocPhan
-                              .danhSachHocPhan
-                              .last
-                              .diemThiLan1! >
-                          0) {
-                    if (point[index].lopHocPhan.dangKyHocGhepThiLai == null) {
-                      return ExamCard(
-                        nameSubject: point[index].lopHocPhan.tenHocPhan,
-                        flag: true,
-                        lecture1: point[index].giamThi1.hoSo.hoTen,
-                        lecture2: point[index].giamThi2.hoSo.hoTen,
-                        date: point[index].ngayThi,
-                        distanceTime: point[index].thoiGianThi,
-                        room: point[index].phong.ten,
-                        timeExams: point[index].lanThi,
-                        pointExam1:
-                            point[index]
-                                .lopHocPhan
-                                .danhSachHocPhan
-                                .last
-                                .diemThiLan1 ??
-                            0.0,
-                        onRegister: () {
-                          context.read<PaymentExamSecondBloc>().add(
-                            RequestPaymentExamSecond(
-                              id: point[index].lopHocPhan.id,
-                            ),
-                          );
-                          _showPaymentDialog(
-                            context,
-                            point[index].lopHocPhan.tenHocPhan,
-                          );
-                        },
-                      );
-                    } else {
-                      return ExamCard(
-                        nameSubject: point[index].lopHocPhan.tenHocPhan,
-                        flag: false,
-                        lecture1: point[index].giamThi1.hoSo.hoTen,
-                        lecture2: point[index].giamThi2.hoSo.hoTen,
-                        date: point[index].ngayThi,
-                        distanceTime: point[index].thoiGianThi,
-                        room: point[index].phong.ten,
-                        timeExams: point[index].lanThi,
-                        pointExam1:
-                            point[index]
-                                .lopHocPhan
-                                .danhSachHocPhan
-                                .last
-                                .diemThiLan1 ??
-                            0.0,
-                        onRegister: () {
-                          _showPaymentDialog(
-                            context,
-                            point[index].lopHocPhan.tenHocPhan,
-                          );
-                        },
-                      );
-                    }
+                  final subject = subjects.lopHocPhanDangMo;
+                  if (subjects.checkDKHG == false) {
+                    return ExamCard(
+                      nameSubject: subject[index].tenHocPhan,
+                      flag: true,
+                      lecture1: subject[index].giangVien.hoSo.hoTen,
+                      date: subject[index].thoiKhoaBieu[index].ngay,
+                      room: subject[index].thoiKhoaBieu[index].phong.ten,
+                      idClass: subject[index].thoiKhoaBieu[index].idLopHocPhan,
+                      idSubject: subjects.monHoc.id,
+                      onRegister: () {
+                        context.read<PaymentClassSubjectBloc>().add(
+                          RequestPaymentClassSubjectEvent(
+                            id_lop_hoc:
+                                subject[index].thoiKhoaBieu[index].idLopHocPhan,
+                            id_mon_hoc: subjects.monHoc.id,
+                          ),
+                        );
+                        _showPaymentDialog(
+                          context,
+                          subject[index].tenHocPhan,
+                          subject[index].lop.tenLop,
+                        );
+                      },
+                      className: subject[index].lop.tenLop,
+                      beginLesson:
+                          subject[index].thoiKhoaBieu[index].tietBatDau,
+                      endLesson: subject[index].thoiKhoaBieu[index].tietBatDau,
+                    );
+                  } else {
+                    return ExamCard(
+                      nameSubject: subject[index].tenHocPhan,
+                      flag: false,
+                      lecture1: subject[index].giangVien.hoSo.hoTen,
+                      date: subject[index].thoiKhoaBieu[index].ngay,
+                      room: subject[index].thoiKhoaBieu[index].phong.ten,
+                      idClass: subject[index].thoiKhoaBieu[index].idLopHocPhan,
+                      idSubject: subjects.monHoc.id,
+                      onRegister: () {},
+                      className: subject[index].lop.tenLop,
+                      beginLesson:
+                          subject[index].thoiKhoaBieu[index].tietBatDau,
+                      endLesson: subject[index].thoiKhoaBieu[index].tietBatDau,
+                    );
                   }
                 },
               ),
             );
-          } else if (state is ExamSecondStateError) {
+          } else if (state is ClassSubjectStateError) {
             return Center(child: Text(state.message));
           }
           return Center(child: Text('NOT FOUND | 404'));
@@ -132,7 +108,11 @@ class _ExamSchedulePageState extends State<ExamSchedulePage> {
     );
   }
 
-  void _showPaymentDialog(BuildContext context, String nameSubject) {
+  void _showPaymentDialog(
+    BuildContext context,
+    String nameSubject,
+    String className,
+  ) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -148,28 +128,23 @@ class _ExamSchedulePageState extends State<ExamSchedulePage> {
               color: Color(0xFF1E3A8A),
             ),
           ),
-          content: BlocBuilder<PaymentExamSecondBloc, PaymentExamSecondState>(
+          content: BlocBuilder<PaymentClassSubjectBloc, PaymentClassSubjectState>(
             builder: (context, state) {
-              if (state is PaymentExamSecondStateLoading) {
+              if (state is PaymentClassSubjectStateLoading) {
                 return Center(
                   child: CircularProgressIndicator(color: Colors.blue),
                 );
-              } else if (state is PaymentExamSecondStateLoaded) {
+              } else if (state is PaymentClassSubjectStateLoaded) {
                 String url = state.url;
                 return Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      'Môn thi: ${nameSubject}',
+                      'Bạn muốn đăng ký môn học: ${nameSubject} tại lớp ${className}',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
                       ),
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      'Phí thi: 50.000 VNĐ',
-                      style: TextStyle(fontSize: 16, color: Colors.red),
                     ),
                     SizedBox(height: 20),
                     Container(
@@ -206,7 +181,7 @@ class _ExamSchedulePageState extends State<ExamSchedulePage> {
                     ),
                   ],
                 );
-              } else if (state is PaymentExamSecondStateError) {
+              } else if (state is PaymentClassSubjectStateError) {
                 return Center(child: Text(state.message));
               }
               return Center(child: Text('NOT FOUND | 404'));
@@ -258,27 +233,29 @@ class _ExamSchedulePageState extends State<ExamSchedulePage> {
 
 class ExamCard extends StatelessWidget {
   final bool flag;
-  final nameSubject;
+  final String nameSubject;
+  final int idClass;
+  final int idSubject;
   final String lecture1;
-  final String lecture2;
+  final String className;
   final String date;
-  final int distanceTime;
   final String room;
-  final int timeExams;
-  final double pointExam1;
+  final int beginLesson;
+  final int endLesson;
   final VoidCallback onRegister;
 
   const ExamCard({
     Key? key,
     required this.nameSubject,
+    required this.idClass,
+    required this.idSubject,
     required this.flag,
     required this.lecture1,
-    required this.lecture2,
+    required this.className,
     required this.date,
-    required this.distanceTime,
     required this.room,
-    required this.timeExams,
-    required this.pointExam1,
+    required this.beginLesson,
+    required this.endLesson,
     required this.onRegister,
   }) : super(key: key);
 
@@ -312,7 +289,7 @@ class ExamCard extends StatelessWidget {
               ),
             ),
             child: Text(
-              nameSubject,
+              'Môn: ${nameSubject} - Lớp ${className}',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 16,
@@ -326,33 +303,24 @@ class ExamCard extends StatelessWidget {
             padding: EdgeInsets.all(16),
             child: Column(
               children: [
-                _buildInfoRow(
-                  Icons.people,
-                  'Giám thị',
-                  '${lecture1} & ${lecture2}',
-                ),
+                _buildInfoRow(Icons.people, 'Giảng Viên', '${lecture1}'),
                 SizedBox(height: 12),
-                _buildInfoRow(Icons.calendar_today, 'Ngày thi', date),
+                _buildInfoRow(Icons.calendar_today, 'Ngày bắt đầu:', '${date}'),
                 SizedBox(height: 12),
                 _buildInfoRow(
                   Icons.access_time,
-                  'Bắt đầu',
-                  '${date} | ${distanceTime} phút',
+                  'Số lượng đăng ký:',
+                  '${date}',
                 ),
                 SizedBox(height: 12),
                 _buildInfoRow(Icons.room, 'Phòng', room),
                 SizedBox(height: 12),
                 _buildInfoRow(
                   Icons.add_circle,
-                  'Lần thi',
-                  timeExams.toString(),
+                  'Từ tiết: ',
+                  '${beginLesson} - ${endLesson}',
                 ),
-                SizedBox(height: 12),
-                _buildInfoRow(
-                  Icons.check_circle,
-                  'Điểm lần 1',
-                  pointExam1.toString() ?? 'Chưa có',
-                ),
+
                 SizedBox(height: 16),
 
                 // Nút đăng ký
@@ -369,7 +337,7 @@ class ExamCard extends StatelessWidget {
                             ),
                           ),
                           child: Text(
-                            'Đăng ký thi',
+                            'Đăng ký học ghép',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 16,

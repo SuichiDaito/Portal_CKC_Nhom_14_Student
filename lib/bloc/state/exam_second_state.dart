@@ -8,7 +8,7 @@ class ExamSecondStateInitial extends ExamSecondState {}
 class ExamSecondStateLoading extends ExamSecondState {}
 
 class ExamSecondStateLoaded extends ExamSecondState {
-  final List<LichThi> exams;
+  final List<ThiData> exams;
 
   ExamSecondStateLoaded(this.exams);
 }

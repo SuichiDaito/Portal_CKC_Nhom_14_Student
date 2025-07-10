@@ -1,22 +1,18 @@
-// GENERATED MODEL WITH NULL-SAFE MAPPING
-
-class LichThiResponse {
+class ThiModel {
   final bool status;
-  final List<LichThi> data;
+  final List<ThiData> data;
 
-  LichThiResponse({required this.status, required this.data});
+  ThiModel({required this.status, required this.data});
 
-  factory LichThiResponse.fromJson(Map<String, dynamic> json) {
-    return LichThiResponse(
-      status: json['status'] ?? false,
-      data: json['data'] != null
-          ? List<LichThi>.from(json['data'].map((x) => LichThi.fromJson(x)))
-          : [],
+  factory ThiModel.fromJson(Map<String, dynamic> json) {
+    return ThiModel(
+      status: json['status'],
+      data: List<ThiData>.from(json['data'].map((x) => ThiData.fromJson(x))),
     );
   }
 }
 
-class LichThi {
+class ThiData {
   final int id;
   final int idLopHocPhan;
   final int idGiamThi1;
@@ -33,7 +29,7 @@ class LichThi {
   final Phong phong;
   final LopHocPhan lopHocPhan;
 
-  LichThi({
+  ThiData({
     required this.id,
     required this.idLopHocPhan,
     required this.idGiamThi1,
@@ -51,31 +47,23 @@ class LichThi {
     required this.lopHocPhan,
   });
 
-  factory LichThi.fromJson(Map<String, dynamic> json) {
-    return LichThi(
-      id: json['id'] ?? 0,
-      idLopHocPhan: json['id_lop_hoc_phan'] ?? 0,
-      idGiamThi1: json['id_giam_thi_1'] ?? 0,
-      idGiamThi2: json['id_giam_thi_2'] ?? 0,
-      idTuan: json['id_tuan'] ?? 0,
-      ngayThi: json['ngay_thi'] ?? '',
-      gioBatDau: json['gio_bat_dau'] ?? '',
-      thoiGianThi: json['thoi_gian_thi'] ?? 0,
-      idPhongThi: json['id_phong_thi'] ?? 0,
-      lanThi: json['lan_thi'] ?? 0,
-      trangThai: json['trang_thai'] ?? 0,
-      giamThi1: json['giam_thi1'] != null
-          ? GiamThi.fromJson(json['giam_thi1'])
-          : GiamThi.empty(),
-      giamThi2: json['giam_thi2'] != null
-          ? GiamThi.fromJson(json['giam_thi2'])
-          : GiamThi.empty(),
-      phong: json['phong'] != null
-          ? Phong.fromJson(json['phong'])
-          : Phong.empty(),
-      lopHocPhan: json['lop_hoc_phan'] != null
-          ? LopHocPhan.fromJson(json['lop_hoc_phan'])
-          : LopHocPhan.empty(),
+  factory ThiData.fromJson(Map<String, dynamic> json) {
+    return ThiData(
+      id: json['id'],
+      idLopHocPhan: json['id_lop_hoc_phan'],
+      idGiamThi1: json['id_giam_thi_1'],
+      idGiamThi2: json['id_giam_thi_2'],
+      idTuan: json['id_tuan'],
+      ngayThi: json['ngay_thi'],
+      gioBatDau: json['gio_bat_dau'],
+      thoiGianThi: json['thoi_gian_thi'],
+      idPhongThi: json['id_phong_thi'],
+      lanThi: json['lan_thi'],
+      trangThai: json['trang_thai'],
+      giamThi1: GiamThi.fromJson(json['giam_thi1']),
+      giamThi2: GiamThi.fromJson(json['giam_thi2']),
+      phong: Phong.fromJson(json['phong']),
+      lopHocPhan: LopHocPhan.fromJson(json['lop_hoc_phan']),
     );
   }
 }
@@ -99,23 +87,12 @@ class GiamThi {
 
   factory GiamThi.fromJson(Map<String, dynamic> json) {
     return GiamThi(
-      id: json['id'] ?? 0,
-      idHoSo: json['id_ho_so'] ?? 0,
-      idBoMon: json['id_bo_mon'] ?? 0,
-      taiKhoan: json['tai_khoan'] ?? '',
-      trangThai: json['trang_thai'] ?? 0,
-      hoSo: json['ho_so'] != null ? HoSo.fromJson(json['ho_so']) : HoSo.empty(),
-    );
-  }
-
-  factory GiamThi.empty() {
-    return GiamThi(
-      id: 0,
-      idHoSo: 0,
-      idBoMon: 0,
-      taiKhoan: '',
-      trangThai: 0,
-      hoSo: HoSo.empty(),
+      id: json['id'],
+      idHoSo: json['id_ho_so'],
+      idBoMon: json['id_bo_mon'],
+      taiKhoan: json['tai_khoan'],
+      trangThai: json['trang_thai'],
+      hoSo: HoSo.fromJson(json['ho_so']),
     );
   }
 }
@@ -147,31 +124,16 @@ class HoSo {
 
   factory HoSo.fromJson(Map<String, dynamic> json) {
     return HoSo(
-      id: json['id'] ?? 0,
-      hoTen: json['ho_ten'] ?? '',
-      email: json['email'] ?? '',
-      password: json['password'] ?? '',
-      soDienThoai: json['so_dien_thoai'] ?? '',
-      ngaySinh: json['ngay_sinh'] ?? '',
-      gioiTinh: json['gioi_tinh'] ?? '',
-      cccd: json['cccd'] ?? '',
-      diaChi: json['dia_chi'] ?? '',
-      anh: json['anh'] ?? '',
-    );
-  }
-
-  factory HoSo.empty() {
-    return HoSo(
-      id: 0,
-      hoTen: '',
-      email: '',
-      password: '',
-      soDienThoai: '',
-      ngaySinh: '',
-      gioiTinh: '',
-      cccd: '',
-      diaChi: '',
-      anh: '',
+      id: json['id'],
+      hoTen: json['ho_ten'],
+      email: json['email'],
+      password: json['password'],
+      soDienThoai: json['so_dien_thoai'],
+      ngaySinh: json['ngay_sinh'],
+      gioiTinh: json['gioi_tinh'],
+      cccd: json['cccd'],
+      diaChi: json['dia_chi'],
+      anh: json['anh'],
     );
   }
 }
@@ -191,15 +153,11 @@ class Phong {
 
   factory Phong.fromJson(Map<String, dynamic> json) {
     return Phong(
-      id: json['id'] ?? 0,
-      ten: json['ten'] ?? '',
-      soLuong: json['so_luong'] ?? 0,
-      loaiPhong: json['loai_phong'] ?? 0,
+      id: json['id'],
+      ten: json['ten'],
+      soLuong: json['so_luong'],
+      loaiPhong: json['loai_phong'],
     );
-  }
-
-  factory Phong.empty() {
-    return Phong(id: 0, ten: '', soLuong: 0, loaiPhong: 0);
   }
 }
 
@@ -215,7 +173,8 @@ class LopHocPhan {
   final int loaiMon;
   final int trangThai;
   final int trangThaiNopBangDiem;
-  final List<DangKyHocPhan> danhSachHocPhan;
+  final DangKyHocGhepThiLai? dangKyHocGhepThiLai;
+  final List<DanhSachHocPhan> danhSachHocPhan;
 
   LopHocPhan({
     required this.id,
@@ -229,49 +188,60 @@ class LopHocPhan {
     required this.loaiMon,
     required this.trangThai,
     required this.trangThaiNopBangDiem,
+    this.dangKyHocGhepThiLai,
     required this.danhSachHocPhan,
   });
 
   factory LopHocPhan.fromJson(Map<String, dynamic> json) {
     return LopHocPhan(
-      id: json['id'] ?? 0,
-      tenHocPhan: json['ten_hoc_phan'] ?? '',
-      idGiangVien: json['id_giang_vien'] ?? 0,
-      idChuongTrinhDaoTao: json['id_chuong_trinh_dao_tao'] ?? 0,
-      idLop: json['id_lop'] ?? 0,
-      loaiLopHocPhan: json['loai_lop_hoc_phan'] ?? 0,
-      soLuongSinhVien: json['so_luong_sinh_vien'] ?? 0,
-      gioiHanDangKy: json['gioi_han_dang_ky'] ?? 0,
-      loaiMon: json['loai_mon'] ?? 0,
-      trangThai: json['trang_thai'] ?? 0,
-      trangThaiNopBangDiem: json['trang_thai_nop_bang_diem'] ?? 0,
-      danhSachHocPhan: json['danh_sach_hoc_phan'] != null
-          ? List<DangKyHocPhan>.from(
-              json['danh_sach_hoc_phan'].map((x) => DangKyHocPhan.fromJson(x)),
-            )
-          : [],
-    );
-  }
-
-  factory LopHocPhan.empty() {
-    return LopHocPhan(
-      id: 0,
-      tenHocPhan: '',
-      idGiangVien: 0,
-      idChuongTrinhDaoTao: 0,
-      idLop: 0,
-      loaiLopHocPhan: 0,
-      soLuongSinhVien: 0,
-      gioiHanDangKy: 0,
-      loaiMon: 0,
-      trangThai: 0,
-      trangThaiNopBangDiem: 0,
-      danhSachHocPhan: [],
+      id: json['id'],
+      tenHocPhan: json['ten_hoc_phan'],
+      idGiangVien: json['id_giang_vien'],
+      idChuongTrinhDaoTao: json['id_chuong_trinh_dao_tao'],
+      idLop: json['id_lop'],
+      loaiLopHocPhan: json['loai_lop_hoc_phan'],
+      soLuongSinhVien: json['so_luong_sinh_vien'],
+      gioiHanDangKy: json['gioi_han_dang_ky'],
+      loaiMon: json['loai_mon'],
+      trangThai: json['trang_thai'],
+      trangThaiNopBangDiem: json['trang_thai_nop_bang_diem'],
+      dangKyHocGhepThiLai: json['dang_ky_hoc_ghep_thi_lai'] != null
+          ? DangKyHocGhepThiLai.fromJson(json['dang_ky_hoc_ghep_thi_lai'])
+          : null,
+      danhSachHocPhan: List<DanhSachHocPhan>.from(
+        json['danh_sach_hoc_phan'].map((x) => DanhSachHocPhan.fromJson(x)),
+      ),
     );
   }
 }
 
-class DangKyHocPhan {
+class DangKyHocGhepThiLai {
+  final int idSinhVien;
+  final int idLopHocPhan;
+  final int soTien;
+  final int loaiDong;
+  final int trangThai;
+
+  DangKyHocGhepThiLai({
+    required this.idSinhVien,
+    required this.idLopHocPhan,
+    required this.soTien,
+    required this.loaiDong,
+    required this.trangThai,
+  });
+
+  factory DangKyHocGhepThiLai.fromJson(Map<String, dynamic> json) {
+    return DangKyHocGhepThiLai(
+      idSinhVien: json['id_sinh_vien'],
+      idLopHocPhan: json['id_lop_hoc_phan'],
+      soTien: json['so_tien'],
+      loaiDong: json['loai_dong'],
+      trangThai: json['trang_thai'],
+    );
+  }
+}
+
+class DanhSachHocPhan {
   final int idSinhVien;
   final int idLopHocPhan;
   final double? diemMdThucHanh;
@@ -283,7 +253,7 @@ class DangKyHocPhan {
   final double? diemTongKet;
   final int loaiHoc;
 
-  DangKyHocPhan({
+  DanhSachHocPhan({
     required this.idSinhVien,
     required this.idLopHocPhan,
     this.diemMdThucHanh,
@@ -296,18 +266,32 @@ class DangKyHocPhan {
     required this.loaiHoc,
   });
 
-  factory DangKyHocPhan.fromJson(Map<String, dynamic> json) {
-    return DangKyHocPhan(
-      idSinhVien: json['id_sinh_vien'] ?? 0,
-      idLopHocPhan: json['id_lop_hoc_phan'] ?? 0,
-      diemMdThucHanh: (json['diem_md_thuc_hanh'] as num?)?.toDouble(),
-      diemMdLyThuyet: (json['diem_md_ly_thuyet'] as num?)?.toDouble(),
-      diemChuyenCan: (json['diem_chuyen_can'] as num?)?.toDouble(),
-      diemQuaTrinh: (json['diem_qua_trinh'] as num?)?.toDouble(),
-      diemThiLan1: (json['diem_thi_lan_1'] as num?)?.toDouble(),
-      diemThiLan2: (json['diem_thi_lan_2'] as num?)?.toDouble(),
-      diemTongKet: (json['diem_tong_ket'] as num?)?.toDouble(),
-      loaiHoc: json['loai_hoc'] ?? 0,
+  factory DanhSachHocPhan.fromJson(Map<String, dynamic> json) {
+    return DanhSachHocPhan(
+      idSinhVien: json['id_sinh_vien'],
+      idLopHocPhan: json['id_lop_hoc_phan'],
+      diemMdThucHanh: (json['diem_md_thuc_hanh'] != null)
+          ? (json['diem_md_thuc_hanh'] as num).toDouble()
+          : null,
+      diemMdLyThuyet: (json['diem_md_ly_thuyet'] != null)
+          ? (json['diem_md_ly_thuyet'] as num).toDouble()
+          : null,
+      diemChuyenCan: (json['diem_chuyen_can'] != null)
+          ? (json['diem_chuyen_can'] as num).toDouble()
+          : null,
+      diemQuaTrinh: (json['diem_qua_trinh'] != null)
+          ? (json['diem_qua_trinh'] as num).toDouble()
+          : null,
+      diemThiLan1: (json['diem_thi_lan_1'] != null)
+          ? (json['diem_thi_lan_1'] as num).toDouble()
+          : null,
+      diemThiLan2: (json['diem_thi_lan_2'] != null)
+          ? (json['diem_thi_lan_2'] as num).toDouble()
+          : null,
+      diemTongKet: (json['diem_tong_ket'] != null)
+          ? (json['diem_tong_ket'] as num).toDouble()
+          : null,
+      loaiHoc: json['loai_hoc'],
     );
   }
 }
