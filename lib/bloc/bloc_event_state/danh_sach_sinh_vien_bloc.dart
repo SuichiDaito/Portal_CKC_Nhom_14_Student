@@ -9,6 +9,24 @@ class ListStudentBloc extends Bloc<ListStudentEvent, ListStudentState> {
 
   ListStudentBloc() : super(ListStudentInitial()) {
     on<FetchListStudent>(_onFetchStudentEvent);
+    on<CreatReportEvent>(_onCreateReport);
+  }
+
+  Future<void> _onCreateReport(
+    CreatReportEvent event,
+    Emitter<ListStudentState> emit,
+  ) async {
+    emit(ListStudentStateLoading());
+    try {
+      final response = await _service.createBienBan(event.lopId, event.data);
+      if (response.isSuccessful) {
+        emit(CreateReportSuccess("Tạo biên bản thành công"));
+      } else {
+        emit(CreateReportError("Tạo biên bản thất bại"));
+      }
+    } catch (e) {
+      emit(CreateReportError("Lỗi khi tạo biên bản: $e"));
+    }
   }
 
   Future<void> _onFetchStudentEvent(

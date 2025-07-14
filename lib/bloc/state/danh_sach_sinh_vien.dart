@@ -13,6 +13,18 @@ class ListStudentStateLoaded extends ListStudentState {
   ListStudentStateLoaded(this.studens);
 }
 
+class CreateReportSuccess extends ListStudentState {
+  final String message;
+
+  CreateReportSuccess(this.message);
+}
+
+class CreateReportError extends ListStudentState {
+  final String message;
+
+  CreateReportError(this.message);
+}
+
 class ListStudentStateError extends ListStudentState {
   final String message;
 

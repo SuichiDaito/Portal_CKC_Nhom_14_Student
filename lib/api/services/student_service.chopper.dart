@@ -223,4 +223,15 @@ final class _$StudentService extends StudentService {
     final Request $request = Request('GET', $url, client.baseUrl);
     return client.send<Map<String, dynamic>, Map<String, dynamic>>($request);
   }
+
+  @override
+  Future<Response<dynamic>> createBienBan(
+    int lopId,
+    Map<String, dynamic> data,
+  ) {
+    final Uri $url = Uri.parse('/sinhvien/bienbanshcn/store/${lopId}');
+    final $body = data;
+    final Request $request = Request('POST', $url, client.baseUrl, body: $body);
+    return client.send<dynamic, dynamic>($request);
+  }
 }
