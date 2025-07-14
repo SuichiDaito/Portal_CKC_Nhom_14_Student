@@ -12,6 +12,7 @@ import 'package:portal_ckc/bloc/event/payment_exam_second.dart';
 import 'package:portal_ckc/bloc/state/exam_second_state.dart';
 import 'package:portal_ckc/bloc/state/list_subject_fail.dart';
 import 'package:portal_ckc/bloc/state/payment_exam_second_state.dart';
+import 'package:portal_ckc/presentation/sections/empty_section.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ClassListScreen extends StatefulWidget {
@@ -50,22 +51,28 @@ class ListScreen extends State<ClassListScreen> {
       body: BlocConsumer<SubjectFailBloc, ListSubjectFailState>(
         listener: (context, state) {},
         builder: (context, state) {
-          if (state is ListSubjectFailStateLoading) {
+          if (state is ListSubjectFailStateLoading ||
+              state is ListSubjectFailInitial) {
             return Center(child: CircularProgressIndicator(color: Colors.blue));
           } else if (state is ListSubjectFailStateLoaded) {
             final subject = state.subject;
+            if (subject.isEmpty) {
+              return EmptySection(message: 'Chúc mừng sinh viên không rớt môn');
+            }
             return Container(
               padding: EdgeInsets.all(16),
               child: ListView.builder(
                 itemCount: subject.length,
                 itemBuilder: (context, index) {
                   return FailedSubjectCard(
-                    idSubject: subject[index].idMonHoc,
-                    nameSubject: subject[index].tenMon,
-                    nameSectionClass: subject[index].tenHocPhan,
-                    numberCredit: subject[index].soTinChi,
-                    totalPoint: subject[index].diemTongKet,
-                    typeSubject: subject[index].loaiMon,
+                    idSubject: int.parse(subject[index].idMonHoc ?? '0'),
+                    nameSubject: subject[index].tenMon ?? '',
+                    nameSectionClass: subject[index].tenHocPhan ?? '',
+                    numberCredit: int.parse(subject[index].soTinChi ?? '0'),
+                    totalPoint: double.parse(
+                      subject[index].diemTongKet ?? '0.0',
+                    ),
+                    typeSubject: subject[index].loaiMon ?? '0',
                   );
                 },
               ),
@@ -208,6 +215,7 @@ class FailedSubjectCard extends StatelessWidget {
                 const SizedBox(height: 20),
                 // Nút bấm
                 SizedBox(
+                  height: 50,
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
@@ -226,7 +234,7 @@ class FailedSubjectCard extends StatelessWidget {
                       elevation: 0,
                     ),
                     child: const Text(
-                      'Xem chi tiết lớp học',
+                      'Xem chi tiết lớp học phần',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,

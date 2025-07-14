@@ -19,7 +19,9 @@ class RequestPaymenFee
     emit(PaymentFeeRequestStateLoading());
 
     try {
-      final response = await _service.paymentFeeStudy({'total_vnpay': 7700000});
+      final response = await _service.paymentFeeStudy(event.id, {
+        'total_vnpay': 7700000,
+      });
 
       if (response.isSuccessful && response.body != null) {
         final body = response.body;

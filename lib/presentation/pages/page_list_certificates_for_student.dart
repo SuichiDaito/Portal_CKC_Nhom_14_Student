@@ -88,14 +88,14 @@ class _DocumentListPageState extends State<DocumentListPage> {
                     itemBuilder: (context, index) {
                       final certificate = certificates[index];
                       return DocumentCard(
-                        title: certificate.loaiGiay.tenGiay,
+                        title: certificate?.loaiGiay?.tenGiay ?? '',
                         dateRegistration: certificate.ngayDangKy != null
-                            ? 'Ngày đăng ký: ${DateFormat('dd/MM/yyyy').format(certificate.ngayDangKy)}'
+                            ? 'Ngày đăng ký: ${certificate?.ngayDangKy}'
                             : 'Ngày đăng ký: Chưa có',
                         dateReceive: certificate.ngayNhan != null
-                            ? 'Ngày nhận: ${DateFormat('dd/MM/yyyy').format(certificate.ngayNhan)}'
+                            ? 'Ngày nhận: ${certificate?.ngayNhan}'
                             : 'Ngày nhận: Chưa có',
-                        status: certificate.trangThai,
+                        status: int.parse(certificate.trangThai ?? '0'),
                       );
                     },
                   ),

@@ -13,116 +13,147 @@ class StudentCertificates {
 }
 
 class Certificates {
+  final int id;
+  final int idSinhVien;
+  final int? idGiangVien;
+  final int idLoaiGiay;
+  final String? ngayDangKy;
+  final String? ngayNhan;
+  final String? trangThai;
+  final String? createdAt;
+  final String? updatedAt;
+  final LoaiGiay? loaiGiay;
+  final Student? sinhVien;
+
   Certificates({
     required this.id,
     required this.idSinhVien,
-    required this.idGiangVien,
+    this.idGiangVien,
     required this.idLoaiGiay,
-    required this.ngayDangKy,
-    required this.ngayNhan,
-    required this.trangThai,
-    required this.loaiGiay,
-    required this.sinhVien,
+    this.ngayDangKy,
+    this.ngayNhan,
+    this.trangThai,
+    this.createdAt,
+    this.updatedAt,
+    this.loaiGiay,
+    this.sinhVien,
   });
-
-  final int id;
-  final int idSinhVien;
-  final int idGiangVien;
-  final int idLoaiGiay;
-  final DateTime ngayDangKy;
-  final DateTime ngayNhan;
-  final int trangThai;
-  final LoaiGiay loaiGiay;
-  final Student sinhVien;
 
   factory Certificates.fromJson(Map<String, dynamic> json) {
     return Certificates(
-      id: json['id'],
-      idSinhVien: json['id_sinh_vien'],
-      idGiangVien: json['id_giang_vien'] ?? 0,
-      idLoaiGiay: json['id_loai_giay'],
-      ngayDangKy: DateTime.parse(json['ngay_dang_ky']),
-      ngayNhan: DateTime.parse(json['ngay_nhan']),
+      id: json['id'] ?? 0,
+      idSinhVien: json['id_sinh_vien'] ?? 0,
+      idGiangVien: json['id_giang_vien'],
+      idLoaiGiay: json['id_loai_giay'] ?? 0,
+      ngayDangKy: json['ngay_dang_ky'],
+      ngayNhan: json['ngay_nhan'],
       trangThai: json['trang_thai'],
-      loaiGiay: LoaiGiay.fromJson(json['loai_giay']),
-      sinhVien: Student.fromJson(json['sinh_vien']),
+      createdAt: json['created_at'],
+      updatedAt: json['updated_at'],
+      loaiGiay: json['loai_giay'] != null
+          ? LoaiGiay.fromJson(json['loai_giay'])
+          : null,
+      sinhVien: json['sinh_vien'] != null
+          ? Student.fromJson(json['sinh_vien'])
+          : null,
     );
   }
 }
 
 class LoaiGiay {
   final int id;
-  final String tenGiay;
-  final int trangThai;
+  final String? tenGiay;
+  final String? trangThai;
+  final String? createdAt;
+  final String? updatedAt;
 
-  LoaiGiay({required this.id, required this.tenGiay, required this.trangThai});
+  LoaiGiay({
+    required this.id,
+    this.tenGiay,
+    this.trangThai,
+    this.createdAt,
+    this.updatedAt,
+  });
 
   factory LoaiGiay.fromJson(Map<String, dynamic> json) {
     return LoaiGiay(
-      id: json['id'],
+      id: json['id'] ?? 0,
       tenGiay: json['ten_giay'],
       trangThai: json['trang_thai'],
+      createdAt: json['created_at'],
+      updatedAt: json['updated_at'],
     );
   }
 }
 
 class Student {
   final int id;
-  final String maSv;
+  final String? maSv;
   final int idHoSo;
-  final String password;
-  final int trangThai;
-  final HoSo hoSo;
+  final String? password;
+  final int? trangThai;
+  final String? createdAt;
+  final String? updatedAt;
+  final HoSo? hoSo;
 
   Student({
     required this.id,
-    required this.maSv,
+    this.maSv,
     required this.idHoSo,
-    required this.password,
-    required this.trangThai,
-    required this.hoSo,
+    this.password,
+    this.trangThai,
+    this.createdAt,
+    this.updatedAt,
+    this.hoSo,
   });
 
   factory Student.fromJson(Map<String, dynamic> json) {
     return Student(
-      id: json['id'],
+      id: json['id'] ?? 0,
       maSv: json['ma_sv'],
-      idHoSo: json['id_ho_so'],
+      idHoSo: json['id_ho_so'] ?? 0,
       password: json['password'],
       trangThai: json['trang_thai'],
-      hoSo: HoSo.fromJson(json['ho_so']),
+      createdAt: json['created_at'],
+      updatedAt: json['updated_at'],
+      hoSo: json['ho_so'] != null ? HoSo.fromJson(json['ho_so']) : null,
     );
   }
 }
 
+
 class HoSo {
+  final int id;
+  final String? hoTen;
+  final String? email;
+  final String? password;
+  final String? soDienThoai;
+  final String? ngaySinh;
+  final String? gioiTinh;
+  final String? cccd;
+  final String? diaChi;
+  final String? anh;
+  final String? createdAt;
+  final String? updatedAt;
+
   HoSo({
     required this.id,
-    required this.hoTen,
-    required this.email,
-    required this.password,
-    required this.soDienThoai,
-    required this.ngaySinh,
-    required this.gioiTinh,
-    required this.cccd,
-    required this.diaChi,
-    required this.anh,
+    this.hoTen,
+    this.email,
+    this.password,
+    this.soDienThoai,
+    this.ngaySinh,
+    this.gioiTinh,
+    this.cccd,
+    this.diaChi,
+    this.anh,
+    this.createdAt,
+    this.updatedAt,
   });
-
-  final int id;
-  final String hoTen;
-  final String email;
-  final String password;
-  final String soDienThoai;
-  final String ngaySinh;
-  final String gioiTinh;
-  final String cccd;
-  final String diaChi;
-  final String anh;
 
   factory HoSo.fromJson(Map<String, dynamic> json) {
     return HoSo(
-      id: json['id'],
+      id: json['id'] ?? 0,
       hoTen: json['ho_ten'],
       email: json['email'],
       password: json['password'],
@@ -131,7 +162,10 @@ class HoSo {
       gioiTinh: json['gioi_tinh'],
       cccd: json['cccd'],
       diaChi: json['dia_chi'],
-      anh: json['anh'] ?? '',
+      anh: json['anh'],
+      createdAt: json['created_at'],
+      updatedAt: json['updated_at'],
     );
   }
 }
+

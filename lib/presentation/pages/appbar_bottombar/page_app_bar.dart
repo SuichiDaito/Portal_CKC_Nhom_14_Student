@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/student_bloc.dart';
 import 'package:portal_ckc/bloc/state/student_state.dart';
+import 'package:portal_ckc/constant/token.dart';
 import 'package:portal_ckc/presentation/sections/dialogs/snack_bar_scaffold.dart';
 
 class AppBarNavigationHomePage extends StatefulWidget {
@@ -26,6 +27,24 @@ class _AppBarNavigationHomePage extends State<AppBarNavigationHomePage> {
       builder: (context, state) {
         if (state is StudentLoaded) {
           final student = state.student;
+
+          if (student.danhSachSinhVien.isNotEmpty) {
+            for (var item in student.danhSachSinhVien) {
+              if (item.lop.idChuyenNganh != null) {
+                ConstraintToken.setIdSpecialized1(
+                  item.lop.idChuyenNganh.toString(),
+                );
+                if (item.lop.chuyenNganh.idChuyenNganhCha != null) {
+                  ConstraintToken.setIdSpecialized2(
+                    item.lop.chuyenNganh.idChuyenNganhCha.toString(),
+                  );
+                } else {
+                  ConstraintToken.setIdSpecialized2("0");
+                }
+              }
+              break;
+            }
+          }
           return Scaffold(
             key: _scaffoldKey,
             backgroundColor: Colors.grey[100],

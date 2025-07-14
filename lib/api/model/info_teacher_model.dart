@@ -17,7 +17,7 @@ class Teacher {
   final int idHoSo;
   final int idBoMon;
   final String taiKhoan;
-  final int trangThai;
+  final String trangThai;
 
   final HoSo hoSo;
 

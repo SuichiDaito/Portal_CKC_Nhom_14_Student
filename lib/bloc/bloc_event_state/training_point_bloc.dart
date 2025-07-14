@@ -34,7 +34,7 @@ class TrainingPointBloc extends Bloc<TrainingPointEvent, TrainingPointState> {
             final trainingPoints = listData
                 .map(
                   (item) =>
-                      TrainingPointModel.fromJson(item as Map<String, dynamic>),
+                      ChuongTrinhDaoTao.fromJson(item as Map<String, dynamic>),
                 )
                 .toList();
 

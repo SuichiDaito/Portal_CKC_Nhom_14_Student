@@ -9,25 +9,17 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:portal_ckc/presentation/sections/dialogs/snack_bar_scaffold.dart';
 import 'package:portal_ckc/utils/validate_password.dart';
 
-class ButtonLogin extends StatefulWidget {
-  final String account;
-  final String password;
+class ButtonNavigation extends StatefulWidget {
   final String nameButton;
-  final int typeAccount;
+  VoidCallback onPressed;
 
-  ButtonLogin({
-    super.key,
-    required this.nameButton,
-    required this.account,
-    required this.password,
-    required this.typeAccount,
-  });
+  ButtonNavigation({super.key, required this.nameButton, required this.onPressed});
 
   @override
-  State<ButtonLogin> createState() => _ButtonLogin();
+  State<ButtonNavigation> createState() => _ButtonLogin();
 }
 
-class _ButtonLogin extends State<ButtonLogin> {
+class _ButtonLogin extends State<ButtonNavigation> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -46,19 +38,7 @@ class _ButtonLogin extends State<ButtonLogin> {
         ],
       ),
       child: ElevatedButton(
-        onPressed: () {
-          if (widget.account.isNotEmpty && widget.password.isEmpty) {
-            context.read<StudentBloc>().add(
-              StudentRequestChangePasswordEvent(
-                idStudent: widget.account,
-                typeAccount: widget.typeAccount,
-              ),
-            );
-          }
-          context.read<StudentBloc>().add(
-            StudentLoginEvent(ma_sv: widget.account, password: widget.password),
-          );
-        },
+        onPressed: widget.onPressed,
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.transparent,
           shadowColor: Colors.transparent,

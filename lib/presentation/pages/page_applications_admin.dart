@@ -138,13 +138,6 @@ List<FeatureItem> getStudentFeatures() {
       value: '',
     ),
     FeatureItem(
-      id: 5,
-      icon: Icons.alarm,
-      title: 'Đăng ký thi lại',
-      color: Colors.redAccent,
-      value: '',
-    ),
-    FeatureItem(
       id: 6,
       icon: Icons.description,
       title: 'Sinh hoạt chủ nhiệm',

@@ -125,9 +125,10 @@ final class _$StudentService extends StudentService {
 
   @override
   Future<Response<Map<String, dynamic>>> paymentFeeStudy(
+    int id,
     Map<String, dynamic> body,
   ) {
-    final Uri $url = Uri.parse('/sinhvien/vnpay_payment');
+    final Uri $url = Uri.parse('/sinhvien/vnpay_payment/${id}');
     final $body = body;
     final Request $request = Request('POST', $url, client.baseUrl, body: $body);
     return client.send<Map<String, dynamic>, Map<String, dynamic>>($request);

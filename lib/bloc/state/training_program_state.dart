@@ -7,7 +7,7 @@ class TrainingProgramStateInitial extends TrainingProgramState {}
 class TrainingProgramStateLoading extends TrainingProgramState {}
 
 class TrainingProgramStateLoaded extends TrainingProgramState {
-  final List<ChuongTrinhDaoTao> trainingPrograms;
+  final List<TrainingProgram> trainingPrograms;
 
   TrainingProgramStateLoaded(this.trainingPrograms);
 }

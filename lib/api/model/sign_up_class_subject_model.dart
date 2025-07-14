@@ -1,263 +1,333 @@
 class DangKyHocPhanResponse {
-  final bool status;
-  final List<LopHocPhan> lopHocPhanDangMo;
-  final MonHoc monHoc;
-  final bool checkDKHG;
-  final List<ThoiKhoaBieu> dsThoiKhoaBieuDauTien;
+  final bool? status;
+  final List<LopHocPhanDangMo>? lopHocPhanDangMo;
+  final MonHoc? monHoc;
+  final bool? checkDKHG;
+  final List<ThoiKhoaBieu>? dsThoiKhoaBieuDauTien;
 
   DangKyHocPhanResponse({
-    required this.status,
-    required this.lopHocPhanDangMo,
-    required this.monHoc,
-    required this.checkDKHG,
-    required this.dsThoiKhoaBieuDauTien,
+    this.status,
+    this.lopHocPhanDangMo,
+    this.monHoc,
+    this.checkDKHG,
+    this.dsThoiKhoaBieuDauTien,
   });
 
   factory DangKyHocPhanResponse.fromJson(Map<String, dynamic> json) {
     return DangKyHocPhanResponse(
-      status: json['status'] ?? false,
-      lopHocPhanDangMo:
-          (json['lopHocPhanDangMo'] as List?)
-              ?.map((e) => LopHocPhan.fromJson(e))
-              .toList() ??
-          [],
-      monHoc: MonHoc.fromJson(json['monHoc'] ?? {}),
-      checkDKHG: json['checkDKHG'] ?? false,
-      dsThoiKhoaBieuDauTien:
-          (json['dsThoiKhoaBieuDauTien'] as List?)
-              ?.map((e) => ThoiKhoaBieu.fromJson(e))
-              .toList() ??
-          [],
+      status: json['status'] as bool?,
+      lopHocPhanDangMo: (json['lopHocPhanDangMo'] as List?)
+          ?.map((e) => LopHocPhanDangMo.fromJson(e))
+          .toList(),
+      monHoc: json['monHoc'] != null ? MonHoc.fromJson(json['monHoc']) : null,
+      checkDKHG: json['checkDKHG'] as bool?,
+      dsThoiKhoaBieuDauTien: (json['dsThoiKhoaBieuDauTien'] as List?)
+          ?.map((e) => ThoiKhoaBieu.fromJson(e))
+          .toList(),
     );
   }
 }
 
-class LopHocPhan {
-  final int id;
-  final String tenHocPhan;
-  final int idGiangVien;
-  final int idChuongTrinhDaoTao;
-  final int idLop;
-  final int loaiLopHocPhan;
-  final int soLuongSinhVien;
-  final int gioiHanDangKy;
-  final int loaiMon;
-  final int trangThai;
-  final int trangThaiNopBangDiem;
-  final Lop lop;
-  final GiangVien giangVien;
-  final List<ThoiKhoaBieu> thoiKhoaBieu;
+class LopHocPhanDangMo {
+  final int? id;
+  final String? tenHocPhan;
+  final int? idGiangVien;
+  final int? idChuongTrinhDaoTao;
+  final int? idLop;
+  final String? loaiLopHocPhan;
+  final String? soLuongSinhVien;
+  final String? gioiHanDangKy;
+  final int? loaiMon;
+  final String? trangThai;
+  final int? trangThaiNopBangDiem;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  final Lop? lop;
+  final GiangVien? giangVien;
+  final List<ThoiKhoaBieu>? thoiKhoaBieu;
 
-  LopHocPhan({
-    required this.id,
-    required this.tenHocPhan,
-    required this.idGiangVien,
-    required this.idChuongTrinhDaoTao,
-    required this.idLop,
-    required this.loaiLopHocPhan,
-    required this.soLuongSinhVien,
-    required this.gioiHanDangKy,
-    required this.loaiMon,
-    required this.trangThai,
-    required this.trangThaiNopBangDiem,
-    required this.lop,
-    required this.giangVien,
-    required this.thoiKhoaBieu,
+  LopHocPhanDangMo({
+    this.id,
+    this.tenHocPhan,
+    this.idGiangVien,
+    this.idChuongTrinhDaoTao,
+    this.idLop,
+    this.loaiLopHocPhan,
+    this.soLuongSinhVien,
+    this.gioiHanDangKy,
+    this.loaiMon,
+    this.trangThai,
+    this.trangThaiNopBangDiem,
+    this.createdAt,
+    this.updatedAt,
+    this.lop,
+    this.giangVien,
+    this.thoiKhoaBieu,
   });
 
-  factory LopHocPhan.fromJson(Map<String, dynamic> json) {
-    return LopHocPhan(
-      id: json['id'],
-      tenHocPhan: json['ten_hoc_phan'],
-      idGiangVien: json['id_giang_vien'],
-      idChuongTrinhDaoTao: json['id_chuong_trinh_dao_tao'],
-      idLop: json['id_lop'],
-      loaiLopHocPhan: json['loai_lop_hoc_phan'],
-      soLuongSinhVien: json['so_luong_sinh_vien'],
-      gioiHanDangKy: json['gioi_han_dang_ky'],
-      loaiMon: json['loai_mon'],
-      trangThai: json['trang_thai'],
-      trangThaiNopBangDiem: json['trang_thai_nop_bang_diem'],
-      lop: Lop.fromJson(json['lop'] ?? {}),
-      giangVien: GiangVien.fromJson(json['giang_vien'] ?? {}),
-      thoiKhoaBieu:
-          (json['thoi_khoa_bieu'] as List?)
-              ?.map((e) => ThoiKhoaBieu.fromJson(e))
-              .toList() ??
-          [],
+  factory LopHocPhanDangMo.fromJson(Map<String, dynamic> json) {
+    return LopHocPhanDangMo(
+      id: json['id'] as int?,
+      tenHocPhan: json['ten_hoc_phan'] as String?,
+      idGiangVien: json['id_giang_vien'] as int?,
+      idChuongTrinhDaoTao: json['id_chuong_trinh_dao_tao'] as int?,
+      idLop: json['id_lop'] as int?,
+      loaiLopHocPhan: json['loai_lop_hoc_phan'] as String?,
+      soLuongSinhVien: json['so_luong_sinh_vien'] as String?,
+      gioiHanDangKy: json['gioi_han_dang_ky'] as String?,
+      loaiMon: json['loai_mon'] as int?,
+      trangThai: json['trang_thai'] as String?,
+      trangThaiNopBangDiem: json['trang_thai_nop_bang_diem'] as int?,
+      createdAt: json['created_at'] != null
+          ? DateTime.tryParse(json['created_at'])
+          : null,
+      updatedAt: json['updated_at'] != null
+          ? DateTime.tryParse(json['updated_at'])
+          : null,
+      lop: json['lop'] != null ? Lop.fromJson(json['lop']) : null,
+      giangVien: json['giang_vien'] != null
+          ? GiangVien.fromJson(json['giang_vien'])
+          : null,
+      thoiKhoaBieu: (json['thoi_khoa_bieu'] as List?)
+          ?.map((e) => ThoiKhoaBieu.fromJson(e))
+          .toList(),
     );
   }
 }
 
 class Lop {
-  final int id;
-  final String tenLop;
-  final int idNienKhoa;
-  final int idGvcn;
-  final int idChuyenNganh;
-  final int siSo;
+  final int? id;
+  final String? tenLop;
+  final int? idNienKhoa;
+  final int? idGvcn;
+  final int? idChuyenNganh;
+  final String? siSo;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
 
   Lop({
-    required this.id,
-    required this.tenLop,
-    required this.idNienKhoa,
-    required this.idGvcn,
-    required this.idChuyenNganh,
-    required this.siSo,
+    this.id,
+    this.tenLop,
+    this.idNienKhoa,
+    this.idGvcn,
+    this.idChuyenNganh,
+    this.siSo,
+    this.createdAt,
+    this.updatedAt,
   });
 
   factory Lop.fromJson(Map<String, dynamic> json) {
     return Lop(
-      id: json['id'],
-      tenLop: json['ten_lop'] ?? '',
-      idNienKhoa: json['id_nien_khoa'] ?? 0,
-      idGvcn: json['id_gvcn'] ?? 0,
-      idChuyenNganh: json['id_chuyen_nganh'] ?? 0,
-      siSo: json['si_so'] ?? 0,
+      id: json['id'] as int?,
+      tenLop: json['ten_lop'] as String?,
+      idNienKhoa: json['id_nien_khoa'] as int?,
+      idGvcn: json['id_gvcn'] as int?,
+      idChuyenNganh: json['id_chuyen_nganh'] as int?,
+      siSo: json['si_so'] as String?,
+      createdAt: json['created_at'] != null
+          ? DateTime.tryParse(json['created_at'])
+          : null,
+      updatedAt: json['updated_at'] != null
+          ? DateTime.tryParse(json['updated_at'])
+          : null,
     );
   }
 }
 
 class GiangVien {
-  final int id;
-  final int idHoSo;
-  final int idBoMon;
-  final String taiKhoan;
-  final int trangThai;
-  final HoSo hoSo;
+  final int? id;
+  final int? idHoSo;
+  final int? idBoMon;
+  final String? taiKhoan;
+  final String? trangThai;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  final HoSo? hoSo;
 
   GiangVien({
-    required this.id,
-    required this.idHoSo,
-    required this.idBoMon,
-    required this.taiKhoan,
-    required this.trangThai,
-    required this.hoSo,
+    this.id,
+    this.idHoSo,
+    this.idBoMon,
+    this.taiKhoan,
+    this.trangThai,
+    this.createdAt,
+    this.updatedAt,
+    this.hoSo,
   });
 
   factory GiangVien.fromJson(Map<String, dynamic> json) {
     return GiangVien(
-      id: json['id'],
-      idHoSo: json['id_ho_so'],
-      idBoMon: json['id_bo_mon'],
-      taiKhoan: json['tai_khoan'] ?? '',
-      trangThai: json['trang_thai'] ?? 0,
-      hoSo: HoSo.fromJson(json['ho_so'] ?? {}),
+      id: json['id'] as int?,
+      idHoSo: json['id_ho_so'] as int?,
+      idBoMon: json['id_bo_mon'] as int?,
+      taiKhoan: json['tai_khoan'] as String?,
+      trangThai: json['trang_thai'] as String?,
+      createdAt: json['created_at'] != null
+          ? DateTime.tryParse(json['created_at'])
+          : null,
+      updatedAt: json['updated_at'] != null
+          ? DateTime.tryParse(json['updated_at'])
+          : null,
+      hoSo: json['ho_so'] != null ? HoSo.fromJson(json['ho_so']) : null,
     );
   }
 }
 
 class HoSo {
-  final int id;
-  final String hoTen;
-  final String email;
-  final String password;
-  final String soDienThoai;
-  final String ngaySinh;
-  final String gioiTinh;
-  final String cccd;
-  final String diaChi;
-  final String anh;
+  final int? id;
+  final String? hoTen;
+  final String? email;
+  final String? password;
+  final String? soDienThoai;
+  final String? ngaySinh;
+  final String? gioiTinh;
+  final String? cccd;
+  final String? diaChi;
+  final String? anh;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
 
   HoSo({
-    required this.id,
-    required this.hoTen,
-    required this.email,
-    required this.password,
-    required this.soDienThoai,
-    required this.ngaySinh,
-    required this.gioiTinh,
-    required this.cccd,
-    required this.diaChi,
-    required this.anh,
+    this.id,
+    this.hoTen,
+    this.email,
+    this.password,
+    this.soDienThoai,
+    this.ngaySinh,
+    this.gioiTinh,
+    this.cccd,
+    this.diaChi,
+    this.anh,
+    this.createdAt,
+    this.updatedAt,
   });
 
   factory HoSo.fromJson(Map<String, dynamic> json) {
     return HoSo(
-      id: json['id'],
-      hoTen: json['ho_ten'] ?? '',
-      email: json['email'] ?? '',
-      password: json['password'] ?? '',
-      soDienThoai: json['so_dien_thoai'] ?? '',
-      ngaySinh: json['ngay_sinh'] ?? '',
-      gioiTinh: json['gioi_tinh'] ?? '',
-      cccd: json['cccd'] ?? '',
-      diaChi: json['dia_chi'] ?? '',
-      anh: json['anh'] ?? '',
+      id: json['id'] as int?,
+      hoTen: json['ho_ten'] as String?,
+      email: json['email'] as String?,
+      password: json['password'] as String?,
+      soDienThoai: json['so_dien_thoai'] as String?,
+      ngaySinh: json['ngay_sinh'] as String?,
+      gioiTinh: json['gioi_tinh'] as String?,
+      cccd: json['cccd'] as String?,
+      diaChi: json['dia_chi'] as String?,
+      anh: json['anh'] as String?,
+      createdAt: json['created_at'] != null
+          ? DateTime.tryParse(json['created_at'])
+          : null,
+      updatedAt: json['updated_at'] != null
+          ? DateTime.tryParse(json['updated_at'])
+          : null,
     );
   }
 }
 
 class ThoiKhoaBieu {
-  final int id;
-  final int idTuan;
-  final int idLopHocPhan;
-  final int idPhong;
-  final int tietBatDau;
-  final int tietKetThuc;
-  final String ngay;
-  final Phong phong;
+  final int? id;
+  final int? idTuan;
+  final int? idLopHocPhan;
+  final int? idPhong;
+  final String? tietBatDau;
+  final String? tietKetThuc;
+  final String? ngay;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  final Phong? phong;
 
   ThoiKhoaBieu({
-    required this.id,
-    required this.idTuan,
-    required this.idLopHocPhan,
-    required this.idPhong,
-    required this.tietBatDau,
-    required this.tietKetThuc,
-    required this.ngay,
-    required this.phong,
+    this.id,
+    this.idTuan,
+    this.idLopHocPhan,
+    this.idPhong,
+    this.tietBatDau,
+    this.tietKetThuc,
+    this.ngay,
+    this.createdAt,
+    this.updatedAt,
+    this.phong,
   });
 
   factory ThoiKhoaBieu.fromJson(Map<String, dynamic> json) {
     return ThoiKhoaBieu(
-      id: json['id'],
-      idTuan: json['id_tuan'],
-      idLopHocPhan: json['id_lop_hoc_phan'],
-      idPhong: json['id_phong'],
-      tietBatDau: json['tiet_bat_dau'],
-      tietKetThuc: json['tiet_ket_thuc'],
-      ngay: json['ngay'] ?? '',
-      phong: Phong.fromJson(json['phong'] ?? {}),
+      id: json['id'] as int?,
+      idTuan: json['id_tuan'] as int?,
+      idLopHocPhan: json['id_lop_hoc_phan'] as int?,
+      idPhong: json['id_phong'] as int?,
+      tietBatDau: json['tiet_bat_dau'] as String?,
+      tietKetThuc: json['tiet_ket_thuc'] as String?,
+      ngay: json['ngay'] as String?,
+      createdAt: json['created_at'] != null
+          ? DateTime.tryParse(json['created_at'])
+          : null,
+      updatedAt: json['updated_at'] != null
+          ? DateTime.tryParse(json['updated_at'])
+          : null,
+      phong: json['phong'] != null ? Phong.fromJson(json['phong']) : null,
     );
   }
 }
 
 class Phong {
-  final int id;
-  final String ten;
-  final int soLuong;
-  final int loaiPhong;
+  final int? id;
+  final String? ten;
+  final String? soLuong;
+  final int? loaiPhong;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
 
   Phong({
-    required this.id,
-    required this.ten,
-    required this.soLuong,
-    required this.loaiPhong,
+    this.id,
+    this.ten,
+    this.soLuong,
+    this.loaiPhong,
+    this.createdAt,
+    this.updatedAt,
   });
 
   factory Phong.fromJson(Map<String, dynamic> json) {
     return Phong(
-      id: json['id'],
-      ten: json['ten'] ?? '',
-      soLuong: json['so_luong'] ?? 0,
-      loaiPhong: json['loai_phong'] ?? 0,
+      id: json['id'] as int?,
+      ten: json['ten'] as String?,
+      soLuong: json['so_luong'] as String?,
+      loaiPhong: json['loai_phong'] as int?,
+      createdAt: json['created_at'] != null
+          ? DateTime.tryParse(json['created_at'])
+          : null,
+      updatedAt: json['updated_at'] != null
+          ? DateTime.tryParse(json['updated_at'])
+          : null,
     );
   }
 }
 
 class MonHoc {
-  final int id;
-  final String tenMon;
-  final int loaiMonHoc;
+  final int? id;
+  final String? tenMon;
+  final String? loaiMonHoc;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
 
-  MonHoc({required this.id, required this.tenMon, required this.loaiMonHoc});
+  MonHoc({
+    this.id,
+    this.tenMon,
+    this.loaiMonHoc,
+    this.createdAt,
+    this.updatedAt,
+  });
 
   factory MonHoc.fromJson(Map<String, dynamic> json) {
     return MonHoc(
-      id: json['id'],
-      tenMon: json['ten_mon'] ?? '',
-      loaiMonHoc: json['loai_mon_hoc'] ?? 0,
+      id: json['id'] as int?,
+      tenMon: json['ten_mon'] as String?,
+      loaiMonHoc: json['loai_mon_hoc'] as String?,
+      createdAt: json['created_at'] != null
+          ? DateTime.tryParse(json['created_at'])
+          : null,
+      updatedAt: json['updated_at'] != null
+          ? DateTime.tryParse(json['updated_at'])
+          : null,
     );
   }
 }

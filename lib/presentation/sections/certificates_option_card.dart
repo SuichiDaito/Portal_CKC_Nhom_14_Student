@@ -105,7 +105,7 @@ class CertificatesCard extends State<CertificatesOptionCard> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        papers[index].tenGiay,
+                                        papers[index].tenGiay ?? '',
                                         style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w600,

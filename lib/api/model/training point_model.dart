@@ -1,68 +1,58 @@
 class ListTrainingPoints {
-  List<TrainingPointModel> listPoint;
+  List<ChuongTrinhDaoTao> listPoint;
 
   ListTrainingPoints({required this.listPoint});
 
   factory ListTrainingPoints.fromJson(Map<String, dynamic> json) {
     return ListTrainingPoints(
       listPoint: (json['data'] as List<dynamic>)
-          .map((item) => TrainingPointModel.fromJson(item))
+          .map((item) => ChuongTrinhDaoTao.fromJson(item))
           .toList(),
     );
   }
 }
 
-class TrainingPointModel {
+class ChuongTrinhDaoTao {
   final int id;
-  final int idStudent;
-  final int totalYear;
-  final String typePoint;
-  final int month;
-  final Years years;
+  final int idSinhVien;
+  final int idNam;
+  final String xepLoai;
+  final int thoiGian;
+  final NamHocModel? namHoc;
 
-  TrainingPointModel({
+  ChuongTrinhDaoTao({
     required this.id,
-    required this.idStudent,
-    required this.totalYear,
-    required this.typePoint,
-    required this.month,
-    required this.years,
+    required this.idSinhVien,
+    required this.idNam,
+    required this.xepLoai,
+    required this.thoiGian,
+    required this.namHoc,
   });
 
-  factory TrainingPointModel.fromJson(Map<String, dynamic> json) {
-    return TrainingPointModel(
-      id: json['id'],
-      idStudent: json['id_sinh_vien'],
-      totalYear: json['id_nam'],
-      typePoint: json['xep_loai'],
-      month: json['thoi_gian'],
-      years: Years.fromJson(json['nam_hoc']),
+  factory ChuongTrinhDaoTao.fromJson(Map<String, dynamic> json) {
+    return ChuongTrinhDaoTao(
+      id: json['id'] ?? 0,
+      idSinhVien: int.tryParse(json['id_sinh_vien'] ?? '') ?? 0,
+      idNam: int.tryParse(json['id_nam'] ?? '') ?? 0,
+      xepLoai: json['xep_loai'] ?? '',
+      thoiGian: int.tryParse(json['thoi_gian'] ?? '') ?? 0,
+      namHoc: json['nam_hoc'] != null
+          ? NamHocModel.fromJson(json['nam_hoc'])
+          : null,
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'id_sinh_vien': idStudent,
-      'id_nam': totalYear,
-      'xep_loai': typePoint,
-      'thoi_gian': month,
-      'nam_hoc': years.toJson(),
-    };
   }
 }
 
-class Years {
+class NamHocModel {
   final int id;
-  final int startYear;
+  final String namBatDau;
 
-  Years({required this.id, required this.startYear});
+  NamHocModel({required this.id, required this.namBatDau});
 
-  factory Years.fromJson(Map<String, dynamic> json) {
-    return Years(id: json['id'], startYear: json['nam_bat_dau']);
-  }
-
-  Map<String, dynamic> toJson() {
-    return {'id': id, 'nam_bat_dau': startYear};
+  factory NamHocModel.fromJson(Map<String, dynamic> json) {
+    return NamHocModel(
+      id: json['id'] ?? 0,
+      namBatDau: json['nam_bat_dau'] ?? '',
+    );
   }
 }

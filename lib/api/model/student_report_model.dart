@@ -1,372 +1,411 @@
-class BienBanShcnResponse {
-  final String status;
-  final BienBanShcnPagination bienBanSHCN;
+class BienBanResponse {
+  final String? status;
+  final BienBanSHCN? bienBanSHCN;
 
-  BienBanShcnResponse({required this.status, required this.bienBanSHCN});
+  BienBanResponse({this.status, this.bienBanSHCN});
 
-  factory BienBanShcnResponse.fromJson(Map<String, dynamic> json) {
-    return BienBanShcnResponse(
-      status: json['status'],
-      bienBanSHCN: BienBanShcnPagination.fromJson(json['bienBanSHCN']),
-    );
-  }
-}
-
-class BienBanShcnPagination {
-  final int currentPage;
-  final List<BienBanShcn> data;
-  final int from;
-  final int lastPage;
-  final String firstPageUrl;
-  final String lastPageUrl;
-  final List<Link> links;
-  final String? nextPageUrl;
-  final String path;
-  final int perPage;
-  final String? prevPageUrl;
-  final int to;
-  final int total;
-
-  BienBanShcnPagination({
-    required this.currentPage,
-    required this.data,
-    required this.from,
-    required this.lastPage,
-    required this.firstPageUrl,
-    required this.lastPageUrl,
-    required this.links,
-    this.nextPageUrl,
-    required this.path,
-    required this.perPage,
-    this.prevPageUrl,
-    required this.to,
-    required this.total,
-  });
-
-  factory BienBanShcnPagination.fromJson(Map<String, dynamic> json) {
-    return BienBanShcnPagination(
-      currentPage: json['current_page'],
-      data: (json['data'] as List).map((e) => BienBanShcn.fromJson(e)).toList(),
-      from: json['from'],
-      lastPage: json['last_page'],
-      firstPageUrl: json['first_page_url'],
-      lastPageUrl: json['last_page_url'],
-      links: (json['links'] as List).map((e) => Link.fromJson(e)).toList(),
-      nextPageUrl: json['next_page_url'],
-      path: json['path'],
-      perPage: json['per_page'],
-      prevPageUrl: json['prev_page_url'],
-      to: json['to'],
-      total: json['total'],
-    );
-  }
-}
-
-class BienBanShcn {
-  final int id;
-  final int idLop;
-  final int idSv;
-  final int idGvcn;
-  final int idTuan;
-  final String tieuDe;
-  final String noiDung;
-  final DateTime thoiGianBatDau;
-  final DateTime thoiGianKetThuc;
-  final int soLuongSinhVien;
-  final int vangMat;
-  final int trangThai;
-  final DateTime createdAt;
-  final DateTime? updatedAt;
-  final Lop lop;
-  final SinhVien thuky;
-  final GiaoVien gvcn;
-  final Tuan tuan;
-  final List<dynamic> chiTietBienBanShcn;
-
-  BienBanShcn({
-    required this.id,
-    required this.idLop,
-    required this.idSv,
-    required this.idGvcn,
-    required this.idTuan,
-    required this.tieuDe,
-    required this.noiDung,
-    required this.thoiGianBatDau,
-    required this.thoiGianKetThuc,
-    required this.soLuongSinhVien,
-    required this.vangMat,
-    required this.trangThai,
-    required this.createdAt,
-    this.updatedAt,
-    required this.lop,
-    required this.thuky,
-    required this.gvcn,
-    required this.tuan,
-    required this.chiTietBienBanShcn,
-  });
-
-  factory BienBanShcn.fromJson(Map<String, dynamic> json) {
-    return BienBanShcn(
-      id: json['id'],
-      idLop: json['id_lop'],
-      idSv: json['id_sv'],
-      idGvcn: json['id_gvcn'],
-      idTuan: json['id_tuan'],
-      tieuDe: json['tieu_de'],
-      noiDung: json['noi_dung'],
-      thoiGianBatDau: DateTime.parse(json['thoi_gian_bat_dau']),
-      thoiGianKetThuc: DateTime.parse(json['thoi_gian_ket_thuc']),
-      soLuongSinhVien: json['so_luong_sinh_vien'],
-      vangMat: json['vang_mat'],
-      trangThai: json['trang_thai'],
-      createdAt: DateTime.parse(json['created_at']),
-      updatedAt: json['updated_at'] != null
-          ? DateTime.parse(json['updated_at'])
+  factory BienBanResponse.fromJson(Map<String, dynamic> json) {
+    return BienBanResponse(
+      status: json['status'] as String?,
+      bienBanSHCN: json['bienBanSHCN'] != null
+          ? BienBanSHCN.fromJson(json['bienBanSHCN'])
           : null,
-      lop: Lop.fromJson(json['lop']),
-      thuky: SinhVien.fromJson(json['thuky']),
-      gvcn: GiaoVien.fromJson(json['gvcn']),
-      tuan: Tuan.fromJson(json['tuan']),
-      chiTietBienBanShcn: json['chi_tiet_bien_ban_s_h_c_n'],
+    );
+  }
+}
+
+class BienBanSHCN {
+  final int? currentPage;
+  final List<BienBanItem>? data;
+  final String? firstPageUrl;
+  final int? from;
+  final int? lastPage;
+  final String? lastPageUrl;
+  final List<LinkItem>? links;
+  final String? nextPageUrl;
+  final String? path;
+  final int? perPage;
+  final String? prevPageUrl;
+  final int? to;
+  final int? total;
+
+  BienBanSHCN({
+    this.currentPage,
+    this.data,
+    this.firstPageUrl,
+    this.from,
+    this.lastPage,
+    this.lastPageUrl,
+    this.links,
+    this.nextPageUrl,
+    this.path,
+    this.perPage,
+    this.prevPageUrl,
+    this.to,
+    this.total,
+  });
+
+  factory BienBanSHCN.fromJson(Map<String, dynamic> json) {
+    return BienBanSHCN(
+      currentPage: json['current_page'] as int?,
+      data: (json['data'] as List<dynamic>?)
+          ?.map((e) => BienBanItem.fromJson(e))
+          .toList(),
+      firstPageUrl: json['first_page_url'] as String?,
+      from: json['from'] as int?,
+      lastPage: json['last_page'] as int?,
+      lastPageUrl: json['last_page_url'] as String?,
+      links: (json['links'] as List<dynamic>?)
+          ?.map((e) => LinkItem.fromJson(e))
+          .toList(),
+      nextPageUrl: json['next_page_url'] as String?,
+      path: json['path'] as String?,
+      perPage: json['per_page'] as int?,
+      prevPageUrl: json['prev_page_url'] as String?,
+      to: json['to'] as int?,
+      total: json['total'] as int?,
+    );
+  }
+}
+
+class BienBanItem {
+  final int? id;
+  final int? idLop;
+  final int? idSv;
+  final int? idGvcn;
+  final int? idTuan;
+  final String? tieuDe;
+  final String? noiDung;
+  final String? thoiGianBatDau;
+  final String? thoiGianKetThuc;
+  final String? soLuongSinhVien;
+  final String? vangMat;
+  final int? trangThai;
+  final String? createdAt;
+  final String? updatedAt;
+  final Lop? lop;
+  final ThuKy? thuky;
+  final Tuan? tuan;
+  final Gvcn? gvcn;
+  final List<ChiTietBienBanSHCN>? chiTietBienBanSHCN;
+
+  BienBanItem({
+    this.id,
+    this.idLop,
+    this.idSv,
+    this.idGvcn,
+    this.idTuan,
+    this.tieuDe,
+    this.noiDung,
+    this.thoiGianBatDau,
+    this.thoiGianKetThuc,
+    this.soLuongSinhVien,
+    this.vangMat,
+    this.trangThai,
+    this.createdAt,
+    this.updatedAt,
+    this.lop,
+    this.thuky,
+    this.tuan,
+    this.gvcn,
+    this.chiTietBienBanSHCN,
+  });
+
+  factory BienBanItem.fromJson(Map<String, dynamic> json) {
+    return BienBanItem(
+      id: json['id'] as int?,
+      idLop: json['id_lop'] as int?,
+      idSv: json['id_sv'] as int?,
+      idGvcn: json['id_gvcn'] as int?,
+      idTuan: json['id_tuan'] as int?,
+      tieuDe: json['tieu_de'] as String?,
+      noiDung: json['noi_dung'] as String?,
+      thoiGianBatDau: json['thoi_gian_bat_dau'] as String?,
+      thoiGianKetThuc: json['thoi_gian_ket_thuc'] as String?,
+      soLuongSinhVien: json['so_luong_sinh_vien'] as String?,
+      vangMat: json['vang_mat'] as String?,
+      trangThai: json['trang_thai'] as int?,
+      createdAt: json['created_at'] as String?,
+      updatedAt: json['updated_at'] as String?,
+      lop: json['lop'] != null ? Lop.fromJson(json['lop']) : null,
+      thuky: json['thuky'] != null ? ThuKy.fromJson(json['thuky']) : null,
+      tuan: json['tuan'] != null ? Tuan.fromJson(json['tuan']) : null,
+      gvcn: json['gvcn'] != null ? Gvcn.fromJson(json['gvcn']) : null,
+      chiTietBienBanSHCN: (json['chi_tiet_bien_ban_s_h_c_n'] as List<dynamic>?)
+          ?.map((e) => ChiTietBienBanSHCN.fromJson(e))
+          .toList(),
     );
   }
 }
 
 class Lop {
-  final int id;
-  final String tenLop;
-  final int idNienKhoa;
-  final int idGvcn;
-  final int idChuyenNganh;
-  final int siSo;
+  final int? id;
+  final String? tenLop;
+  final int? idNienKhoa;
+  final int? idGvcn;
+  final int? idChuyenNganh;
+  final String? siSo;
+  final String? createdAt;
+  final String? updatedAt;
 
   Lop({
-    required this.id,
-    required this.tenLop,
-    required this.idNienKhoa,
-    required this.idGvcn,
-    required this.idChuyenNganh,
-    required this.siSo,
+    this.id,
+    this.tenLop,
+    this.idNienKhoa,
+    this.idGvcn,
+    this.idChuyenNganh,
+    this.siSo,
+    this.createdAt,
+    this.updatedAt,
   });
 
   factory Lop.fromJson(Map<String, dynamic> json) {
     return Lop(
-      id: json['id'],
-      tenLop: json['ten_lop'],
-      idNienKhoa: json['id_nien_khoa'],
-      idGvcn: json['id_gvcn'],
-      idChuyenNganh: json['id_chuyen_nganh'],
-      siSo: json['si_so'],
+      id: json['id'] as int?,
+      tenLop: json['ten_lop'] as String?,
+      idNienKhoa: json['id_nien_khoa'] as int?,
+      idGvcn: json['id_gvcn'] as int?,
+      idChuyenNganh: json['id_chuyen_nganh'] as int?,
+      siSo: json['si_so'] as String?,
+      createdAt: json['created_at'] as String?,
+      updatedAt: json['updated_at'] as String?,
     );
   }
 }
 
 class ThuKy {
-  final int id;
-  final String maSv;
-  final int idLop;
-  final int idHoSo;
-  final int? idLopChuyenNganh;
-  final int chucVu;
-  final String password;
-  final int trangThai;
-  final HoSo hoSo;
+  final int? id;
+  final String? maSv;
+  final int? idHoSo;
+  final String? password;
+  final int? trangThai;
+  final String? createdAt;
+  final String? updatedAt;
+  final HoSo? hoSo;
 
   ThuKy({
-    required this.id,
-    required this.maSv,
-    required this.idLop,
-    required this.idHoSo,
-    required this.idLopChuyenNganh,
-    required this.chucVu,
-    required this.password,
-    required this.trangThai,
-    required this.hoSo,
+    this.id,
+    this.maSv,
+    this.idHoSo,
+    this.password,
+    this.trangThai,
+    this.createdAt,
+    this.updatedAt,
+    this.hoSo,
   });
 
   factory ThuKy.fromJson(Map<String, dynamic> json) {
     return ThuKy(
-      id: json['id'],
-      maSv: json['ma_sv'],
-      idLop: json['id_lop'],
-      idHoSo: json['id_ho_so'],
-      idLopChuyenNganh: json['id_lop_chuyen_nganh'],
-      chucVu: json['chuc_vu'],
-      password: json['password'],
-      trangThai: json['trang_thai'],
-      hoSo: HoSo.fromJson(json['ho_so']),
+      id: json['id'] as int?,
+      maSv: json['ma_sv'] as String?,
+      idHoSo: json['id_ho_so'] as int?,
+      password: json['password'] as String?,
+      trangThai: json['trang_thai'] as int?,
+      createdAt: json['created_at'] as String?,
+      updatedAt: json['updated_at'] as String?,
+      hoSo: json['ho_so'] != null ? HoSo.fromJson(json['ho_so']) : null,
     );
   }
 }
 
 class HoSo {
-  final int id;
-  final String hoTen;
-  final String email;
-  final String password;
-  final String soDienThoai;
-  final String ngaySinh;
-  final String gioiTinh;
-  final String cccd;
-  final String diaChi;
-  final String anh;
+  final int? id;
+  final String? hoTen;
+  final String? email;
+  final String? password;
+  final String? soDienThoai;
+  final String? ngaySinh;
+  final String? gioiTinh;
+  final String? cccd;
+  final String? diaChi;
+  final String? anh;
+  final String? createdAt;
+  final String? updatedAt;
 
   HoSo({
-    required this.id,
-    required this.hoTen,
-    required this.email,
-    required this.password,
-    required this.soDienThoai,
-    required this.ngaySinh,
-    required this.gioiTinh,
-    required this.cccd,
-    required this.diaChi,
-    required this.anh,
+    this.id,
+    this.hoTen,
+    this.email,
+    this.password,
+    this.soDienThoai,
+    this.ngaySinh,
+    this.gioiTinh,
+    this.cccd,
+    this.diaChi,
+    this.anh,
+    this.createdAt,
+    this.updatedAt,
   });
 
   factory HoSo.fromJson(Map<String, dynamic> json) {
     return HoSo(
-      id: json['id'],
-      hoTen: json['ho_ten'],
-      email: json['email'],
-      password: json['password'],
-      soDienThoai: json['so_dien_thoai'],
-      ngaySinh: json['ngay_sinh'],
-      gioiTinh: json['gioi_tinh'],
-      cccd: json['cccd'],
-      diaChi: json['dia_chi'],
-      anh: json['anh'],
+      id: json['id'] as int?,
+      hoTen: json['ho_ten'] as String?,
+      email: json['email'] as String?,
+      password: json['password'] as String?,
+      soDienThoai: json['so_dien_thoai'] as String?,
+      ngaySinh: json['ngay_sinh'] as String?,
+      gioiTinh: json['gioi_tinh'] as String?,
+      cccd: json['cccd'] as String?,
+      diaChi: json['dia_chi'] as String?,
+      anh: json['anh'] as String?,
+      createdAt: json['created_at'] as String?,
+      updatedAt: json['updated_at'] as String?,
     );
   }
 }
 
 class Tuan {
-  final int id;
-  final int idNam;
-  final int tuan;
-  final DateTime ngayBatDau;
-  final DateTime ngayKetThuc;
-  final DateTime createdAt;
-  final DateTime updatedAt;
+  final int? id;
+  final int? idNam;
+  final String? tuan;
+  final String? ngayBatDau;
+  final String? ngayKetThuc;
+  final String? createdAt;
+  final String? updatedAt;
 
   Tuan({
-    required this.id,
-    required this.idNam,
-    required this.tuan,
-    required this.ngayBatDau,
-    required this.ngayKetThuc,
-    required this.createdAt,
-    required this.updatedAt,
+    this.id,
+    this.idNam,
+    this.tuan,
+    this.ngayBatDau,
+    this.ngayKetThuc,
+    this.createdAt,
+    this.updatedAt,
   });
 
   factory Tuan.fromJson(Map<String, dynamic> json) {
     return Tuan(
-      id: json['id'],
-      idNam: json['id_nam'],
-      tuan: json['tuan'],
-      ngayBatDau: DateTime.parse(json['ngay_bat_dau']),
-      ngayKetThuc: DateTime.parse(json['ngay_ket_thuc']),
-      createdAt: DateTime.parse(json['created_at']),
-      updatedAt: DateTime.parse(json['updated_at']),
+      id: json['id'] as int?,
+      idNam: json['id_nam'] as int?,
+      tuan: json['tuan'] as String?,
+      ngayBatDau: json['ngay_bat_dau'] as String?,
+      ngayKetThuc: json['ngay_ket_thuc'] as String?,
+      createdAt: json['created_at'] as String?,
+      updatedAt: json['updated_at'] as String?,
     );
   }
 }
 
 class Gvcn {
-  final int id;
-  final int idHoSo;
-  final int idBoMon;
-  final String taiKhoan;
-  final int trangThai;
-  final HoSo hoSo;
+  final int? id;
+  final int? idHoSo;
+  final int? idBoMon;
+  final String? taiKhoan;
+  final String? trangThai;
+  final String? createdAt;
+  final String? updatedAt;
+  final HoSo? hoSo;
 
   Gvcn({
-    required this.id,
-    required this.idHoSo,
-    required this.idBoMon,
-    required this.taiKhoan,
-    required this.trangThai,
-    required this.hoSo,
+    this.id,
+    this.idHoSo,
+    this.idBoMon,
+    this.taiKhoan,
+    this.trangThai,
+    this.createdAt,
+    this.updatedAt,
+    this.hoSo,
   });
 
   factory Gvcn.fromJson(Map<String, dynamic> json) {
     return Gvcn(
-      id: json['id'],
-      idHoSo: json['id_ho_so'],
-      idBoMon: json['id_bo_mon'],
-      taiKhoan: json['tai_khoan'],
-      trangThai: json['trang_thai'],
-      hoSo: HoSo.fromJson(json['ho_so']),
+      id: json['id'] as int?,
+      idHoSo: json['id_ho_so'] as int?,
+      idBoMon: json['id_bo_mon'] as int?,
+      taiKhoan: json['tai_khoan'] as String?,
+      trangThai: json['trang_thai'] as String?,
+      createdAt: json['created_at'] as String?,
+      updatedAt: json['updated_at'] as String?,
+      hoSo: json['ho_so'] != null ? HoSo.fromJson(json['ho_so']) : null,
+    );
+  }
+}
+
+class ChiTietBienBanSHCN {
+  final int? id;
+  final int? idBienBanShcn;
+  final int? idSinhVien;
+  final String? lyDo;
+  final int? loai;
+  final String? createdAt;
+  final String? updatedAt;
+  final SinhVien? sinhVien;
+
+  ChiTietBienBanSHCN({
+    this.id,
+    this.idBienBanShcn,
+    this.idSinhVien,
+    this.lyDo,
+    this.loai,
+    this.createdAt,
+    this.updatedAt,
+    this.sinhVien,
+  });
+
+  factory ChiTietBienBanSHCN.fromJson(Map<String, dynamic> json) {
+    return ChiTietBienBanSHCN(
+      id: json['id'] as int?,
+      idBienBanShcn: json['id_bien_ban_shcn'] as int?,
+      idSinhVien: json['id_sinh_vien'] as int?,
+      lyDo: json['ly_do'] as String?,
+      loai: json['loai'] as int?,
+      createdAt: json['created_at'] as String?,
+      updatedAt: json['updated_at'] as String?,
+      sinhVien: json['sinh_vien'] != null
+          ? SinhVien.fromJson(json['sinh_vien'])
+          : null,
     );
   }
 }
 
 class SinhVien {
-  final int id;
-  final String maSv;
-  final int idHoSo;
-  final String password;
-  final int trangThai;
-  final HoSo hoSo;
+  final int? id;
+  final String? maSv;
+  final int? idHoSo;
+  final String? password;
+  final int? trangThai;
+  final String? createdAt;
+  final String? updatedAt;
+  final HoSo? hoSo;
 
   SinhVien({
-    required this.id,
-    required this.maSv,
-    required this.idHoSo,
-    required this.password,
-    required this.trangThai,
-    required this.hoSo,
+    this.id,
+    this.maSv,
+    this.idHoSo,
+    this.password,
+    this.trangThai,
+    this.createdAt,
+    this.updatedAt,
+    this.hoSo,
   });
 
   factory SinhVien.fromJson(Map<String, dynamic> json) {
     return SinhVien(
-      id: json['id'],
-      maSv: json['ma_sv'],
-      idHoSo: json['id_ho_so'],
-      password: json['password'],
-      trangThai: json['trang_thai'],
-      hoSo: HoSo.fromJson(json['ho_so']),
+      id: json['id'] as int?,
+      maSv: json['ma_sv'] as String?,
+      idHoSo: json['id_ho_so'] as int?,
+      password: json['password'] as String?,
+      trangThai: json['trang_thai'] as int?,
+      createdAt: json['created_at'] as String?,
+      updatedAt: json['updated_at'] as String?,
+      hoSo: json['ho_so'] != null ? HoSo.fromJson(json['ho_so']) : null,
     );
   }
 }
 
-class GiaoVien {
-  final int id;
-  final int idHoSo;
-  final int idBoMon;
-  final String taiKhoan;
-  final int trangThai;
-  final HoSo hoSo;
-
-  GiaoVien({
-    required this.id,
-    required this.idHoSo,
-    required this.idBoMon,
-    required this.taiKhoan,
-    required this.trangThai,
-    required this.hoSo,
-  });
-
-  factory GiaoVien.fromJson(Map<String, dynamic> json) {
-    return GiaoVien(
-      id: json['id'],
-      idHoSo: json['id_ho_so'],
-      idBoMon: json['id_bo_mon'],
-      taiKhoan: json['tai_khoan'],
-      trangThai: json['trang_thai'],
-      hoSo: HoSo.fromJson(json['ho_so']),
-    );
-  }
-}
-
-class Link {
+class LinkItem {
   final String? url;
-  final String label;
-  final bool active;
+  final String? label;
+  final bool? active;
 
-  Link({this.url, required this.label, required this.active});
+  LinkItem({this.url, this.label, this.active});
 
-  factory Link.fromJson(Map<String, dynamic> json) {
-    return Link(url: json['url'], label: json['label'], active: json['active']);
+  factory LinkItem.fromJson(Map<String, dynamic> json) {
+    return LinkItem(
+      url: json['url'] as String?,
+      label: json['label'] as String?,
+      active: json['active'] as bool?,
+    );
   }
 }

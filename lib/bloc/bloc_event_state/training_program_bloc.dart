@@ -34,7 +34,7 @@ class TrainingProgramBloc
             final exams = listJson
                 .map(
                   (item) =>
-                      ChuongTrinhDaoTao.fromJson(item as Map<String, dynamic>),
+                      TrainingProgram.fromJson(item as Map<String, dynamic>),
                 )
                 .toList();
 

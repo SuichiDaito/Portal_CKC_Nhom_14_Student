@@ -7,7 +7,7 @@ class TrainingPointInitial extends TrainingPointState {}
 class TrainingPointLoading extends TrainingPointState {}
 
 class TrainingPointLoaded extends TrainingPointState {
-  final List<TrainingPointModel> trainingPoints;
+  final List<ChuongTrinhDaoTao> trainingPoints;
 
   TrainingPointLoaded(this.trainingPoints);
 }

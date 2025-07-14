@@ -29,6 +29,7 @@ class _MainLayoutHomeAdminPageState extends State<MainLayoutHomeAdminPage> {
   String? _nameUser;
   List<ThongBao> khoaNoti = [];
   List<ThongBao> phongNoti = [];
+  List<ThongBao> gvNoti = [];
 
   @override
   void initState() {
@@ -75,11 +76,17 @@ class _MainLayoutHomeAdminPageState extends State<MainLayoutHomeAdminPage> {
                     final now = DateTime.now();
 
                     final khoaNoti = state.notifications
-                        .where((e) => e.tuAi == 'khoa' && e.trangThai == 1)
+                        .where((e) => e.tuAi == 'admin' && e.trangThai == 1)
                         .toList();
                     final phongNoti = state.notifications
                         .where(
                           (e) => e.tuAi == 'phong_ctct' && e.trangThai == 1,
+                        )
+                        .toList();
+                    final gvNoti = state.notifications
+                        .where(
+                          (e) =>
+                              e.tuAi == 'Giáo viên bộ môn' && e.trangThai == 1,
                         )
                         .toList();
 
@@ -115,6 +122,23 @@ class _MainLayoutHomeAdminPageState extends State<MainLayoutHomeAdminPage> {
                                   },
                                 )
                               : const Text('Chưa có thông báo phòng ctct'),
+
+                        if (selectedFilter == 'Tất cả' ||
+                            selectedFilter == 'Giảng viên bộ môn')
+                          gvNoti.isNotEmpty
+                              ? NotificationsHomeAdmin(
+                                  typeNotification: 'Thông báo giảng viên',
+                                  notifications: gvNoti,
+                                  onReload: () {
+                                    setState(() {});
+                                    context.read<NotificateBloc>().add(
+                                      FetchNotificateEvent(),
+                                    );
+                                  },
+                                )
+                              : const Text(
+                                  'Chưa có thông báo từ giảng viên bộ môn',
+                                ),
                       ],
                     );
                   } else {
@@ -130,7 +154,12 @@ class _MainLayoutHomeAdminPageState extends State<MainLayoutHomeAdminPage> {
   }
 
   Widget _buildFilterTabs() {
-    final filters = ['Tất cả', 'Khoa', 'Phòng Công Tác Chính Trị'];
+    final filters = [
+      'Tất cả',
+      'Khoa',
+      'Phòng Công Tác Chính Trị',
+      'Giảng viên bộ môn',
+    ];
 
     return Container(
       color: const Color.fromARGB(255, 243, 241, 241),
@@ -176,36 +205,3 @@ class _MainLayoutHomeAdminPageState extends State<MainLayoutHomeAdminPage> {
     );
   }
 }
-
-// class MainLayoutHomeAdminPage extends StatefulWidget {
-//   const MainLayoutHomeAdminPage({super.key});
-//   State<MainLayoutHomeAdminPage> createState() => _MainLayoutHomeAdminPage();
-// }
-
-// class _MainLayoutHomeAdminPage extends State<MainLayoutHomeAdminPage> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return SingleChildScrollView(
-//       scrollDirection: Axis.vertical,
-//       padding: EdgeInsets.all(16.0),
-//       child: Column(
-//         mainAxisSize: MainAxisSize.min,
-//         crossAxisAlignment: CrossAxisAlignment.start,
-//         children: [
-//           // Header Section
-//           SizedBox(height: 10),
-//           HeaderAndCardStudentInfo(),
-//           // GridAppHomeAdmin(),
-//           SizedBox(height: 15),
-
-//           // Latest Notifications Section
-//           NotificationsHomeAdmin(
-//             typeNotification: 'Thông báo khoa',
-//             contentNotification: 'Thông báo mới nhất',
-//             date: '24/06/2025',
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }

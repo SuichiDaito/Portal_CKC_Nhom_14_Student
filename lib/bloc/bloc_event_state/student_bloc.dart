@@ -16,7 +16,6 @@ class StudentBloc extends Bloc<StudentEvent, StudentState> {
       super(StudentInitial()) {
     print('🟡 StudentBloc CREATED');
     on<StudentLoginEvent>(_onLogin);
-    on<StudentLogout>(_onLogout);
     on<StudentRequestChangePasswordEvent>(_onRequestChangePassword);
   }
 
@@ -122,46 +121,6 @@ class StudentBloc extends Bloc<StudentEvent, StudentState> {
       }
     } catch (e, stackTrace) {
       print('❌ Lỗi đăng nhập: $e');
-      print('📌 StackTrace: $stackTrace');
-      emit(StudentError('Lỗi hệ thống: $e'));
-    }
-  }
-
-  Future<void> _onLogout(StudentLogout event, Emitter emit) async {
-    print('➡️ Đang xử lý đăng xuất');
-    emit(StudentLoading());
-    try {
-      final response = await service.logout();
-
-      if (response.isSuccessful && response.body != null) {
-        final body = response.body;
-        print('📦 Status: ${response.statusCode}');
-        print('📦 Body: ${response.body}');
-        print('📦 Error: ${response.error}');
-
-        if (body is Map<String, dynamic>) {
-          if (body.containsKey('message')) {
-            final message = body['message'];
-            emit(StudentLogoutSuccess(message));
-            print(
-              'AdminBloc: Emitted AdminLoaded ${StudentLogoutSuccess(message)}',
-            ); // Debug log
-          } else {
-            emit(StudentError('Đăng xuất không thành công'));
-          }
-        } else {
-          emit(StudentError('Phản hồi không hợp lệ từ server'));
-        }
-      } else {
-        final error = response.error;
-        if (error is Map<String, dynamic> && error.containsKey('message')) {
-          emit(StudentError(error['message']));
-        } else {
-          emit(StudentError('Đăng xuất thất bại'));
-        }
-      }
-    } catch (e, stackTrace) {
-      print('❌ Lỗi đăng xuất: $e');
       print('📌 StackTrace: $stackTrace');
       emit(StudentError('Lỗi hệ thống: $e'));
     }

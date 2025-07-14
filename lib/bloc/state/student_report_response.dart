@@ -7,7 +7,7 @@ class StudentReportResponseInitial extends StudentReportResponseState {}
 class StudentReportResponseLoading extends StudentReportResponseState {}
 
 class StudentReportResponseLoaded extends StudentReportResponseState {
-  final List<BienBanShcn> reportResponseList;
+  final List<BienBanItem> reportResponseList;
 
   StudentReportResponseLoaded(this.reportResponseList);
 }

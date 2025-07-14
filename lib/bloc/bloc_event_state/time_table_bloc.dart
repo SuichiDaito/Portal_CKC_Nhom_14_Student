@@ -12,7 +12,7 @@ class TimeTableBloc extends Bloc<TimeTableEvent, TimeTableState> {
   }
 
   Future<void> _onFetchTimeTable(TimeTableEvent event, Emitter emit) async {
-    print('➡️ Đang xử lý lấy học phí');
+    print('➡️ Đang xử lý lấy thời khóa biểu sinh viên');
     emit(TimeTableStateLoading());
 
     try {

@@ -5,6 +5,9 @@ import 'package:portal_ckc/bloc/bloc_event_state/student_bloc.dart';
 import 'package:portal_ckc/bloc/event/student_event.dart';
 import 'package:portal_ckc/main.dart';
 import 'package:portal_ckc/presentation/pages/page_change_password_student.dart';
+import 'package:portal_ckc/presentation/pages/page_create_report_detail_student.dart';
+import 'package:portal_ckc/presentation/pages/page_detail_study_fee.dart';
+import 'package:portal_ckc/presentation/pages/page_empty.dart';
 import 'package:portal_ckc/presentation/pages/page_show_detail_class_subject.dart';
 import 'package:portal_ckc/presentation/pages/page_show_exam_second_student.dart';
 import 'package:portal_ckc/presentation/pages/page_training_program.dart';
@@ -35,6 +38,7 @@ import 'package:portal_ckc/presentation/references/page_login_admin.dart';
 import 'package:portal_ckc/presentation/references/page_management_group_admin.dart';
 import 'package:portal_ckc/presentation/references/page_class_book_admin.dart';
 import 'package:portal_ckc/presentation/pages/page_notification_admin.dart';
+import 'package:portal_ckc/presentation/sections/empty_section.dart';
 import 'package:portal_ckc/presentation/sections/notifications_home_admin.dart';
 
 class RouteName {
@@ -140,9 +144,19 @@ class RouteName {
         path: '/student/signup/certificates',
         builder: (context, state) => CertificateRegistrationScreen(),
       ),
+      //CreateAttendanceForm
+      GoRoute(
+        path: '/student/create/report/class',
+        builder: (context, state) => CreateAttendanceForm(),
+      ),
       GoRoute(
         path: '/student/show/point',
         builder: (context, state) => StudentGradeScreen(),
+      ),
+      GoRoute(
+        path: '/student/show/error',
+        builder: (context, state) =>
+           EmptyPage(),
       ),
       //ExamSchedulePage
       GoRoute(
@@ -168,6 +182,7 @@ class RouteName {
           return DocumentListPage();
         },
       ),
+      //PaymentDetailScreen
       //TuitionFeeScreen
       GoRoute(
         path: '/student/payment',

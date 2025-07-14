@@ -10,6 +10,7 @@ import 'package:portal_ckc/presentation/sections/card/report_detail_build_conten
 import 'package:portal_ckc/presentation/sections/card/report_detail_fixed_info_card.dart';
 import 'package:portal_ckc/presentation/sections/card/report_detail_readonly_summary_card.dart';
 import 'package:portal_ckc/presentation/sections/card/report_detail_editable_section.dart';
+import 'package:portal_ckc/presentation/sections/empty_section.dart';
 import 'package:portal_ckc/utils/formatter_datetime.dart';
 
 class PageReportDetailAdmin extends StatefulWidget {
@@ -55,11 +56,10 @@ class _PageReportDetailAdminState extends State<PageReportDetailAdmin> {
           } else if (state is StudentReportResponseLoaded) {
             final reports = state.reportResponseList;
             if (reports.isEmpty) {
-              return Center(
-                child: Text(
-                  'Không có biên bản nào.',
-                  style: TextStyle(fontSize: 16, color: Colors.grey[700]),
-                ),
+              return Column(
+                children: [
+                  EmptySection(message: "Không có biên bản sinh hoạt"),
+                ],
               );
             }
             return ListView.builder(
@@ -71,25 +71,27 @@ class _PageReportDetailAdminState extends State<PageReportDetailAdmin> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     ReportDetailReadonlySummaryCard(
-                      week: reports[index].tuan.tuan,
+                      week: int.parse(reports[index].tuan?.tuan ?? '0'),
                       beginDate: DateFormatter.formatDate(
-                        reports[index].thoiGianBatDau,
+                        DateTime.parse(reports[index].thoiGianBatDau ?? ''),
                       ),
                       endDate: DateFormatter.formatDate(
-                        reports[index].thoiGianKetThuc,
+                        DateTime.parse(reports[index].thoiGianKetThuc ?? ''),
                       ),
-                      roomNumber: reports[index].lop.tenLop,
+                      roomNumber: reports[index].lop?.tenLop ?? '',
                       startHour: DateFormatter.formatTime(
-                        reports[index].thoiGianBatDau,
+                        DateTime.parse(reports[index].thoiGianBatDau ?? ''),
                       ),
                       endHour: DateFormatter.formatTime(
-                        reports[index].thoiGianKetThuc,
+                        DateTime.parse(reports[index].thoiGianKetThuc ?? ''),
                       ),
-                      teacher: reports[index].gvcn.hoSo.hoTen,
-                      secretary: reports[index].thuky.hoSo.hoTen,
-                      totalStudent: reports[index].soLuongSinhVien,
-                      absentStudent: reports[index].vangMat,
-                      content: reports[index].noiDung,
+                      teacher: reports[index].gvcn?.hoSo?.hoTen ?? '',
+                      secretary: reports[index].thuky?.hoSo?.hoTen ?? '',
+                      totalStudent: int.parse(
+                        reports[index].soLuongSinhVien ?? '0',
+                      ),
+                      absentStudent: int.parse(reports[index].vangMat ?? '0'),
+                      content: reports[index].noiDung ?? '',
                       absentStudentIds: [],
                       studentList: [],
                     ),

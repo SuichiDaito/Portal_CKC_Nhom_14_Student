@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:portal_ckc/api/model/exam_second_model.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/exam_second_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/payment_exam_second_bloc.dart';
 import 'package:portal_ckc/bloc/event/exam_second_event.dart';
 import 'package:portal_ckc/bloc/event/payment_exam_second.dart';
 import 'package:portal_ckc/bloc/state/exam_second_state.dart';
 import 'package:portal_ckc/bloc/state/payment_exam_second_state.dart';
+import 'package:portal_ckc/presentation/sections/empty_section.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ExamSchedulePage extends StatefulWidget {
@@ -37,7 +40,7 @@ class _ExamSchedulePageState extends State<ExamSchedulePage> {
         ),
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => context.pop(true),
         ),
         elevation: 0,
       ),
@@ -48,78 +51,50 @@ class _ExamSchedulePageState extends State<ExamSchedulePage> {
             return Center(child: CircularProgressIndicator(color: Colors.blue));
           } else if (state is ExamSecondStateLoaded) {
             final point = state.exams;
+            if (point.isEmpty) {
+              return EmptySection(
+                message: "Không có lịch thi trong thời gian này",
+              );
+            }
             return Container(
               padding: EdgeInsets.all(16),
               child: ListView.builder(
                 itemCount: point.length,
                 itemBuilder: (context, index) {
-                  if (point[index]
-                              .lopHocPhan
-                              .danhSachHocPhan
-                              .last
-                              .diemThiLan1 !=
-                          null ||
-                      point[index]
-                              .lopHocPhan
-                              .danhSachHocPhan
-                              .last
-                              .diemThiLan1! >
-                          0) {
-                    if (point[index].lopHocPhan.dangKyHocGhepThiLai == null) {
-                      return ExamCard(
-                        nameSubject: point[index].lopHocPhan.tenHocPhan,
-                        flag: true,
-                        lecture1: point[index].giamThi1.hoSo.hoTen,
-                        lecture2: point[index].giamThi2.hoSo.hoTen,
-                        date: point[index].ngayThi,
-                        distanceTime: point[index].thoiGianThi,
-                        room: point[index].phong.ten,
-                        timeExams: point[index].lanThi,
-                        pointExam1:
-                            point[index]
-                                .lopHocPhan
-                                .danhSachHocPhan
-                                .last
-                                .diemThiLan1 ??
-                            0.0,
-                        onRegister: () {
-                          context.read<PaymentExamSecondBloc>().add(
-                            RequestPaymentExamSecond(
-                              id: point[index].lopHocPhan.id,
-                            ),
-                          );
-                          _showPaymentDialog(
-                            context,
-                            point[index].lopHocPhan.tenHocPhan,
-                          );
-                        },
+                  return ExamCard(
+                    nameSubject: point[index].lopHocPhan?.tenHocPhan,
+                    flag: true,
+                    lecture1: point[index].giamThi1?.hoSo?.hoTen ?? '',
+                    lecture2: point[index].giamThi2?.hoSo?.hoTen ?? '',
+                    date: point[index].ngayThi ?? '',
+                    distanceTime: int.parse(point[index].thoiGianThi ?? '0'),
+                    room: point[index].phong?.ten ?? '',
+                    listSignup:
+                        point[index].lopHocPhan?.dangKyHocGhepThiLai ??
+                        DangKyHocGhepThiLai(),
+                    timeExams: int.parse(point[index].lanThi ?? '0'),
+                    pointExam1:
+                        double.parse(
+                          point[index]
+                                  .lopHocPhan!
+                                  .danhSachHocPhan!
+                                  .last
+                                  .diemThiLan1 ??
+                              '0.0',
+                        ) ??
+                        0.0,
+                    onRegister: () {
+                      context.read<PaymentExamSecondBloc>().add(
+                        RequestPaymentExamSecond(
+                          id: point[index].lopHocPhan?.id ?? 0,
+                        ),
                       );
-                    } else {
-                      return ExamCard(
-                        nameSubject: point[index].lopHocPhan.tenHocPhan,
-                        flag: false,
-                        lecture1: point[index].giamThi1.hoSo.hoTen,
-                        lecture2: point[index].giamThi2.hoSo.hoTen,
-                        date: point[index].ngayThi,
-                        distanceTime: point[index].thoiGianThi,
-                        room: point[index].phong.ten,
-                        timeExams: point[index].lanThi,
-                        pointExam1:
-                            point[index]
-                                .lopHocPhan
-                                .danhSachHocPhan
-                                .last
-                                .diemThiLan1 ??
-                            0.0,
-                        onRegister: () {
-                          _showPaymentDialog(
-                            context,
-                            point[index].lopHocPhan.tenHocPhan,
-                          );
-                        },
+                      _showPaymentDialog(
+                        context,
+                        point[index].lopHocPhan?.tenHocPhan ?? '',
                       );
-                    }
-                  }
+                    },
+                  );
                 },
               ),
             );
@@ -257,7 +232,7 @@ class _ExamSchedulePageState extends State<ExamSchedulePage> {
 }
 
 class ExamCard extends StatelessWidget {
-  final bool flag;
+  bool flag;
   final nameSubject;
   final String lecture1;
   final String lecture2;
@@ -266,9 +241,10 @@ class ExamCard extends StatelessWidget {
   final String room;
   final int timeExams;
   final double pointExam1;
+  final DangKyHocGhepThiLai listSignup;
   final VoidCallback onRegister;
 
-  const ExamCard({
+  ExamCard({
     Key? key,
     required this.nameSubject,
     required this.flag,
@@ -279,11 +255,21 @@ class ExamCard extends StatelessWidget {
     required this.room,
     required this.timeExams,
     required this.pointExam1,
+    required this.listSignup,
     required this.onRegister,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    bool checkButton(double pointExam1, DangKyHocGhepThiLai list) {
+      if (pointExam1 != null && list == null) {
+        return true;
+      }
+      return false;
+    }
+
+    flag = checkButton(pointExam1, listSignup);
+
     return Container(
       margin: EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
@@ -358,6 +344,7 @@ class ExamCard extends StatelessWidget {
                 // Nút đăng ký
                 flag
                     ? Container(
+                        height: 50,
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: onRegister,
@@ -378,7 +365,28 @@ class ExamCard extends StatelessWidget {
                           ),
                         ),
                       )
-                    : SizedBox.shrink(),
+                    : Container(
+                        height: 50,
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Color(0xFFDC3C22),
+                            padding: EdgeInsets.symmetric(vertical: 12),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          child: Text(
+                            'Bạn đã đăng ký thi môn học này',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
               ],
             ),
           ),

@@ -15,10 +15,6 @@ class FetchAdminDetail extends StudentEvent {
   FetchAdminDetail({required this.userId});
 }
 
-class StudentLogout extends StudentEvent {
-  StudentLogout();
-}
-
 class StudentRequestChangePasswordEvent extends StudentEvent {
   final String idStudent;
   final int typeAccount;
@@ -28,4 +24,3 @@ class StudentRequestChangePasswordEvent extends StudentEvent {
     required this.typeAccount,
   });
 }
-

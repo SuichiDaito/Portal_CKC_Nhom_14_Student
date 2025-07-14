@@ -4,6 +4,7 @@ import 'package:portal_ckc/bloc/bloc_event_state/training_point_bloc.dart';
 import 'package:portal_ckc/bloc/event/training_point_event.dart';
 import 'package:portal_ckc/bloc/state/training_point_state.dart';
 import 'package:portal_ckc/presentation/sections/conduct_evaluation_student_section.dart';
+import 'package:portal_ckc/presentation/sections/empty_section.dart';
 
 class PageConductEvaluationAdmin extends StatefulWidget {
   const PageConductEvaluationAdmin({super.key});
@@ -41,21 +42,26 @@ class _PageConductEvaluationAdminState
               child: CircularProgressIndicator(color: Colors.blue[600]),
             );
           } else if (state is TrainingPointLoaded) {
-            // Handle the loaded state and display the training points
+            final check = state.trainingPoints.isEmpty;
+
+            if (check) {
+              return EmptySection(message: 'Sinh viên chưa được cập nhật điểm');
+            }
             return ListView.builder(
               itemCount: state.trainingPoints.length,
               itemBuilder: (context, index) {
                 final trainingPoint = state.trainingPoints[index];
                 return ConductEvaluationStudentSection(
-                  month: trainingPoint.month,
-                  year: trainingPoint.years.startYear,
-                  typePoint: trainingPoint.typePoint,
+                  month: trainingPoint?.thoiGian ?? 0,
+                  year: int.parse(trainingPoint?.namHoc?.namBatDau ?? "0"),
+                  typePoint: trainingPoint.xepLoai,
                 );
               },
             );
-          } else {
-            return Center(child: Text('Không có dữ liệu'));
+          } else if (state is TrainingPointError) {
+            return Center(child: Text(state.message));
           }
+          return Center(child: Text('Không có dữ liệu'));
         },
       ),
     );

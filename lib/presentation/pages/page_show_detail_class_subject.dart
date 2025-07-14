@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/class_subject_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/exam_second_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/payment_class_subject_bloc.dart';
@@ -11,6 +12,7 @@ import 'package:portal_ckc/bloc/state/class_subject_state.dart';
 import 'package:portal_ckc/bloc/state/exam_second_state.dart';
 import 'package:portal_ckc/bloc/state/payment_class_subject.dart';
 import 'package:portal_ckc/bloc/state/payment_exam_second_state.dart';
+import 'package:portal_ckc/presentation/sections/empty_section.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PageShowDetailClassSubject extends StatefulWidget {
@@ -26,7 +28,7 @@ class DetailClassSubject extends State<PageShowDetailClassSubject> {
       appBar: AppBar(
         backgroundColor: Color(0xFF3B82F6),
         title: Text(
-          'Danh sách lớp học phần',
+          'Danh sách các lớp học phần đang mở ',
           style: TextStyle(
             color: Colors.white,
             fontSize: 20,
@@ -46,54 +48,79 @@ class DetailClassSubject extends State<PageShowDetailClassSubject> {
             return Center(child: CircularProgressIndicator(color: Colors.blue));
           } else if (state is ClassSubjectStateLoaded) {
             final subjects = state.classSubject;
+            if (subjects.dsThoiKhoaBieuDauTien!.isEmpty ||
+                subjects.lopHocPhanDangMo!.isEmpty) {
+              return EmptySection(message: "Không có lớp học phần nào được mở");
+            }
             return Container(
               padding: EdgeInsets.all(16),
               child: ListView.builder(
-                itemCount: subjects.lopHocPhanDangMo.length,
+                itemCount: subjects.lopHocPhanDangMo!.length,
                 itemBuilder: (context, index) {
                   final subject = subjects.lopHocPhanDangMo;
-                  if (subjects.checkDKHG == false) {
+                  if (subject == null) {
+                    return SizedBox.shrink();
+                  }
+                  if (subjects.checkDKHG == false &&
+                      subjects.lopHocPhanDangMo?[index].trangThai != 1) {
                     return ExamCard(
-                      nameSubject: subject[index].tenHocPhan,
+                      nameSubject: subject[index]?.tenHocPhan ?? '',
                       flag: true,
-                      lecture1: subject[index].giangVien.hoSo.hoTen,
-                      date: subject[index].thoiKhoaBieu[index].ngay,
-                      room: subject[index].thoiKhoaBieu[index].phong.ten,
-                      idClass: subject[index].thoiKhoaBieu[index].idLopHocPhan,
-                      idSubject: subjects.monHoc.id,
+                      lecture1: subject[index]?.giangVien?.hoSo?.hoTen ?? '',
+                      quanlity: subject[index].gioiHanDangKy ?? "0",
+                      date: subject[index]?.thoiKhoaBieu?[index].ngay ?? '',
+                      room:
+                          subject[index]?.thoiKhoaBieu?[index].phong?.ten ?? '',
+                      idClass:
+                          subject[index]?.thoiKhoaBieu?[index].idLopHocPhan ??
+                          0,
+                      idSubject: subjects.monHoc?.id ?? 0,
                       onRegister: () {
                         context.read<PaymentClassSubjectBloc>().add(
                           RequestPaymentClassSubjectEvent(
                             id_lop_hoc:
-                                subject[index].thoiKhoaBieu[index].idLopHocPhan,
-                            id_mon_hoc: subjects.monHoc.id,
+                                subject[index]
+                                    ?.thoiKhoaBieu?[index]
+                                    .idLopHocPhan ??
+                                0,
+                            id_mon_hoc: subjects.monHoc?.id ?? 0,
                           ),
                         );
                         _showPaymentDialog(
                           context,
-                          subject[index].tenHocPhan,
-                          subject[index].lop.tenLop,
+                          subject[index]?.tenHocPhan ?? '',
+                          subject[index]?.lop?.tenLop ?? '',
                         );
                       },
-                      className: subject[index].lop.tenLop,
-                      beginLesson:
-                          subject[index].thoiKhoaBieu[index].tietBatDau,
-                      endLesson: subject[index].thoiKhoaBieu[index].tietBatDau,
+                      className: subject[index]?.lop?.tenLop ?? '',
+                      beginLesson: int.parse(
+                        subject[index].thoiKhoaBieu?[index].tietBatDau ?? "0",
+                      ),
+                      endLesson: int.parse(
+                        subject[index]?.thoiKhoaBieu?[index].tietKetThuc ?? "0",
+                      ),
                     );
                   } else {
                     return ExamCard(
-                      nameSubject: subject[index].tenHocPhan,
+                      nameSubject: subject[index]?.tenHocPhan ?? '',
                       flag: false,
-                      lecture1: subject[index].giangVien.hoSo.hoTen,
-                      date: subject[index].thoiKhoaBieu[index].ngay,
-                      room: subject[index].thoiKhoaBieu[index].phong.ten,
-                      idClass: subject[index].thoiKhoaBieu[index].idLopHocPhan,
-                      idSubject: subjects.monHoc.id,
+                      lecture1: subject[index]?.giangVien?.hoSo?.hoTen ?? '',
+                      date: subject[index]?.thoiKhoaBieu?[index].ngay ?? '',
+                      quanlity: subject[index].gioiHanDangKy ?? "0",
+                      room:
+                          subject[index]?.thoiKhoaBieu?[index].phong?.ten ?? '',
+                      idClass:
+                          subject[index]?.thoiKhoaBieu?[index].idLopHocPhan ??
+                          0,
+                      idSubject: subjects.monHoc?.id ?? 0,
                       onRegister: () {},
-                      className: subject[index].lop.tenLop,
-                      beginLesson:
-                          subject[index].thoiKhoaBieu[index].tietBatDau,
-                      endLesson: subject[index].thoiKhoaBieu[index].tietBatDau,
+                      className: subject[index]?.lop?.tenLop ?? '',
+                      beginLesson: int.parse(
+                        subject[index]?.thoiKhoaBieu?[index].tietBatDau ?? "0",
+                      ),
+                      endLesson: int.parse(
+                        subject[index]?.thoiKhoaBieu?[index].tietKetThuc ?? "0",
+                      ),
                     );
                   }
                 },
@@ -128,65 +155,105 @@ class DetailClassSubject extends State<PageShowDetailClassSubject> {
               color: Color(0xFF1E3A8A),
             ),
           ),
-          content: BlocBuilder<PaymentClassSubjectBloc, PaymentClassSubjectState>(
-            builder: (context, state) {
-              if (state is PaymentClassSubjectStateLoading) {
-                return Center(
-                  child: CircularProgressIndicator(color: Colors.blue),
-                );
-              } else if (state is PaymentClassSubjectStateLoaded) {
-                String url = state.url;
-                return Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'Bạn muốn đăng ký môn học: ${nameSubject} tại lớp ${className}',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    Container(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                          print(url);
-                          _processVNPayPayment(url);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFF0066CC),
-                          padding: EdgeInsets.symmetric(vertical: 15),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
+          content:
+              BlocBuilder<PaymentClassSubjectBloc, PaymentClassSubjectState>(
+                builder: (context, state) {
+                  if (state is PaymentClassSubjectStateLoading ||
+                      state is PaymentClassSubjectStateInitial) {
+                    return Center(
+                      child: CircularProgressIndicator(color: Colors.blue),
+                    );
+                  } else if (state is PaymentClassSubjectStateLoaded) {
+                    String url = state.url;
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'Bạn muốn đăng ký môn học:',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.grey,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 16),
+
+                        // Course info card
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: Colors.blue.shade50,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: Colors.blue.shade100,
+                              width: 1,
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.school,
+                                color: Colors.blue.shade600,
+                                size: 24,
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Text(
+                                  'Môn: ${nameSubject} tại lớp ${className}',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.blue.shade800,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.payment, color: Colors.white),
-                            SizedBox(width: 10),
-                            Text(
-                              'Thanh toán VNPay',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
+                        SizedBox(height: 20),
+                        Container(
+                          height: 50,
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              context.push('/student/detail/studyfee');
+                              _processVNPayPayment(url);
+                              print(url);
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Color(0xFF0066CC),
+                              padding: EdgeInsets.symmetric(vertical: 15),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
                               ),
                             ),
-                          ],
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.payment, color: Colors.white),
+                                SizedBox(width: 10),
+                                Text(
+                                  'Thanh toán VNPay',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  )
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  ],
-                );
-              } else if (state is PaymentClassSubjectStateError) {
-                return Center(child: Text(state.message));
-              }
-              return Center(child: Text('NOT FOUND | 404'));
-            },
-          ),
+                      ],
+                    );
+                  } else if (state is PaymentClassSubjectStateError) {
+                    return Center(child: Text(state.message));
+                  }
+                  return Center(child: Text('NOT FOUND | 404'));
+                },
+              ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
@@ -239,6 +306,7 @@ class ExamCard extends StatelessWidget {
   final String lecture1;
   final String className;
   final String date;
+  final String quanlity;
   final String room;
   final int beginLesson;
   final int endLesson;
@@ -252,6 +320,7 @@ class ExamCard extends StatelessWidget {
     required this.flag,
     required this.lecture1,
     required this.className,
+    required this.quanlity,
     required this.date,
     required this.room,
     required this.beginLesson,
@@ -310,7 +379,7 @@ class ExamCard extends StatelessWidget {
                 _buildInfoRow(
                   Icons.access_time,
                   'Số lượng đăng ký:',
-                  '${date}',
+                  '${quanlity}',
                 ),
                 SizedBox(height: 12),
                 _buildInfoRow(Icons.room, 'Phòng', room),
@@ -326,6 +395,7 @@ class ExamCard extends StatelessWidget {
                 // Nút đăng ký
                 flag
                     ? Container(
+                        height: 50,
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: onRegister,

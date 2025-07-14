@@ -76,7 +76,7 @@ class _NotificationCommentItemState extends State<NotificationCommentItem> {
                 radius: 18,
                 backgroundColor: Colors.purple[100],
                 child: Text(
-                  _getInitials(name),
+                  _getInitials(name ?? ''),
                   style: TextStyle(
                     color: Colors.purple[700],
                     fontWeight: FontWeight.bold,
@@ -96,7 +96,7 @@ class _NotificationCommentItemState extends State<NotificationCommentItem> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        name,
+                        name ?? '',
                         style: const TextStyle(
                           fontWeight: FontWeight.w600,
                           color: Color(0xFF2D3748),
@@ -265,8 +265,11 @@ class _NotificationCommentItemState extends State<NotificationCommentItem> {
   }
 
   String _getInitials(String name) {
-    final parts = name.trim().split(' ');
-    if (parts.length == 1) return parts[0][0];
-    return parts.first[0] + parts.last[0];
+    if (name != '') {
+      final parts = name.trim().split(' ');
+      if (parts.length == 1) return parts[0][0];
+      return parts.first[0] + parts.last[0];
+    }
+    return '';
   }
 }

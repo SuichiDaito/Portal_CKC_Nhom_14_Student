@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:portal_ckc/api/model/student_point_result.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/student_point_result_bloc.dart';
 import 'package:portal_ckc/bloc/event/student_point_event.dart';
 import 'package:portal_ckc/bloc/state/student_point_state.dart';
@@ -10,17 +11,6 @@ class StudentGradeScreen extends StatefulWidget {
 }
 
 class GradeScreen extends State<StudentGradeScreen> {
-  // int total = 0;
-  // int totalCredit(String credit) {
-  //   int e = int.parse(credit);
-  //   if (e > 0) {
-  //     total += e;
-  //   } else {
-  //     return total;
-  //   }
-  //   return total;
-  // }
-
   @override
   void initState() {
     // TODO: implement initState
@@ -48,9 +38,11 @@ class GradeScreen extends State<StudentGradeScreen> {
             final result = state.subjects;
             return ListView.builder(
               padding: EdgeInsets.all(16),
-              itemCount: 6,
+              itemCount: result.length,
               itemBuilder: (context, index) {
-                final subjects = result["${index + 1}"] ?? [];
+                final key = result.keys.elementAt(index);
+
+                final subjects = result[key] ?? [];
                 return Card(
                   margin: EdgeInsets.only(bottom: 16),
                   elevation: 3,
@@ -94,7 +86,7 @@ class GradeScreen extends State<StudentGradeScreen> {
                                       ),
                                     ),
                                     Text(
-                                      '${20}',
+                                      '${totalCredit(subjects)}',
                                       style: TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold,
@@ -124,7 +116,7 @@ class GradeScreen extends State<StudentGradeScreen> {
                                       ),
                                     ),
                                     Text(
-                                      '${9.5}',
+                                      '${totalAvergrade(subjects)}',
                                       style: TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold,
@@ -229,7 +221,7 @@ class GradeScreen extends State<StudentGradeScreen> {
                                   Expanded(
                                     flex: 1,
                                     child: Text(
-                                      '${subject!.soTinChi}',
+                                      checkCredit(subject?.soTinChi),
                                       style: TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w500,
@@ -267,5 +259,46 @@ class GradeScreen extends State<StudentGradeScreen> {
         },
       ),
     );
+  }
+}
+
+int totalCredit(List<Subject> subject) {
+  int total = 0;
+  for (int i = 0; i < subject.length; i++) {
+    if (subject[i].soTinChi != null && subject[i].soTinChi != "null") {
+      total += int.parse(subject[i].soTinChi!);
+    }
+  }
+  return total;
+}
+
+double totalAvergrade(List<Subject> subject) {
+  double total = 0.0;
+  double result = 0.0;
+  int count = 0;
+  for (int i = 0; i < subject.length; i++) {
+    if (subject[i].diemTongKet != null &&
+        subject[i].diemTongKet != "-" &&
+        subject[i].diemTongKet != "null") {
+      total += double.parse(subject[i].diemTongKet!);
+      count++;
+    }
+  }
+
+  if (total > 0) {
+    result = total / count;
+    String roundedString = result.toStringAsFixed(2);
+  } else {
+    result = 0.0;
+  }
+
+  return result;
+}
+
+String checkCredit(String? credit) {
+  if (credit == "null" || credit == null) {
+    return "-";
+  } else {
+    return credit;
   }
 }

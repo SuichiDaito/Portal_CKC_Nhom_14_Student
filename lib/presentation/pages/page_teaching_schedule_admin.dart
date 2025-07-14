@@ -50,31 +50,35 @@ class _PageTeachingScheduleAdminState extends State<PageTeachingScheduleAdmin> {
       'Chủ nhật': {'Sáng': [], 'Chiều': [], 'Tối': []},
     };
 
-    for (final lhp in list) {
-      if (lhp.idTuan != selectedWeekId) continue;
+    for (final schedule in list) {
+      // Kiểm tra tuần được chọn - so sánh với id_tuan
+      if (schedule.idTuan != selectedWeekId.toString()) continue;
 
-      final DateTime ngay = DateTime.tryParse(lhp.ngay ?? '') ?? DateTime.now();
+      final DateTime ngay =
+          DateTime.tryParse(schedule.ngay ?? '') ?? DateTime.now();
       final String thu = _convertWeekdayToVietnamese(ngay.weekday);
-      final int tietBatDau = lhp.tietBatDau ?? 0;
-      print('tkb.idTuan: ${lhp.idTuan}, selectedWeekId: $selectedWeekId');
+      final int tietBatDau = int.parse(schedule.tietBatDau ?? '0');
 
+      print(
+        'schedule.idTuan: ${schedule.idTuan}, selectedWeekId: $selectedWeekId',
+      );
+
+      // Xác định buổi học dựa trên tiết bắt đầu
       String buoi = 'Sáng';
-      if (lhp.tietBatDau >= 7 && lhp.tietBatDau <= 12) {
+      if (tietBatDau >= 7 && tietBatDau <= 12) {
         buoi = 'Chiều';
-      } else if (lhp.tietBatDau > 12) {
+      } else if (tietBatDau > 12) {
         buoi = 'Tối';
       } else {
         buoi = 'Sáng';
       }
 
       final subject = Subject(
-        lhp.lopHocPhan.tenHocPhan ?? '',
-        lhp.lopHocPhan.lop.ten ?? '',
-        lhp.lopHocPhan.loaiMon == 0
-            ? 'Đại cương'
-            : (lhp.lopHocPhan.loaiMon == 1 ? 'Cơ sở' : 'Chuyên ngành'),
-        lhp.phong.ten ?? '',
-        '${lhp.tietBatDau}-${lhp.tietKetThuc}',
+        schedule.lopHocPhan?.tenHocPhan ?? '',
+        schedule.lopHocPhan?.lop?.ten ?? '',
+        schedule.lopHocPhan?.loaiMon ?? 'Đại cương',
+        schedule.phong?.ten ?? '',
+        '${schedule.tietBatDau}-${schedule.tietKetThuc}',
       );
 
       result[thu]?[buoi]?.add(subject);
@@ -137,7 +141,6 @@ class _PageTeachingScheduleAdminState extends State<PageTeachingScheduleAdmin> {
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
         ),
         backgroundColor: Colors.blue,
-
         foregroundColor: Colors.white,
         elevation: 0,
         actions: [
@@ -171,93 +174,123 @@ class _PageTeachingScheduleAdminState extends State<PageTeachingScheduleAdmin> {
         ),
         child: Column(
           children: [
-            // Card(
-            //   margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            //   shape: RoundedRectangleBorder(
-            //     borderRadius: BorderRadius.circular(12),
-            //   ),
-            //   elevation: 3,
-            //   color: Colors.blue,
-            //   child: Padding(
-            //     padding: const EdgeInsets.all(16),
-            //     child: Column(
-            //       crossAxisAlignment: CrossAxisAlignment.start,
-            //       children: [
-            //         // Text(
-            //         //   'Lọc theo Tuần',
-            //         //   style: TextStyle(
-            //         //     fontWeight: FontWeight.bold,
-            //         //     fontSize: 16,
-            //         //     color: Colors.white,
-            //         //   ),
-            //         // ),
-            //         const SizedBox(height: 12),
-            //         //LỌC THEO TUẦN CỦA THỜI KHÓA BIỂU SINH VIÊN
-            //         // Row(
-            //         //   children: [
-            //         //     const SizedBox(width: 16),
-            //         //     Expanded(
-            //         //       child: BlocBuilder<TimeTableBloc, TimeTableState>(
-            //         //         builder: (context, state) {
-            //         //           if (state is TimeTableStateLoading) {
-            //         //             return Center(
-            //         //               child: CircularProgressIndicator(
-            //         //                 color: Colors.blue,
-            //         //               ),
-            //         //             );
-            //         //           }
-            //         //           if (state is TimeTableStateLoaded) {
-            //         //             final timeTableWeek = state.timeTables;
+            Card(
+              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              elevation: 3,
+              color: Colors.blue,
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Lọc theo Tuần',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    //LỌC THEO TUẦN CỦA THỜI KHÓA BIỂU SINH VIÊN
+                    Row(
+                      children: [
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: BlocBuilder<TimeTableBloc, TimeTableState>(
+                            builder: (context, state) {
+                              if (state is TimeTableStateLoading) {
+                                return Center(
+                                  child: CircularProgressIndicator(
+                                    color: Colors.blue,
+                                  ),
+                                );
+                              }
+                              if (state is TimeTableStateLoaded) {
+                                final timeTableData = state.timeTables;
 
-            //         //             // Lấy danh sách tuần không trùng lặp
-            //         //             final uniqueWeeks =
-            //         //                 timeTableWeek
-            //         //                     .map((e) => e.tuan)
-            //         //                     .toSet()
-            //         //                     .toList()
-            //         //                   ..sort(
-            //         //                     (a, b) => a.tuan.compareTo(b.tuan),
-            //         //                   ); // Sắp xếp theo số tuần
+                                // Lấy danh sách tuần không trùng lặp từ các schedule
+                                // Sử dụng Map để đảm bảo mỗi id chỉ xuất hiện 1 lần
+                                final Map<int, dynamic> uniqueWeeksMap = {};
 
-            //         //             // Map thành dropdown
-            //         //             final _weeks = uniqueWeeks.map((tuan) {
-            //         //               return DropdownItem(
-            //         //                 value: tuan.id.toString(),
-            //         //                 label: 'Tuần ${tuan.tuan}',
-            //         //                 icon: Icons.calendar_today,
-            //         //               );
-            //         //             }).toList();
+                                for (final schedule in timeTableData) {
+                                  if (schedule.tuan != null) {
+                                    final tuanId = schedule.tuan!.id;
+                                    if (!uniqueWeeksMap.containsKey(tuanId)) {
+                                      uniqueWeeksMap[tuanId ?? 0] =
+                                          schedule.tuan!;
+                                    }
+                                  }
+                                }
 
-            //         //             // Gán tuần mặc định nếu chưa có
-            //         //             _selectedWeek ??= _weeks.first;
+                                // Chuyển đổi thành list và sắp xếp
+                                final uniqueWeeks =
+                                    uniqueWeeksMap.values.toList()..sort(
+                                      (a, b) => int.parse(
+                                        a.tuan ?? '0',
+                                      ).compareTo(int.parse(b.tuan ?? '0')),
+                                    );
 
-            //         //             // Giao diện dropdown
-            //         //             return DropdownSelector(
-            //         //               label: 'Tuần',
-            //         //               selectedItem: _selectedWeek,
-            //         //               items: _weeks,
-            //         //               onChanged: (item) {
-            //         //                 setState(() {
-            //         //                   _selectedWeek = item;
-            //         //                   selectedWeek =
-            //         //                       int.tryParse(item?.value ?? '') ?? 1;
-            //         //                 });
-            //         //               },
-            //         //             );
-            //         //           }
-            //         //           if (state is TimeTableStateError) {
-            //         //             return Text('Lỗi: ${state.message}');
-            //         //           }
-            //         //           return const SizedBox();
-            //         //         },
-            //         //       ),
-            //         //     ),
-            //         //   ],
-            //         // ),
-            //       ],
-            //     ),
-            //   ),
-            // ),
+                                // Map thành dropdown items với value là id unique
+                                final _weeks = uniqueWeeks.map((tuan) {
+                                  return DropdownItem(
+                                    value: tuan.id.toString(),
+                                    label: 'Tuần ${tuan.tuan ?? ''}',
+                                    icon: Icons.calendar_today,
+                                  );
+                                }).toList();
+
+                                // Kiểm tra xem _selectedWeek hiện tại có tồn tại trong danh sách mới không
+                                bool selectedWeekExists =
+                                    _selectedWeek != null &&
+                                    _weeks.any(
+                                      (week) =>
+                                          week.value == _selectedWeek!.value,
+                                    );
+
+                                // Gán tuần mặc định nếu chưa có hoặc không tồn tại trong danh sách mới
+                                if (_selectedWeek == null ||
+                                    !selectedWeekExists) {
+                                  if (_weeks.isNotEmpty) {
+                                    _selectedWeek = _weeks.first;
+                                    selectedWeek =
+                                        int.tryParse(
+                                          _selectedWeek?.value ?? '',
+                                        ) ??
+                                        1;
+                                  }
+                                }
+
+                                // Giao diện dropdown
+                                return DropdownSelector(
+                                  label: 'Tuần',
+                                  selectedItem: _selectedWeek,
+                                  items: _weeks,
+                                  onChanged: (item) {
+                                    setState(() {
+                                      _selectedWeek = item;
+                                      selectedWeek =
+                                          int.tryParse(item?.value ?? '') ?? 1;
+                                    });
+                                  },
+                                );
+                              }
+                              if (state is TimeTableStateError) {
+                                return Text('Lỗi: ${state.message}');
+                              }
+                              return const SizedBox();
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
             DaySelector(
               selectedDay: selectedDay,
               onDayTap: (String day) {

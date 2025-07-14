@@ -3,8 +3,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:portal_ckc/bloc/bloc_event_state/logoutn_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/student_bloc.dart';
+import 'package:portal_ckc/bloc/event/logount_event.dart';
 import 'package:portal_ckc/bloc/event/student_event.dart';
+import 'package:portal_ckc/bloc/state/student_logout.dart';
 import 'package:portal_ckc/bloc/state/student_state.dart';
 import 'package:portal_ckc/constant/token.dart';
 import 'package:portal_ckc/gen/assets.gen.dart';
@@ -44,7 +47,16 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return _buildFormLogin();
+    return BlocConsumer<LogoutBloc, StudentLogoutState>(
+      listener: (BuildContext context, StudentLogoutState state) {
+        if (state is StudentLogoutStateLoaded) {
+          SnackBarScaffold.showToast('Đăng xuất thành công', false, context);
+        }
+      },
+      builder: (BuildContext context, StudentLogoutState state) {
+        return _buildFormLogin();
+      },
+    );
   }
 
   Widget _buildFormLogin() {
@@ -72,15 +84,9 @@ class _LoginScreenState extends State<LoginScreen> {
           }
 
           if (state is StudentLoaded) {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              context.go('/home/admin');
-              ConstraintToken.setPassword(_studentPasswordController.text);
-              SnackBarScaffold.showToast(
-                'Đăng nhập thành công!',
-                false,
-                context,
-              );
-            });
+            context.go('/home/admin');
+            ConstraintToken.setPassword(_studentPasswordController.text);
+            SnackBarScaffold.showToast('Đăng nhập thành công!', false, context);
           } else if (state is StudentError) {
             SnackBarScaffold.showToast(
               'Đăng nhập không thành công!',

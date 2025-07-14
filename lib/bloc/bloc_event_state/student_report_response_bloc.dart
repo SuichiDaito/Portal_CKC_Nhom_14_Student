@@ -39,7 +39,7 @@ class StudentReportResponseBloc
                 final reportResponses = json
                     .map(
                       (item) =>
-                          BienBanShcn.fromJson(item as Map<String, dynamic>),
+                          BienBanItem.fromJson(item as Map<String, dynamic>),
                     )
                     .toList();
 
