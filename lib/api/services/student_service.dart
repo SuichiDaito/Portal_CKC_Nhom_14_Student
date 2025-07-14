@@ -100,4 +100,7 @@ abstract class StudentService extends ChopperService {
     @Path('id_lop_hoc') int id,
     @Body() Map<String, dynamic> body,
   );
+
+  @GET(path: '/bienbanshcn/create')
+  Future<Response<Map<String, dynamic>>> getListStudent();
 }
