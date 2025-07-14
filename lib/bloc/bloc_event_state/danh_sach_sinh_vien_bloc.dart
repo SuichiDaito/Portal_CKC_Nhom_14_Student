@@ -7,6 +7,9 @@ import 'package:portal_ckc/bloc/state/danh_sach_sinh_vien.dart';
 class ListStudentBloc extends Bloc<ListStudentEvent, ListStudentState> {
   final _service = CallApiStudent.adminService;
 
+  List<ListStudent> _students = [];
+
+  List<ListStudent> get students => _students;
   ListStudentBloc() : super(ListStudentInitial()) {
     on<FetchListStudent>(_onFetchStudentEvent);
     on<CreatReportEvent>(_onCreateReport);
@@ -37,7 +40,7 @@ class ListStudentBloc extends Bloc<ListStudentEvent, ListStudentState> {
     emit(ListStudentStateLoading());
 
     try {
-      final response = await _service.getExamStudent();
+      final response = await _service.getListStudent();
 
       if (response.isSuccessful && response.body != null) {
         final body = response.body;
@@ -54,6 +57,7 @@ class ListStudentBloc extends Bloc<ListStudentEvent, ListStudentState> {
                 )
                 .toList();
 
+            _students = exams;
             emit(ListStudentStateLoaded(exams));
           } else {
             emit(

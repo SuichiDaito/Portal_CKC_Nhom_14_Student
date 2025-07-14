@@ -165,11 +165,9 @@ class _NotificationCommentItemState extends State<NotificationCommentItem> {
                                               context.read<CommentBloc>().add(
                                                 DeleteCommentEvent(comment.id),
                                               );
-                                              context.read<NotificateBloc>().add(
-                                                FetchNotificationDetailEvent(
-                                                  widget.idThongBao,
-                                                ),
-                                              );
+                                              context
+                                                  .read<NotificateBloc>()
+                                                  .add(FetchNotificateEvent());
                                             },
                                             child: const Text(
                                               'Xóa',

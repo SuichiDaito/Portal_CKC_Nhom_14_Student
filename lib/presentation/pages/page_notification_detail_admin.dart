@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:portal_ckc/api/model/notification_model.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/notificate_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/student_comment_bloc.dart';
 import 'package:portal_ckc/bloc/event/student_comment_event.dart';
@@ -26,7 +27,7 @@ class _NotificationDetailPageState extends State<NotificationDetailPage> {
   void initState() {
     super.initState();
     print('Gửi FetchNotificationDetailEvent với id = ${widget.id}');
-    context.read<NotificateBloc>().add(FetchNotificationDetailEvent(widget.id));
+    // context.read<NotificateBloc>().add(FetchNotificationDetailEvent(widget.id));
   }
 
   @override
@@ -45,9 +46,8 @@ class _NotificationDetailPageState extends State<NotificationDetailPage> {
         child: BlocListener<CommentBloc, CommentState>(
           listener: (context, commentState) {
             if (commentState is CommentSuccess) {
-              context.read<NotificateBloc>().add(
-                FetchNotificationDetailEvent(widget.id),
-              );
+              context.read<NotificateBloc>().add(FetchNotificateEvent());
+
               _commentController.clear();
             }
           },
@@ -58,10 +58,28 @@ class _NotificationDetailPageState extends State<NotificationDetailPage> {
               if (state is NotificateStateLoading) {
                 print("===========Load==========");
                 return const Center(child: CircularProgressIndicator());
-              } else if (state is NotificateDetailStateLoaded) {
-                final tb = state.notification;
+              } else if (state is NotificateStateLoaded) {
+                final allNotifications = state.notifications;
+
+                ThongBao? tb;
+                for (var e in allNotifications) {
+                  if (e.id == widget.id) {
+                    tb = e;
+                    break;
+                  }
+                }
+
+                if (tb == null) {
+                  return const Center(
+                    child: Text("❌ Không tìm thấy thông báo."),
+                  );
+                }
+
                 final comments = tb.binhLuans;
-                print("=========${tb.binhLuans.first.noiDung}");
+                final rootComments = tb.binhLuans
+                    .where((e) => e.idBinhLuanCha == null)
+                    .toList();
+
                 return SingleChildScrollView(
                   child: Column(
                     children: [
@@ -76,7 +94,6 @@ class _NotificationDetailPageState extends State<NotificationDetailPage> {
                             .toList(),
                         id: tb.id,
                       ),
-
                       const SizedBox(height: 16),
                       NotificationCommentSection(
                         lengthComment: '${comments.length}',
@@ -91,11 +108,9 @@ class _NotificationDetailPageState extends State<NotificationDetailPage> {
                                 noiDung: content,
                               ),
                             );
-
                             _commentController.clear();
                           }
                         },
-
                         comments: comments,
                       ),
                       const SizedBox(height: 20),

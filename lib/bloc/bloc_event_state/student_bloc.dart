@@ -7,6 +7,7 @@ import 'package:portal_ckc/bloc/event/student_event.dart';
 import 'package:portal_ckc/bloc/state/student_state.dart';
 import 'package:portal_ckc/constant/token.dart';
 import 'package:portal_ckc/presentation/pages/page_class_detail_admin.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class StudentBloc extends Bloc<StudentEvent, StudentState> {
   final StudentService service;
@@ -97,6 +98,12 @@ class StudentBloc extends Bloc<StudentEvent, StudentState> {
           if (body.containsKey('sinh_vien')) {
             final studentJson = body['sinh_vien'] as Map<String, dynamic>;
             final student = SinhVien.fromJson(studentJson);
+
+            // 🧠 Lưu ID vào SharedPreferences
+            final prefs = await SharedPreferences.getInstance();
+            await prefs.setInt('student_id', student.id ?? 0);
+            await prefs.setString('student_code', student.maSv ?? '');
+
             emit(StudentLoaded(student));
             print(
               'AdminBloc: Emitted AdminLoaded ${StudentLoaded(student)}',
