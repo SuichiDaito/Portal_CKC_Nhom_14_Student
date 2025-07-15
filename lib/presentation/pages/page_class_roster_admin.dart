@@ -1,211 +1,289 @@
-// screens/class_list_screen.dart
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:portal_ckc/presentation/sections/card/class_roster_class_item_card.dart';
-import 'package:portal_ckc/presentation/sections/card/class_roster_teacher_info_card.dart';
-import 'package:portal_ckc/presentation/sections/class_roster_filter_section.dart';
+import 'package:portal_ckc/bloc/bloc_event_state/class_subject_bloc.dart';
+import 'package:portal_ckc/bloc/bloc_event_state/exam_second_bloc.dart';
+import 'package:portal_ckc/bloc/bloc_event_state/payment_exam_second_bloc.dart';
+import 'package:portal_ckc/bloc/bloc_event_state/subject_fail_bloc.dart';
+import 'package:portal_ckc/bloc/event/class_subject_event.dart';
+import 'package:portal_ckc/bloc/event/exam_second_event.dart';
+import 'package:portal_ckc/bloc/event/list_subject_event.dart';
+import 'package:portal_ckc/bloc/event/payment_exam_second.dart';
+import 'package:portal_ckc/bloc/state/exam_second_state.dart';
+import 'package:portal_ckc/bloc/state/list_subject_fail.dart';
+import 'package:portal_ckc/bloc/state/payment_exam_second_state.dart';
+import 'package:portal_ckc/presentation/sections/empty_section.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class PageClassRosterAdmin extends StatefulWidget {
-  const PageClassRosterAdmin({Key? key}) : super(key: key);
-
+class ClassListScreen extends StatefulWidget {
   @override
-  State<PageClassRosterAdmin> createState() => _PageClassRosterAdminState();
+  State<ClassListScreen> createState() => ListScreen();
 }
 
-class _PageClassRosterAdminState extends State<PageClassRosterAdmin> {
-  // Sample data
-  final TeacherModel teacher = TeacherModel(
-    id: '1',
-    name: 'TS. Nguyễn Văn A',
-    email: 'nguyenvana@university.edu.vn',
-    phone: '0123456789',
-    department: 'Khoa Công nghệ Thông tin',
-    title: 'Tiến sĩ - Giảng viên chính',
-  );
-
-  List<ClassModel> allClasses = [
-    ClassModel(
-      id: '1',
-      className: 'CNTT01-K65',
-      subject: 'Lập trình di động',
-      status: 'Đang diễn ra',
-      semester: 'HK1 2024-2025',
-      studentCount: 45,
-      schedule: 'T2, T4 (7:00-11:00)',
-      room: 'P.301-A1',
-    ),
-    ClassModel(
-      id: '2',
-      className: 'CNTT02-K64',
-      subject: 'Cơ sở dữ liệu',
-      status: 'Đã kết thúc',
-      semester: 'HK2 2023-2024',
-      studentCount: 38,
-      schedule: 'T3, T6 (13:00-17:00)',
-      room: 'P.205-B2',
-    ),
-    ClassModel(
-      id: '3',
-      className: 'CNTT03-K65',
-      subject: 'Phát triển ứng dụng web',
-      status: 'Sắp diễn ra',
-      semester: 'HK2 2024-2025',
-      studentCount: 42,
-      schedule: 'T2, T5 (7:00-11:00)',
-      room: 'P.402-C1',
-    ),
-    ClassModel(
-      id: '4',
-      className: 'CNTT04-K64',
-      subject: 'Lập trình di động',
-      status: 'Đang diễn ra',
-      semester: 'HK1 2024-2025',
-      studentCount: 35,
-      schedule: 'T4, T7 (13:00-17:00)',
-      room: 'P.103-A2',
-    ),
-  ];
-
-  List<ClassModel> filteredClasses = [];
-  String? selectedSubject;
-  String? selectedStatus;
-
+class ListScreen extends State<ClassListScreen> {
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
-    filteredClasses = allClasses;
-  }
-
-  void _applyFilters() {
-    setState(() {
-      filteredClasses = allClasses.where((classModel) {
-        bool matchesSubject =
-            selectedSubject == null || classModel.subject == selectedSubject;
-        bool matchesStatus =
-            selectedStatus == null || classModel.status == selectedStatus;
-        return matchesSubject && matchesStatus;
-      }).toList();
-    });
-  }
-
-  void _clearFilters() {
-    setState(() {
-      selectedSubject = null;
-      selectedStatus = null;
-      filteredClasses = allClasses;
-    });
-  }
-
-  void _onClassTap(ClassModel classModel) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text('Chi tiết lớp ${classModel.className}'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Môn: ${classModel.subject}'),
-            Text('Trạng thái: ${classModel.status}'),
-            Text('Số sinh viên: ${classModel.studentCount}'),
-            Text('Lịch học: ${classModel.schedule}'),
-            Text('Phòng: ${classModel.room}'),
-            Text('Học kỳ: ${classModel.semester}'),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Đóng'),
-          ),
-          TextButton(
-            onPressed: () => context.push('/admin/course_student_list'),
-            child: const Text('Xem chi tiết'),
-          ),
-        ],
-      ),
-    );
+    context.read<SubjectFailBloc>().add(FetchListSubjectEvent());
   }
 
   @override
   Widget build(BuildContext context) {
-    final uniqueSubjects = allClasses.map((c) => c.subject).toSet().toList();
-    final uniqueStatuses = allClasses.map((c) => c.status).toSet().toList();
-
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: Color(0xFF1E3A8A),
       appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.blue[700],
-        foregroundColor: Colors.white,
-        title: const Text(
-          'Lớp học phần',
-          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
+        backgroundColor: Color(0xFF3B82F6),
+        title: Text(
+          'Danh sách các môn sinh viên rớt',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.w500,
+          ),
         ),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
+        elevation: 0,
       ),
-      body: RefreshIndicator(
-        onRefresh: () async {
-          // Refresh data
-          await Future.delayed(const Duration(milliseconds: 1000));
-        },
-        child: CustomScrollView(
-          slivers: [
-            // Teacher Info
-            SliverToBoxAdapter(child: TeacherInfoCard(teacher: teacher)),
-
-            // Filter Section
-            SliverToBoxAdapter(
-              child: FilterSection(
-                subjects: uniqueSubjects,
-                statuses: uniqueStatuses,
-                selectedSubject: selectedSubject,
-                selectedStatus: selectedStatus,
-                onSubjectChanged: (value) {
-                  selectedSubject = value;
-                  _applyFilters();
+      body: BlocConsumer<SubjectFailBloc, ListSubjectFailState>(
+        listener: (context, state) {},
+        builder: (context, state) {
+          if (state is ListSubjectFailStateLoading ||
+              state is ListSubjectFailInitial) {
+            return Center(child: CircularProgressIndicator(color: Colors.blue));
+          } else if (state is ListSubjectFailStateLoaded) {
+            final subject = state.subject;
+            if (subject.isEmpty) {
+              return EmptySection(message: 'Chúc mừng sinh viên không rớt môn');
+            }
+            return Container(
+              padding: EdgeInsets.all(16),
+              child: ListView.builder(
+                itemCount: subject.length,
+                itemBuilder: (context, index) {
+                  return FailedSubjectCard(
+                    idSubject: int.parse(subject[index].idMonHoc ?? '0'),
+                    nameSubject: subject[index].tenMon ?? '',
+                    nameSectionClass: subject[index].tenHocPhan ?? '',
+                    numberCredit: int.parse(subject[index].soTinChi ?? '0'),
+                    totalPoint: double.parse(
+                      subject[index].diemTongKet ?? '0.0',
+                    ),
+                    typeSubject: subject[index].loaiMon ?? '0',
+                  );
                 },
-                onStatusChanged: (value) {
-                  selectedStatus = value;
-                  _applyFilters();
-                },
-                onClearFilters: _clearFilters,
               ),
-            ),
+            );
+          } else if (state is ListSubjectFailStateError) {
+            return Center(child: Text(state.message));
+          }
+          return Center(child: Text('NOT FOUND | 404'));
+        },
+      ),
+    );
+  }
+}
 
-            // Class Count
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 8,
+class FailedSubjectCard extends StatelessWidget {
+  final int idSubject;
+  final String nameSubject;
+  final String nameSectionClass;
+  final String typeSubject;
+  final int numberCredit;
+  final double totalPoint;
+  final VoidCallback? onTap;
+
+  const FailedSubjectCard({
+    super.key,
+    required this.idSubject,
+    required this.nameSubject,
+    required this.nameSectionClass,
+    required this.numberCredit,
+    required this.totalPoint,
+    required this.typeSubject,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.08),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(16),
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Header với tên môn học
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF4A90E2).withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Icon(
+                        Icons.school,
+                        color: const Color(0xFF4A90E2),
+                        size: 20,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        nameSubject,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF2C3E50),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                child: Text(
-                  'Tìm thấy ${filteredClasses.length} lớp học phần',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey[600],
-                    fontWeight: FontWeight.w500,
+
+                const SizedBox(height: 16),
+
+                // Thông tin chi tiết
+                Row(
+                  children: [
+                    Expanded(
+                      child: _buildInfoItem(
+                        icon: Icons.category,
+                        label: 'Học phần',
+                        value: nameSectionClass,
+                        color: const Color(0xFF27AE60),
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: _buildInfoItem(
+                        icon: Icons.library_books,
+                        label: 'Loại môn',
+                        value: typeSubject,
+                        color: const Color(0xFFE67E22),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    Expanded(
+                      child: _buildInfoItem(
+                        icon: Icons.credit_card,
+                        label: 'Số tín chỉ',
+                        value: numberCredit.toString(),
+                        color: const Color(0xFF9B59B6),
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: _buildInfoItem(
+                        icon: Icons.star,
+                        label: 'Điểm tổng kết',
+                        value: totalPoint.toString(),
+                        color: totalPoint >= 8.0
+                            ? const Color(0xFF27AE60)
+                            : totalPoint >= 6.5
+                            ? const Color(0xFFF39C12)
+                            : const Color(0xFFE74C3C),
+                      ),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 20),
+                // Nút bấm
+                SizedBox(
+                  height: 50,
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      context.push('/student/signup/class/subject');
+                      context.read<ClassSubjectBloc>().add(
+                        RequestClassSubjectEvent(id_mon_hoc: idSubject),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF4A90E2),
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      elevation: 0,
+                    ),
+                    child: const Text(
+                      'Xem chi tiết lớp học phần',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                   ),
                 ),
-              ),
+              ],
             ),
-
-            // Class List
-            SliverList(
-              delegate: SliverChildBuilderDelegate((context, index) {
-                final classModel = filteredClasses[index];
-                return ClassItemCard(
-                  classModel: classModel,
-                  onTap: () => _onClassTap(classModel),
-                );
-              }, childCount: filteredClasses.length),
-            ),
-
-            // Bottom spacing
-            const SliverToBoxAdapter(child: SizedBox(height: 20)),
-          ],
+          ),
         ),
       ),
     );
   }
+}
+
+Widget _buildInfoItem({
+  required IconData icon,
+  required String label,
+  required String value,
+  required Color color,
+}) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Row(
+        children: [
+          Icon(icon, size: 16, color: color),
+          const SizedBox(width: 6),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 12,
+              color: Colors.grey[600],
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
+      const SizedBox(height: 4),
+      Text(
+        value,
+        style: const TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.w600,
+          color: Color(0xFF2C3E50),
+        ),
+      ),
+    ],
+  );
 }

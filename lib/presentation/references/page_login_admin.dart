@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:portal_ckc/bloc/bloc_event_state/admin_bloc.dart';
-import 'package:portal_ckc/bloc/event/admin_event.dart';
-import 'package:portal_ckc/bloc/state/admin_state.dart';
+import 'package:portal_ckc/bloc/bloc_event_state/student_bloc.dart';
+import 'package:portal_ckc/bloc/event/student_event.dart';
+import 'package:portal_ckc/bloc/state/student_state.dart';
 import 'package:portal_ckc/constant/string.dart';
 import 'package:portal_ckc/constant/string.dart';
 
@@ -31,8 +31,8 @@ class _PageLoginAdminState extends State<PageLoginAdmin> {
       return;
     }
 
-    context.read<AdminBloc>().add(
-      AdminLoginEvent(taiKhoan: taiKhoan, password: password),
+    context.read<StudentBloc>().add(
+      StudentLoginEvent(ma_sv: taiKhoan, password: password),
     );
   }
 
@@ -143,12 +143,12 @@ class _PageLoginAdminState extends State<PageLoginAdmin> {
                   ),
                   child: Form(
                     key: _formKey,
-                    child: BlocConsumer<AdminBloc, AdminState>(
+                    child: BlocConsumer<StudentBloc, StudentState>(
                       listener: (context, state) {
-                        if (state is AdminLoaded) {
+                        if (state is StudentLoaded) {
                           // context.go('/admin/home');
                           GoRouter.of(context).go('/home/admin');
-                        } else if (state is AdminError) {
+                        } else if (state is StudentError) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(content: Text(state.message)),
                           );
@@ -221,7 +221,7 @@ class _PageLoginAdminState extends State<PageLoginAdmin> {
                               width: double.infinity,
                               height: 48,
                               child: ElevatedButton(
-                                onPressed: state is AdminLoading
+                                onPressed: (state is StudentLoading)
                                     ? null
                                     : () => adminLogin(context),
                                 style: ElevatedButton.styleFrom(
@@ -231,7 +231,7 @@ class _PageLoginAdminState extends State<PageLoginAdmin> {
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                 ),
-                                child: state is AdminLoading
+                                child: (state is StudentLoading)
                                     ? const SizedBox(
                                         width: 20,
                                         height: 20,

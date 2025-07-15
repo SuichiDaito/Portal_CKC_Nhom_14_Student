@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class UserProfileCardHomeAdmin extends StatefulWidget {
   final String nameUser;
   final String idStudent;
   final String email;
+  final String classStudent;
+  // final VoidCallbackAction resultStudy;
+
   const UserProfileCardHomeAdmin({
     super.key,
     required this.nameUser,
     required this.idStudent,
     required this.email,
+    required this.classStudent,
+    // required this.resultStudy,
   });
   State<UserProfileCardHomeAdmin> createState() => _UserCardHomeAdmin();
 }
@@ -74,12 +80,21 @@ class _UserCardHomeAdmin extends State<UserProfileCardHomeAdmin> {
               fontSize: 14,
             ),
           ),
+          Text(
+            'Lớp: ${widget.classStudent}',
+            style: TextStyle(
+              color: Colors.white.withOpacity(0.9),
+              fontSize: 14,
+            ),
+          ),
           SizedBox(height: 16),
           Row(
             children: [
               Expanded(
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    context.push('/student/show/point');
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white.withOpacity(0.2),
                     foregroundColor: Colors.white,
@@ -89,21 +104,6 @@ class _UserCardHomeAdmin extends State<UserProfileCardHomeAdmin> {
                     ),
                   ),
                   child: Text('Kết quả học tập'),
-                ),
-              ),
-              SizedBox(width: 12),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white.withOpacity(0.2),
-                    foregroundColor: Colors.white,
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  child: Text('Thông tin'),
                 ),
               ),
             ],

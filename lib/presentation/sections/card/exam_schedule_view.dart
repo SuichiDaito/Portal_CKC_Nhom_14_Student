@@ -1,10 +1,13 @@
+
 import 'package:flutter/material.dart';
-import 'package:portal_ckc/presentation/pages/page_exam_schedule_admin.dart';
+import 'package:go_router/go_router.dart';
+import 'package:portal_ckc/api/model/exam_model.dart';
+import 'package:portal_ckc/presentation/sections/button/button_navigation.dart';
 import 'package:portal_ckc/presentation/sections/card/exam_duty_card.dart';
 
 class ExamScheduleView extends StatelessWidget {
   final String? selectedDay;
-  final Map<String, List<ExamDuty>> scheduleData;
+  final Map<String, List<ExamSchedule>> scheduleData;
   final void Function(String) onDayTap;
 
   const ExamScheduleView({
