@@ -48,8 +48,8 @@ class BuildSenderInformationDetail
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Phòng Công Tác Chính Trị',
+                Text(
+                  '${widget.typeNotificationSender}',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,

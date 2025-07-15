@@ -1,6 +1,16 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:portal_ckc/bloc/bloc_event_state/student_bloc.dart';
+import 'package:portal_ckc/bloc/event/student_event.dart';
 import 'package:portal_ckc/main.dart';
+import 'package:portal_ckc/presentation/pages/page_change_password_student.dart';
+import 'package:portal_ckc/presentation/pages/page_create_report_detail_student.dart';
+import 'package:portal_ckc/presentation/pages/page_detail_study_fee.dart';
+import 'package:portal_ckc/presentation/pages/page_empty.dart';
+import 'package:portal_ckc/presentation/pages/page_show_detail_class_subject.dart';
+import 'package:portal_ckc/presentation/pages/page_show_exam_second_student.dart';
+import 'package:portal_ckc/presentation/pages/page_training_program.dart';
 import 'package:portal_ckc/presentation/pages/appbar_bottombar/page_app_bar.dart';
 import 'package:portal_ckc/presentation/pages/page_class_book_admin.dart';
 import 'package:portal_ckc/presentation/pages/page_class_detail_admin.dart';
@@ -8,23 +18,27 @@ import 'package:portal_ckc/presentation/pages/page_class_management_admin.dart';
 import 'package:portal_ckc/presentation/pages/page_class_roster_admin.dart';
 import 'package:portal_ckc/presentation/pages/page_conduct_evaluation_admin.dart';
 import 'package:portal_ckc/presentation/pages/page_course_section_student_list.dart';
+import 'package:portal_ckc/presentation/pages/page_info_teacher.dart';
+import 'package:portal_ckc/presentation/pages/page_list_certificates_for_student.dart';
 import 'package:portal_ckc/presentation/pages/page_login.dart';
 import 'package:portal_ckc/presentation/pages/page_meeting_minutes_admin.dart';
 import 'package:portal_ckc/presentation/pages/page_notification_detail_admin.dart';
+import 'package:portal_ckc/presentation/pages/page_payment_study_fee.dart';
 import 'package:portal_ckc/presentation/pages/page_report_detail_admin.dart';
 import 'package:portal_ckc/presentation/pages/page_exam_schedule_admin.dart';
+import 'package:portal_ckc/presentation/pages/page_search_info_general_student.dart';
+import 'package:portal_ckc/presentation/pages/page_show_point_student.dart';
+import 'package:portal_ckc/presentation/pages/page_signup_certificates.dart';
 import 'package:portal_ckc/presentation/pages/page_teaching_schedule_admin.dart';
 import 'package:portal_ckc/presentation/pages/page_user_detail_information.dart';
 import 'package:portal_ckc/presentation/pages/page_main_layout_home_admin.dart';
-import 'package:portal_ckc/presentation/references/dashboard_admin.dart';
-import 'package:portal_ckc/presentation/references/page_change_password_admin.dart';
 import 'package:portal_ckc/presentation/pages/appbar_bottombar/page_home_admin.dart';
 import 'package:portal_ckc/presentation/pages/page_applications_admin.dart';
 import 'package:portal_ckc/presentation/references/page_login_admin.dart';
 import 'package:portal_ckc/presentation/references/page_management_group_admin.dart';
 import 'package:portal_ckc/presentation/references/page_class_book_admin.dart';
-import 'package:portal_ckc/presentation/references/page_infomation_detail_admin.dart';
 import 'package:portal_ckc/presentation/pages/page_notification_admin.dart';
+import 'package:portal_ckc/presentation/sections/empty_section.dart';
 import 'package:portal_ckc/presentation/sections/notifications_home_admin.dart';
 
 class RouteName {
@@ -75,20 +89,12 @@ class RouteName {
         ],
       ),
       GoRoute(
-        path: '/admin/info',
-        builder: (context, state) => const PageThongtinAdmin(),
-      ),
-      GoRoute(
         path: '/admin/class_book_admin',
         builder: (context, state) => const PageClassBookAdmin(),
       ),
       GoRoute(
         path: '/admin/management_group_admin',
         builder: (context, state) => const PageQuanlyphongAdmin(),
-      ),
-      GoRoute(
-        path: '/doimatkhau',
-        builder: (context, state) => const PageDoimatkhauAdmin(),
       ),
       GoRoute(
         path: '/admin/class_management_admin',
@@ -105,7 +111,7 @@ class RouteName {
 
       GoRoute(
         path: '/admin/class_roster_admin',
-        builder: (context, state) => PageClassRosterAdmin(),
+        builder: (context, state) => ClassListScreen(),
       ),
       GoRoute(
         path: '/admin/meeting_minutes_admin',
@@ -124,26 +130,77 @@ class RouteName {
         path: '/admin/exam_schedule_admin',
         builder: (context, state) => PageExamScheduleAdmin(),
       ),
+      //LecturerInfoScreen
+      GoRoute(
+        path: '/student/info/teacher',
+        builder: (context, state) => LecturerInfoScreen(),
+      ),
       GoRoute(
         path: '/admin/report_detail_admin',
-        builder: (context, state) {
-          final args = state.extra as Map<String, dynamic>;
-          return PageReportDetailAdmin(isApproved: args['isApproved'] as bool);
-        },
+        builder: (context, state) => PageReportDetailAdmin(),
       ),
-
+      // CertificateRegistrationScreen
       GoRoute(
-        path: '/notifications/detail',
+        path: '/student/signup/certificates',
+        builder: (context, state) => CertificateRegistrationScreen(),
+      ),
+      //CreateAttendanceForm
+      GoRoute(
+        path: '/student/create/report/class',
+        builder: (context, state) => CreateAttendanceForm(),
+      ),
+      GoRoute(
+        path: '/student/show/point',
+        builder: (context, state) => StudentGradeScreen(),
+      ),
+      GoRoute(
+        path: '/student/show/error',
+        builder: (context, state) =>
+           EmptyPage(),
+      ),
+      //ExamSchedulePage
+      GoRoute(
+        path: '/student/exam/second',
+        builder: (context, state) => ExamSchedulePage(),
+      ),
+      //ChangePasswordScreen
+      GoRoute(
+        path: '/student/change/password',
+        builder: (context, state) => ChangePasswordScreen(),
+      ),
+      GoRoute(
+        path: '/student/signup/class/subject',
+        builder: (context, state) => PageShowDetailClassSubject(),
+      ),
+      GoRoute(
+        path: '/student/training/program',
+        builder: (context, state) => TrainingProgramScreen(),
+      ),
+      GoRoute(
+        path: '/student/list/certificates',
         builder: (context, state) {
-          final data = state.extra as Map<String, dynamic>;
-          return NotificationDetailPage(
-            title: data['title'],
-            content: data['content'],
-            date: data['date'],
-          );
+          return DocumentListPage();
         },
       ),
-      //NotificationDetailPage
+      //PaymentDetailScreen
+      //TuitionFeeScreen
+      GoRoute(
+        path: '/student/payment',
+        builder: (context, state) {
+          return TuitionFeeScreen();
+        },
+      ),
+      GoRoute(
+        path: '/student/search/tuition',
+        builder: (context, state) => PageSearchInfoGeneralStudent(),
+      ),
+      GoRoute(
+        path: '/notifications/detail/:id',
+        builder: (context, state) {
+          final id = int.tryParse(state.pathParameters['id'] ?? '') ?? 0;
+          return NotificationDetailPage(id: 1);
+        },
+      ),
     ],
   );
 }

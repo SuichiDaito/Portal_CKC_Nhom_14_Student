@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:portal_ckc/presentation/pages/page_notification_detail_admin.dart';
 
 class NotificationCard extends StatefulWidget {
   final String title;
@@ -7,7 +6,7 @@ class NotificationCard extends StatefulWidget {
   final String date;
   final Color bgColor;
   final Color? buttonColor;
-  final Function onPressed;
+  final VoidCallback onPressed;
 
   const NotificationCard({
     super.key,
