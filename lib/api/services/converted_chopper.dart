@@ -50,6 +50,7 @@ class ModelConverter implements Converter {
       chopperLogger.warning('❌ JSON decode error: $e');
       return response.copyWith<BodyType>(body: body);
     }
+
   }
 
   @override
