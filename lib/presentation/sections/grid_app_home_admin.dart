@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class GridAppHomeAdmin extends StatefulWidget {
   const GridAppHomeAdmin({super.key});
@@ -8,23 +9,19 @@ class GridAppHomeAdmin extends StatefulWidget {
 
 class _GridAppHomeAdmin extends State<GridAppHomeAdmin> {
   final functions = [
+    {'icon': Icons.assessment, 'title': 'Điểm rèn luyện', 'color': Colors.blue},
+    {'icon': Icons.list_alt, 'title': 'Đăng ký học phần', 'color': Colors.teal},
+    {'icon': Icons.school, 'title': 'Điểm học tập', 'color': Colors.lightGreen},
     {
-      'icon': Icons.assignment,
-      'title': 'Kết quả\nrèn luyện',
-      'color': Colors.blue,
+      'icon': Icons.description,
+      'title': 'Xin cấp giấy tờ',
+      'color': Colors.green,
     },
+    {'icon': Icons.calendar_today, 'title': 'Lịch thi', 'color': Colors.blue},
     {
-      'icon': Icons.notifications,
-      'title': 'Thông\nbáo',
-      'color': Colors.orange,
-    },
-    {'icon': Icons.video_call, 'title': 'KPKP', 'color': Colors.green},
-    {'icon': Icons.description, 'title': 'SKCH', 'color': Colors.purple},
-    {'icon': Icons.calendar_today, 'title': 'Lịch học', 'color': Colors.red},
-    {
-      'icon': Icons.library_books,
-      'title': 'Tài liệu\nhọc tập',
-      'color': Colors.teal,
+      'icon': Icons.access_time,
+      'title': 'Thời khóa biểu',
+      'color': Colors.indigo,
     },
   ];
 
@@ -46,6 +43,25 @@ class _GridAppHomeAdmin extends State<GridAppHomeAdmin> {
           onTap: () {
             // Handle function tap
             print('Tapped: ${function['title']}');
+            if (index == 0) {
+              // Điểm rèn luyện
+              context.push('/admin/conduct_evaluation_admin');
+            } else if (index == 1) {
+              // Đăng ký học phần
+              context.push('/admin/class_roster_admin');
+            } else if (index == 3) {
+              // Điểm học tập
+              context.push('/student/signup/certificates');
+            } else if (index == 2) {
+              // Xin cấp giấy tờ
+              context.push('/student/show/point');
+            } else if (index == 4) {
+              // Lịch thi
+              context.push('/admin/exam_schedule_admin');
+            } else if (index == 5) {
+              // Thời khóa biểu
+              context.push('/admin/teaching_schedule_admin');
+            }
           },
           child: Container(
             decoration: BoxDecoration(
