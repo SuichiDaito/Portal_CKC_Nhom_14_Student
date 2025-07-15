@@ -206,7 +206,7 @@ class TuitionFeeCard extends StatelessWidget {
                   _buildInfoRow('Ngày kết thúc:', endDate),
                   SizedBox(height: 16),
                   Column(
-                    children: checkInput(id_status, startDate, endDate) == 1
+                    children: checkInput(id_status, startDate, endDate) == 4
                         ? [
                             SizedBox(height: 16),
                             Text(

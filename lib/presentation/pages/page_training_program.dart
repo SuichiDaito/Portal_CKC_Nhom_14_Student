@@ -62,16 +62,14 @@ class _TrainingProgramScreenState extends State<TrainingProgramScreen> {
     _extractStudentSpecializations(trainingPrograms);
 
     // Xác định học kỳ dựa trên chuyên ngành
-    if (studentSpecializations.contains(id1)) {
+    if (studentSpecializations.contains(1)) {
       // Nếu có chuyên ngành 1, thêm học kỳ 1-3
       semesterSet.addAll([1, 2, 3]);
     }
 
-    if (id2 != 0 || id2 != null) {
-      if (studentSpecializations.contains(id2)) {
-        // Nếu có chuyên ngành 2, thêm học kỳ 4-6
-        semesterSet.addAll([4, 5, 6]);
-      }
+    if (studentSpecializations.contains(2)) {
+      // Nếu có chuyên ngành 2, thêm học kỳ 4-6
+      semesterSet.addAll([4, 5, 6]);
     }
 
     availableSemesters = semesterSet.toList()..sort();
