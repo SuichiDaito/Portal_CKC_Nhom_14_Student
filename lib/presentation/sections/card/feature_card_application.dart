@@ -58,7 +58,7 @@ class FeatureCard extends State<FeatureCardApplication> {
                   context.push('/student/signup/certificates');
                 } else if (widget.feature.id == 8) {
                   // Viết biên bản sinh hoạt (Thư ký)
-                  GoRouter.of(context).push('/student/create/report/class');
+                  GoRouter.of(context).push('/student/show/report/list');
                 } else if (widget.feature.id == 9) {
                   // Chương trình đào tạo
                   GoRouter.of(context).push('/student/training/program');

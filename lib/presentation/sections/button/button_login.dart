@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:portal_ckc/bloc/bloc_event_state/response_change_password.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/student_bloc.dart';
+import 'package:portal_ckc/bloc/event/change_response_event.dart';
 import 'package:portal_ckc/bloc/event/student_event.dart';
 import 'package:portal_ckc/constant/style_of_widget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -48,8 +50,8 @@ class _ButtonLogin extends State<ButtonLogin> {
       child: ElevatedButton(
         onPressed: () {
           if (widget.account.isNotEmpty && widget.password.isEmpty) {
-            context.read<StudentBloc>().add(
-              StudentRequestChangePasswordEvent(
+            context.read<ResponseChangePasswordBloc>().add(
+              FetchResponseChangePassword(
                 idStudent: widget.account,
                 typeAccount: widget.typeAccount,
               ),

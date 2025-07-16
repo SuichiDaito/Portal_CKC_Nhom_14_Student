@@ -10,6 +10,7 @@ import 'package:portal_ckc/bloc/bloc_event_state/certificates_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/change_password_friendly_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/class_subject_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/danh_sach_sinh_vien_bloc.dart';
+import 'package:portal_ckc/bloc/bloc_event_state/delete_report_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/exam_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/exam_second_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/info_teacher_bloc.dart';
@@ -20,6 +21,7 @@ import 'package:portal_ckc/bloc/bloc_event_state/payment_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/payment_class_subject_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/payment_exam_second_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/payment_fee_bloc.dart';
+import 'package:portal_ckc/bloc/bloc_event_state/response_change_password.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/sign_up_certificates_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/student_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/student_comment_bloc.dart';
@@ -71,6 +73,8 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => CommentBloc()),
         BlocProvider(create: (_) => LogoutBloc()),
         BlocProvider(create: (_) => ListStudentBloc()),
+        BlocProvider(create: (_) => ResponseChangePasswordBloc()),
+        BlocProvider(create: (_) => DeleteReportBloc()),
       ],
       child: MaterialApp.router(
         routerConfig: RouteName.route,

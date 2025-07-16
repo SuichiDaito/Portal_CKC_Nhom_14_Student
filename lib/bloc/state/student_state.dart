@@ -26,16 +26,6 @@ class StudentError extends StudentState {
   StudentError(this.message);
 }
 
-class StudentRequestChangePasswordSuccess extends StudentState {
-  final String message;
 
-  StudentRequestChangePasswordSuccess(this.message);
-}
-
-class StudentRequestChangePasswordFail extends StudentState {
-  final String message;
-
-  StudentRequestChangePasswordFail(this.message);
-}
 
 
