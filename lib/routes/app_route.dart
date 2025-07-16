@@ -8,6 +8,7 @@ import 'package:portal_ckc/presentation/pages/page_change_password_student.dart'
 import 'package:portal_ckc/presentation/pages/page_create_report_detail_student.dart';
 import 'package:portal_ckc/presentation/pages/page_detail_study_fee.dart';
 import 'package:portal_ckc/presentation/pages/page_empty.dart';
+import 'package:portal_ckc/presentation/pages/page_report_secretary.dart';
 import 'package:portal_ckc/presentation/pages/page_show_detail_class_subject.dart';
 import 'package:portal_ckc/presentation/pages/page_show_exam_second_student.dart';
 import 'package:portal_ckc/presentation/pages/page_training_program.dart';
@@ -144,10 +145,14 @@ class RouteName {
         path: '/student/signup/certificates',
         builder: (context, state) => CertificateRegistrationScreen(),
       ),
-      //CreateAttendanceForm
       GoRoute(
         path: '/student/create/report/class',
         builder: (context, state) => CreateAttendanceForm(),
+      ),
+      // BienBanListScreen
+      GoRoute(
+        path: '/student/show/report/list',
+        builder: (context, state) => BienBanListScreen(),
       ),
       GoRoute(
         path: '/student/show/point',
@@ -155,8 +160,7 @@ class RouteName {
       ),
       GoRoute(
         path: '/student/show/error',
-        builder: (context, state) =>
-           EmptyPage(),
+        builder: (context, state) => EmptyPage(),
       ),
       //ExamSchedulePage
       GoRoute(

@@ -154,7 +154,7 @@ List<FeatureItem> getStudentFeatures() {
     FeatureItem(
       id: 8,
       icon: Icons.edit,
-      title: 'Viết biên bản sinh hoạt',
+      title: 'Tạo biên bản sinh hoạt',
       color: Colors.brown,
       value: '',
     ),

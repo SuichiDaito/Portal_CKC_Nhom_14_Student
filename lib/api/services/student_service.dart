@@ -109,4 +109,7 @@ abstract class StudentService extends ChopperService {
     @Path('lop') int lopId,
     @Body() Map<String, dynamic> data,
   );
+
+  @DELETE(path: '/bienbanshcn/{id}')
+  Future<Response> deleteReport(@Path('id') int id);
 }
