@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:portal_ckc/api/model/danh_sach_sinh_vien.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/danh_sach_sinh_vien_bloc.dart';
 import 'package:portal_ckc/bloc/event/danh_sach_sinh_vien_event.dart';
@@ -7,6 +8,18 @@ import 'package:portal_ckc/bloc/state/danh_sach_sinh_vien.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 typedef Student = ListStudent;
+
+class StudentAbsence {
+  final Student student;
+  final TextEditingController reasonController;
+  bool hasReason;
+
+  StudentAbsence({
+    required this.student,
+    required this.reasonController,
+    this.hasReason = false,
+  });
+}
 
 class CreateAttendanceForm extends StatefulWidget {
   const CreateAttendanceForm({super.key});
@@ -19,7 +32,6 @@ class _CreateAttendanceFormState extends State<CreateAttendanceForm> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _searchController = TextEditingController();
   final TextEditingController _contentController = TextEditingController();
-  final TextEditingController _reasonController = TextEditingController();
   int? currentUserId;
 
   String? _selectedWeek = 'Tuần 1';
@@ -28,9 +40,8 @@ class _CreateAttendanceFormState extends State<CreateAttendanceForm> {
 
   List<Student> allStudents = [];
   List<Student> _filteredStudents = [];
-  List<Student> _selectedStudents = [];
+  List<StudentAbsence> _selectedStudents = [];
 
-  bool _showReasonField = false;
   bool _showSuggestions = false;
 
   @override
@@ -38,6 +49,17 @@ class _CreateAttendanceFormState extends State<CreateAttendanceForm> {
     super.initState();
     context.read<ListStudentBloc>().add(FetchListStudent());
     _loadCurrentUserId();
+  }
+
+  @override
+  void dispose() {
+    // Dispose all controllers
+    for (var studentAbsence in _selectedStudents) {
+      studentAbsence.reasonController.dispose();
+    }
+    _searchController.dispose();
+    _contentController.dispose();
+    super.dispose();
   }
 
   Future<void> _loadCurrentUserId() async {
@@ -68,17 +90,37 @@ class _CreateAttendanceFormState extends State<CreateAttendanceForm> {
 
   void _selectStudent(Student student) {
     setState(() {
-      if (!_selectedStudents.contains(student)) {
-        _selectedStudents.add(student);
+      // Kiểm tra xem sinh viên đã được chọn chưa
+      bool alreadySelected = _selectedStudents.any(
+        (absence) => absence.student.sinhVien!.id == student.sinhVien!.id,
+      );
+
+      if (!alreadySelected) {
+        _selectedStudents.add(
+          StudentAbsence(
+            student: student,
+            reasonController: TextEditingController(),
+          ),
+        );
       }
       _searchController.clear();
       _showSuggestions = false;
     });
   }
 
-  void _removeStudent(Student student) {
+  void _removeStudent(StudentAbsence studentAbsence) {
     setState(() {
-      _selectedStudents.remove(student);
+      studentAbsence.reasonController.dispose();
+      _selectedStudents.remove(studentAbsence);
+    });
+  }
+
+  void _toggleReason(StudentAbsence studentAbsence, bool hasReason) {
+    setState(() {
+      studentAbsence.hasReason = hasReason;
+      if (!hasReason) {
+        studentAbsence.reasonController.clear();
+      }
     });
   }
 
@@ -114,20 +156,8 @@ class _CreateAttendanceFormState extends State<CreateAttendanceForm> {
 
   void _submitForm(int idLop) {
     if (_formKey.currentState!.validate()) {
-      // if (_selectedStudents.isEmpty) {
-      //   ScaffoldMessenger.of(context).showSnackBar(
-      //     SnackBar(content: Text('Vui lòng chọn ít nhất một sinh viên vắng')),
-      //   );
-      //   return;
-      // }
-
       int idTuan = int.parse(_selectedWeek!.replaceAll(RegExp(r'[^0-9]'), ''));
 
-      // ✅ Tạo danh sách id sinh viên vắng
-      final List<int> listIdAbsent = _selectedStudents
-          .map((student) => student.sinhVien?.id)
-          .whereType<int>()
-          .toList();
       String _combineDateTime(DateTime date, TimeOfDay time) {
         final combined = DateTime(
           date.year,
@@ -136,10 +166,7 @@ class _CreateAttendanceFormState extends State<CreateAttendanceForm> {
           time.hour,
           time.minute,
         );
-        return combined.toIso8601String().substring(
-          0,
-          16,
-        ); // giữ định dạng yyyy-MM-ddTHH:mm
+        return combined.toIso8601String().substring(0, 16);
       }
 
       final data = {
@@ -152,15 +179,14 @@ class _CreateAttendanceFormState extends State<CreateAttendanceForm> {
           _selectedDate,
           TimeOfDay(hour: 9, minute: 0),
         ),
-
         'so_luong_sinh_vien': allStudents.length,
         'vang_mat': _selectedStudents.length,
         'id_sv': currentUserId,
         'sinh_vien_vang': {
-          for (var student in _selectedStudents)
-            '${student.sinhVien!.id}': {
-              'ly_do': _reasonController.text.trim(),
-              'loai': _showReasonField ? 1 : 0,
+          for (var studentAbsence in _selectedStudents)
+            '${studentAbsence.student.sinhVien!.id}': {
+              'ly_do': studentAbsence.reasonController.text.trim(),
+              'loai': studentAbsence.hasReason ? 1 : 0,
             },
         },
       };
@@ -168,6 +194,8 @@ class _CreateAttendanceFormState extends State<CreateAttendanceForm> {
       context.read<ListStudentBloc>().add(
         CreatReportEvent(data: data, lopId: idLop),
       );
+
+      context.push('/student/show/report/list');
     }
   }
 
@@ -197,7 +225,7 @@ class _CreateAttendanceFormState extends State<CreateAttendanceForm> {
             ScaffoldMessenger.of(
               context,
             ).showSnackBar(SnackBar(content: Text(state.message)));
-            Navigator.of(context).pop(); // <-- đóng sau khi tạo thành công
+            Navigator.of(context).pop();
           } else if (state is CreateReportError) {
             ScaffoldMessenger.of(
               context,
@@ -366,82 +394,121 @@ class _CreateAttendanceFormState extends State<CreateAttendanceForm> {
 
                     SizedBox(height: 16),
 
-                    // Selected students
+                    // Selected students with individual reason fields
                     if (_selectedStudents.isNotEmpty)
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Sinh viên đã chọn:',
+                            'Sinh viên vắng và lý do:',
                             style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
-                          SizedBox(height: 8),
-                          Wrap(
-                            spacing: 8,
-                            runSpacing: 8,
-                            children: _selectedStudents.map((student) {
-                              return Chip(
-                                label: Text(
-                                  '${student.sinhVien!.hoSo!.hoTen ?? ""} (${student.sinhVien!.maSv ?? ""})',
+                          SizedBox(height: 12),
+
+                          // List of selected students with reason fields
+                          ListView.builder(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: _selectedStudents.length,
+                            itemBuilder: (context, index) {
+                              final studentAbsence = _selectedStudents[index];
+                              return Card(
+                                margin: EdgeInsets.only(bottom: 12),
+                                child: Padding(
+                                  padding: EdgeInsets.all(12),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      // Student info and remove button
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  studentAbsence
+                                                          .student
+                                                          .sinhVien!
+                                                          .hoSo!
+                                                          .hoTen ??
+                                                      "",
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  'MSSV: ${studentAbsence.student.sinhVien!.maSv ?? ""}',
+                                                  style: TextStyle(
+                                                    fontSize: 14,
+                                                    color: Colors.grey[600],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          IconButton(
+                                            icon: Icon(
+                                              Icons.close,
+                                              color: Colors.red,
+                                            ),
+                                            onPressed: () =>
+                                                _removeStudent(studentAbsence),
+                                          ),
+                                        ],
+                                      ),
+
+                                      SizedBox(height: 8),
+
+                                      // Checkbox for reason
+                                      Row(
+                                        children: [
+                                          Checkbox(
+                                            value: studentAbsence.hasReason,
+                                            onChanged: (value) => _toggleReason(
+                                              studentAbsence,
+                                              value ?? false,
+                                            ),
+                                          ),
+                                          Text('Có lý do vắng'),
+                                        ],
+                                      ),
+
+                                      // Reason text field
+                                      if (studentAbsence.hasReason)
+                                        Padding(
+                                          padding: EdgeInsets.only(top: 8),
+                                          child: TextFormField(
+                                            controller:
+                                                studentAbsence.reasonController,
+                                            decoration: InputDecoration(
+                                              hintText: 'Nhập lý do vắng',
+                                              border: OutlineInputBorder(),
+                                              contentPadding: EdgeInsets.all(
+                                                12,
+                                              ),
+                                            ),
+                                            maxLines: 2,
+                                            validator: (value) {
+                                              if (studentAbsence.hasReason &&
+                                                  (value == null ||
+                                                      value.trim().isEmpty)) {
+                                                return 'Vui lòng nhập lý do vắng';
+                                              }
+                                              return null;
+                                            },
+                                          ),
+                                        ),
+                                    ],
+                                  ),
                                 ),
-                                deleteIcon: Icon(Icons.close, size: 18),
-                                onDeleted: () => _removeStudent(student),
                               );
-                            }).toList(),
-                          ),
-                          SizedBox(height: 16),
-                        ],
-                      ),
-
-                    // Reason checkbox
-                    Row(
-                      children: [
-                        Checkbox(
-                          value: _showReasonField,
-                          onChanged: (value) {
-                            setState(() {
-                              _showReasonField = value ?? false;
-                              if (!_showReasonField) {
-                                _reasonController.clear();
-                              }
-                            });
-                          },
-                        ),
-                        Text('Có lý do vắng'),
-                      ],
-                    ),
-
-                    // Reason field
-                    if (_showReasonField)
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(height: 8),
-                          Text(
-                            'Lý do vắng:',
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          SizedBox(height: 8),
-                          TextFormField(
-                            controller: _reasonController,
-                            maxLines: 3,
-                            decoration: InputDecoration(
-                              hintText: 'Nhập lý do vắng của sinh viên',
-                              border: OutlineInputBorder(),
-                              contentPadding: EdgeInsets.all(12),
-                            ),
-                            validator: (value) {
-                              if (_showReasonField &&
-                                  (value == null || value.trim().isEmpty)) {
-                                return 'Vui lòng nhập lý do vắng';
-                              }
-                              return null;
                             },
                           ),
                         ],
@@ -483,7 +550,7 @@ class _CreateAttendanceFormState extends State<CreateAttendanceForm> {
                       child: ElevatedButton(
                         onPressed: allStudents.isNotEmpty
                             ? () => _submitForm(allStudents.first.idLop ?? 0)
-                            : null, // vô hiệu hóa nút nếu chưa có dữ liệu
+                            : null,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blue,
                           padding: EdgeInsets.symmetric(vertical: 16),
