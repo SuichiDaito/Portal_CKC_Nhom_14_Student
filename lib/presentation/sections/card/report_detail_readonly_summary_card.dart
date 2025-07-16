@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'dart:math';
 
+import 'package:portal_ckc/api/model/student_report_model.dart';
+
 class ReportDetailReadonlySummaryCard extends StatefulWidget {
   final int week;
   final String beginDate;
@@ -14,13 +16,8 @@ class ReportDetailReadonlySummaryCard extends StatefulWidget {
   final int totalStudent;
   final int absentStudent;
   final String content;
-  final List<String> absentStudentIds;
+  final List<ChiTietBienBanSHCN> absentStudentIds;
   final List<Map<String, String>> studentList;
-  final Map<String, String> absenceReasons = {
-    '22DTH001': 'Bị bệnh',
-    '22DTH003': 'Về quê',
-    '22DTH005': 'Không rõ lý do',
-  };
 
   ReportDetailReadonlySummaryCard({
     super.key,
@@ -80,10 +77,7 @@ class ReportDetail extends State<ReportDetailReadonlySummaryCard> {
                   const SizedBox(height: 16),
                   const Text(
                     'BIÊN BẢN SINH HOẠT CHỦ NHIỆM',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                    ),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                   ),
                   Text(
                     'TUẦN THỨ: ${widget.week} (${widget.beginDate} – ${widget.endDate})',
@@ -93,13 +87,13 @@ class ReportDetail extends State<ReportDetailReadonlySummaryCard> {
               ),
             ),
             const SizedBox(height: 16),
-    
+
             Text(
               'Thời gian bắt đầu sinh hoạt lớp: ${widget.startHour} ngày ${widget.beginDate}',
             ),
             Text('Địa điểm sinh hoạt: ${widget.roomNumber}'),
             const SizedBox(height: 8),
-    
+
             const Text(
               'Thành phần tham dự gồm có:',
               style: TextStyle(fontWeight: FontWeight.w600),
@@ -109,19 +103,26 @@ class ReportDetail extends State<ReportDetailReadonlySummaryCard> {
             Text(
               ' - Sĩ số: ${widget.totalStudent}       Hiện diện: ${caculatedNumberStudent(widget.totalStudent, widget.absentStudent)}        Vắng mặt: ${widget.absentStudent}',
             ),
-    
+
             if (widget.absentStudentIds.isNotEmpty) ...[
               const SizedBox(height: 8),
               const Text('Họ và tên HSSV vắng, lý do:'),
-              ...widget.absentStudentIds.map((mssv) {
-                final student = widget.studentList.firstWhere(
-                  (s) => s['mssv'] == mssv,
-                  orElse: () => {'mssv': mssv, 'name': 'Không rõ'},
-                );
-                final reason =
-                    widget.absenceReasons[mssv] ?? 'Không rõ lý do';
-                return Text('  ${student['name']}, Lý do: $reason');
-              }).toList(),
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: widget.absentStudentIds.length,
+                itemBuilder: (context, index) {
+                  final student = widget.absentStudentIds[index];
+                  return ListTile(
+                    dense: true,
+                    leading: Text('${index + 1}.'),
+                    title: Text(
+                      'Họ tên sinh viên: ${student.sinhVien?.hoSo?.hoTen}-(${student.sinhVien?.maSv})',
+                    ),
+                    subtitle: Text('Lý do: ${student.lyDo}'),
+                  );
+                },
+              ),
             ],
             const SizedBox(height: 16),
             const Text(
@@ -130,7 +131,7 @@ class ReportDetail extends State<ReportDetailReadonlySummaryCard> {
             ),
             const SizedBox(height: 4),
             Text(widget.content),
-    
+
             const SizedBox(height: 16),
             const Text(
               'CÁC ĐỀ XUẤT, KIẾN NGHỊ:',
@@ -142,10 +143,10 @@ class ReportDetail extends State<ReportDetailReadonlySummaryCard> {
             const Text(
               '..........................................................................................',
             ),
-    
+
             const SizedBox(height: 16),
             Text('Buổi sinh hoạt kết thúc lúc: ${widget.endHour} cùng ngày.'),
-    
+
             const SizedBox(height: 24),
             Wrap(
               spacing: 24,

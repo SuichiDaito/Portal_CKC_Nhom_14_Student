@@ -92,7 +92,7 @@ class _PageReportDetailAdminState extends State<PageReportDetailAdmin> {
                       ),
                       absentStudent: int.parse(reports[index].vangMat ?? '0'),
                       content: reports[index].noiDung ?? '',
-                      absentStudentIds: [],
+                      absentStudentIds: reports[index].chiTietBienBanSHCN ?? [],
                       studentList: [],
                     ),
                   ],

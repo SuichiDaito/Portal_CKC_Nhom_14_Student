@@ -201,145 +201,20 @@ class TuitionFeeCard extends StatelessWidget {
                   SizedBox(height: 16),
                   _buildInfoRow('Số tiền:', amount),
                   SizedBox(height: 8),
-                  _buildInfoRow('Ngày bắt đầu:', startDate),
+                  _buildInfoRow('Ngày bắt đầu:', FormatterDate(startDate)),
                   SizedBox(height: 8),
-                  _buildInfoRow('Ngày kết thúc:', endDate),
+                  _buildInfoRow('Ngày kết thúc:', FormatterDate(endDate)),
                   SizedBox(height: 16),
                   Column(
-                    children: checkInput(id_status, startDate, endDate) == 4
-                        ? [
-                            SizedBox(height: 16),
-                            Text(
-                              "Đã đóng học phí",
-                              style: TextStyle(
-                                color: Colors.green,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ]
-                        : checkInput(id_status, startDate, endDate) == 2
-                        ? [
-                            SizedBox(height: 16),
-                            SizedBox(
-                              width: double.infinity,
-                              child: ElevatedButton.icon(
-                                onPressed: () {
-                                  context.read<RequestPaymenFee>().add(
-                                    RequestPaymentFee(32, 7700000),
-                                  );
-                                  showModalBottomSheet(
-                                    context: context,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.vertical(
-                                        top: Radius.circular(16),
-                                      ),
-                                    ),
-                                    builder: (context) => Container(
-                                      padding: EdgeInsets.all(20),
-                                      child: BlocBuilder<RequestPaymenFee, PaymentFeeRequestState>(
-                                        builder: (context, state) {
-                                          if (state
-                                              is PaymentFeeRequestStateLoading) {
-                                            return Center(
-                                              child: CircularProgressIndicator(
-                                                color: Colors.blue,
-                                              ),
-                                            );
-                                          } else if (state
-                                              is PaymentFeeRequestStateLoaded) {
-                                            final url = state.url;
-                                            return Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                Text(
-                                                  'Chọn phương thức thanh toán',
-                                                  style: TextStyle(
-                                                    fontSize: 18,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                                SizedBox(height: 20),
-                                                PaymentOption(
-                                                  icon: Icons.credit_card,
-                                                  title: 'VNPay',
-                                                  subtitle:
-                                                      'Thanh toán qua VNPay',
-                                                  color: Colors.blue,
-                                                  onTap: () {
-                                                    Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            PaymentDetailScreen(
-                                                              id_order:
-                                                                  id_order,
-                                                              id_status:
-                                                                  id_status,
-                                                              semester:
-                                                                  semester,
-                                                              idStudent:
-                                                                  id_student,
-                                                            ),
-                                                      ),
-                                                    );
-                                                    _launchPaymentUrl(url);
-                                                  },
-                                                ),
-                                                SizedBox(height: 20),
-                                                TextButton(
-                                                  onPressed: () =>
-                                                      Navigator.pop(context),
-                                                  child: Text('Hủy'),
-                                                ),
-                                              ],
-                                            );
-                                          } else if (state
-                                              is PaymentFeeRequestStateError) {
-                                            return Center(
-                                              child: Text(state.message),
-                                            );
-                                          }
-                                          return Center(
-                                            child: Text(
-                                              'Thanh toán không thành công',
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                  );
-                                },
-                                icon: Icon(Icons.payment, size: 20),
-                                label: Text(
-                                  'Thanh toán học phí',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.blue[600],
-                                  foregroundColor: Colors.white,
-                                  padding: EdgeInsets.symmetric(vertical: 12),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ]
-                        : [
-                            SizedBox(height: 16),
-                            Text(
-                              "Thanh toán quá hạn. Vui lòng liên hệ phòng kế toán để được hỗ trợ",
-                              style: TextStyle(
-                                color: Colors.red,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
+                    children: _buildPaymentStatusWidgets(
+                      context,
+                      id_status,
+                      startDate,
+                      endDate,
+                      id_order,
+                      semester,
+                      id_student,
+                    ),
                   ),
                 ],
               ),
@@ -460,16 +335,17 @@ int checkInput(int status, String startStr, String endStr) {
     return 1;
   } else if (status == 0) {
     // chưa đóng
-    final isInRange = now.isAfter(start) && now.isBefore(end);
-    if (isInRange) {
+    // kiểm tra hạn đóng
+    final isStillOpen = now.isAfter(start) && now.isBefore(end);
+
+    if (isStillOpen) {
+      // còn hạn đóng => hiển thị nút thanh toán.
       return 2;
-      // chưa đóng và còn trong thời gian đóng => Hiển thị nút thanh toán
     } else {
-      //chưa đóng, ngoài thời gian đóng
-      return 3;
+      return 3; // không còn hạn đóng => hiển thị vui lòng liên hệ kế toán
     }
   }
-  return 4;
+  return 0;
 }
 
 String formatCurrencyString(String amountStr) {
@@ -482,4 +358,141 @@ String formatCurrencyString(String amountStr) {
   // Format phần nguyên
   final formatter = NumberFormat('#,###');
   return formatter.format(intAmount);
+}
+
+void _launchPaymentUrl(String url) async {
+  final Uri uri = Uri.parse(url);
+  if (await canLaunchUrl(uri)) {
+    await launchUrl(uri, mode: LaunchMode.externalApplication);
+  } else {
+    print('Không thể mở URL: $url');
+  }
+}
+
+List<Widget> _buildPaymentStatusWidgets(
+  BuildContext context,
+  int id_status,
+  String startDate,
+  String endDate,
+  int id_order,
+  String semester,
+  int id_student,
+) {
+  final status = checkInput(id_status, startDate, endDate);
+  if (status == 1) {
+    return [
+      SizedBox(height: 16),
+      Text(
+        "Đã đóng học phí",
+        style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
+        textAlign: TextAlign.center,
+      ),
+    ];
+  } else if (status == 2) {
+    return [
+      SizedBox(height: 16),
+      SizedBox(
+        width: double.infinity,
+        child: ElevatedButton.icon(
+          onPressed: () {
+            context.read<RequestPaymenFee>().add(
+              RequestPaymentFee(32, 7700000),
+            );
+            showModalBottomSheet(
+              context: context,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+              ),
+              builder: (context) => Container(
+                padding: EdgeInsets.all(20),
+                child: BlocBuilder<RequestPaymenFee, PaymentFeeRequestState>(
+                  builder: (context, state) {
+                    if (state is PaymentFeeRequestStateLoading) {
+                      return Center(
+                        child: CircularProgressIndicator(color: Colors.blue),
+                      );
+                    } else if (state is PaymentFeeRequestStateLoaded) {
+                      final url = state.url;
+                      return Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            'Chọn phương thức thanh toán',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                          PaymentOption(
+                            icon: Icons.credit_card,
+                            title: 'VNPay',
+                            subtitle: 'Thanh toán qua VNPay',
+                            color: Colors.blue,
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => PaymentDetailScreen(
+                                    id_order: id_order,
+                                    id_status: id_status,
+                                    semester: semester,
+                                    idStudent: id_student,
+                                  ),
+                                ),
+                              );
+                              _launchPaymentUrl(url);
+                            },
+                          ),
+                          SizedBox(height: 20),
+                          TextButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: Text('Hủy'),
+                          ),
+                        ],
+                      );
+                    } else if (state is PaymentFeeRequestStateError) {
+                      return Center(child: Text(state.message));
+                    }
+                    return Center(child: Text('Thanh toán không thành công'));
+                  },
+                ),
+              ),
+            );
+          },
+          icon: Icon(Icons.payment, size: 20),
+          label: Text(
+            'Thanh toán học phí',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+          ),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.blue[600],
+            foregroundColor: Colors.white,
+            padding: EdgeInsets.symmetric(vertical: 12),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+        ),
+      ),
+    ];
+  } else if (status == 3) {
+    return [
+      SizedBox(height: 16),
+      Text(
+        "Thanh toán quá hạn. Vui lòng liên hệ phòng kế toán để được hỗ trợ",
+        style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+        textAlign: TextAlign.center,
+      ),
+    ];
+  }
+  return [];
+}
+
+String FormatterDate(String? dateStr) {
+  DateTime date = DateTime.parse(dateStr ?? "");
+
+  // Format lại để chỉ hiển thị yyyy-MM-dd
+  String formatted = DateFormat('dd-MM-yyyy').format(date);
+  return formatted;
 }
