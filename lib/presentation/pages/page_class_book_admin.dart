@@ -11,10 +11,6 @@ class PageClassBookAdmin extends StatefulWidget {
 class _PageClassBookAdminState extends State<PageClassBookAdmin> {
   String? selectedLop;
   String? selectedMon;
-  // final tietTuController = TextEditingController();
-  // final tietDenController = TextEditingController();
-  // final siSoController = TextEditingController();
-  // final hienDienController = TextEditingController();
   final noiDungController = TextEditingController();
 
   final List<String> danhSachLop = ['CTK45A', 'CTK45B', 'CDT45A'];

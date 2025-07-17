@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:portal_ckc/bloc/bloc_event_state/class_subject_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/payment_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/student_bloc.dart';
+import 'package:portal_ckc/bloc/event/class_subject_event.dart';
 import 'package:portal_ckc/bloc/event/payment_event.dart';
+import 'package:portal_ckc/bloc/state/class_subject_state.dart';
 import 'package:portal_ckc/bloc/state/payment_state.dart';
 import 'package:portal_ckc/bloc/state/student_state.dart';
 import 'package:portal_ckc/constant/token.dart';
@@ -11,17 +15,19 @@ import 'package:portal_ckc/presentation/sections/card/student_card_info.dart';
 import 'package:portal_ckc/presentation/sections/dialogs/snack_bar_scaffold.dart';
 
 class PaymentFinishClassScreen extends StatefulWidget {
-  final int id_order;
-  final int id_status;
-  final String semester;
-  final int idStudent;
+  final String nameSubject;
+  final int idMonHoc;
+  final bool checkDKHG;
+  final String className;
+  final String startDate;
 
-  const PaymentFinishClassScreen({
+  PaymentFinishClassScreen({
     super.key,
-    required this.id_order,
-    required this.id_status,
-    required this.semester,
-    required this.idStudent,
+    required this.nameSubject,
+    required this.checkDKHG,
+    required this.idMonHoc,
+    required this.className,
+    required this.startDate,
   });
 
   State<PaymentFinishClassScreen> createState() => DetailScreen();
@@ -32,7 +38,9 @@ class DetailScreen extends State<PaymentFinishClassScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    context.read<PaymentBloc>().add(FetchPaymentEvent());
+    context.read<ClassSubjectBloc>().add(
+      RequestClassSubjectEvent(id_mon_hoc: widget.idMonHoc),
+    );
   }
 
   @override
@@ -45,7 +53,7 @@ class DetailScreen extends State<PaymentFinishClassScreen> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => context.go('/admin/class_roster_admin'),
         ),
         title: Text(
           'Chi tiết thanh toán',
@@ -57,44 +65,23 @@ class DetailScreen extends State<PaymentFinishClassScreen> {
         ),
         centerTitle: true,
       ),
-      body: BlocConsumer<PaymentBloc, PaymentState>(
+      body: BlocConsumer<ClassSubjectBloc, ClassSubjectState>(
         listener: (context, state) {
-          if (state is PaymentStateLoaded) {
-            final students = state.students.hocPhi;
-            if (students != null) {
-              for (var item in students) {
-                if (item.id == widget.id_order &&
-                    (item.trangThai == 1 || item.ngayDong == null)) {
-                  flag = false;
-                  // SnackBarScaffold.showToast(
-                  //   'Bạn thanh toán thất bại',
-                  //   true,
-                  //   context,
-                  // );
-                } else if (item.id == widget.id_order &&
-                    (item.trangThai == 0 || item.ngayDong == null)) {
-                  flag = false;
-                  // SnackBarScaffold.showToast(
-                  //   'Bạn thanh toán thất bại',
-                  //   true,
-                  //   context,
-                  // );
-                } else {
-                  flag = true;
-                  // SnackBarScaffold.showToast(
-                  //   'Bạn thanh toán thành công',
-                  //   false,
-                  //   context,
-                  // );
-                }
+          if (state is ClassSubjectStateLoaded) {
+            final subjects = state.classSubject;
+            if (subjects != null) {
+              if (subjects.checkDKHG == true) {
+                flag = true;
+              } else {
+                flag = false;
               }
             }
           }
         },
         builder: (context, state) {
-          if (state is PaymentStateLoading) {
+          if (state is ClassSubjectStateLoading) {
             return Center(child: CircularProgressIndicator(color: Colors.blue));
-          } else if (state is PaymentStateLoaded) {
+          } else if (state is ClassSubjectStateLoaded) {
             return Padding(
               padding: const EdgeInsets.all(20.0),
               child: Column(
@@ -151,10 +138,6 @@ class DetailScreen extends State<PaymentFinishClassScreen> {
                             ),
                             const SizedBox(height: 20),
                             // Thông tin chi tiết
-                            _buildDetailRow(
-                              'Mã thanh toán',
-                              "HD000${widget.id_order}",
-                            ),
                             BlocBuilder<StudentBloc, StudentState>(
                               builder: (context, state) {
                                 if (state is StudentInitial &&
@@ -165,39 +148,39 @@ class DetailScreen extends State<PaymentFinishClassScreen> {
                                     ),
                                   );
                                 } else if (state is StudentLoaded) {
-                                  if (state.student.id == widget.idStudent) {
-                                    return Column(
-                                      children: [
-                                        _buildDetailRow(
-                                          'Họ và tên: ',
-                                          "${state.student.hoSo.hoTen}",
-                                        ),
-                                        _buildDetailRow(
-                                          'MSSV',
-                                          "${state.student.maSv}",
-                                        ),
-                                        _buildDetailRow(
-                                          'Lớp',
-                                          "${state.student.danhSachSinhVien.last.lop.tenLop}",
-                                        ),
-                                      ],
-                                    );
-                                  } else {
-                                    return Container();
-                                  }
+                                  return Column(
+                                    children: [
+                                      _buildDetailRow(
+                                        'Họ và tên: ',
+                                        "${state.student.hoSo.hoTen}",
+                                      ),
+                                      _buildDetailRow(
+                                        'MSSV',
+                                        "${state.student.maSv}",
+                                      ),
+                                    ],
+                                  );
                                 } else if (state is StudentError) {
                                   return Center(child: Text(state.message));
                                 }
                                 return Center(child: Text('NOT FOUND | 404'));
                               },
                             ),
-                            _buildDetailRow('Học kỳ', "${widget.semester}"),
                             _buildDetailRow(
-                              'Thời gian',
-                              _formatHocKyPeriod(
-                                DateTime.now(),
-                                DateTime.now(),
-                              ),
+                              'Tên học phần',
+                              "${widget.nameSubject}",
+                            ),
+                            _buildDetailRow(
+                              'Ngày bắt đầu',
+                              "${widget.startDate}",
+                            ),
+                            _buildDetailRow(
+                              'Lớp học ghép',
+                              "${widget.className}",
+                            ),
+                            _buildDetailRow(
+                              'Thời gian thanh toán',
+                              '${_formatDate(DateTime.now())}',
                             ),
 
                             const SizedBox(height: 16),
@@ -229,7 +212,7 @@ class DetailScreen extends State<PaymentFinishClassScreen> {
                                     ),
                                   ),
                                   Text(
-                                    '${formatCurrency('7700000')}',
+                                    '${formatCurrency('400000')}',
                                     // _formatCurrency(paymentDetail.tongTien),
                                     style: const TextStyle(
                                       fontSize: 20,
@@ -265,7 +248,7 @@ class DetailScreen extends State<PaymentFinishClassScreen> {
                                   const SizedBox(width: 8),
                                   Expanded(
                                     child: Text(
-                                      'Ngày tạo: 09/10/2009',
+                                      'Ngày tạo: ${_formatDate(DateTime.now())}',
                                       style: TextStyle(
                                         fontSize: 12,
                                         color: Colors.grey[600],
@@ -289,7 +272,9 @@ class DetailScreen extends State<PaymentFinishClassScreen> {
                     height: 50,
                     child: ElevatedButton(
                       onPressed: () {
-                        context.read<PaymentBloc>().add(FetchPaymentEvent());
+                        context.read<ClassSubjectBloc>().add(
+                          RequestClassSubjectEvent(id_mon_hoc: widget.idMonHoc),
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
@@ -313,7 +298,7 @@ class DetailScreen extends State<PaymentFinishClassScreen> {
                 ],
               ),
             );
-          } else if (state is PaymentStateError) {
+          } else if (state is ClassSubjectStateError) {
             return Center(child: Text(state.message));
           }
           return Center(child: Text('NOT FOUND | 404'));
@@ -361,12 +346,12 @@ class DetailScreen extends State<PaymentFinishClassScreen> {
     IconData statusIcon;
 
     if (flag) {
-      statusColor = Colors.orange;
-      statusText = 'Chưa thanh toán';
-      statusIcon = Icons.pending;
-    } else {
       statusColor = Colors.green;
       statusText = 'Đã thanh toán';
+      statusIcon = Icons.pending;
+    } else {
+      statusColor = Colors.orange;
+      statusText = 'Chưa thanh toán';
       statusIcon = Icons.check_circle;
     }
 
@@ -426,10 +411,6 @@ class DetailScreen extends State<PaymentFinishClassScreen> {
   String _formatNienKhoa(DateTime ngayBatDau) {
     int year = ngayBatDau.year;
     return 'Niên khóa $year-${year + 1}';
-  }
-
-  String _formatHocKyPeriod(DateTime batDau, DateTime ketThuc) {
-    return '${_formatDate(batDau)} - ${_formatDate(ketThuc)}';
   }
 
   String formatCurrency(String amount) {

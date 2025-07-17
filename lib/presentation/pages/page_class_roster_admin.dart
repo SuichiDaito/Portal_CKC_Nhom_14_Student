@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -13,6 +12,7 @@ import 'package:portal_ckc/bloc/event/payment_exam_second.dart';
 import 'package:portal_ckc/bloc/state/exam_second_state.dart';
 import 'package:portal_ckc/bloc/state/list_subject_fail.dart';
 import 'package:portal_ckc/bloc/state/payment_exam_second_state.dart';
+import 'package:portal_ckc/presentation/pages/page_show_detail_class_subject.dart';
 import 'package:portal_ckc/presentation/sections/empty_section.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -220,9 +220,12 @@ class FailedSubjectCard extends StatelessWidget {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
-                      context.push('/student/signup/class/subject');
-                      context.read<ClassSubjectBloc>().add(
-                        RequestClassSubjectEvent(id_mon_hoc: idSubject),
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              PageShowDetailClassSubject(idMonHoc: idSubject),
+                        ),
                       );
                     },
                     style: ElevatedButton.styleFrom(
