@@ -22,9 +22,18 @@ class ButtonLogOutInUser extends StatelessWidget {
       Future<String> stringFuture2 = ConstraintToken.getIdSpecialized2();
       String string2 = await stringFuture;
 
-      id1 = int.parse(string);
-      id2 = int.parse(string2);
-
+      try {
+        id1 = int.parse(string);
+      } catch (e) {
+        print("Lỗi chuyển đổi: $e");
+        id1 = 0;
+      }
+      try {
+        id2 = int.parse(string2);
+      } catch (e) {
+        print("Lỗi chuyển đổi: $e");
+        id2 = 0;
+      }
       print('Đã lấy được id chuyên ngành: $string $string2');
     }
 
