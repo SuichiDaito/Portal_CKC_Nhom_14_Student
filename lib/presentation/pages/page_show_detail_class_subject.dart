@@ -18,11 +18,23 @@ import 'package:portal_ckc/presentation/sections/empty_section.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PageShowDetailClassSubject extends StatefulWidget {
+  final int idMonHoc;
+
+  PageShowDetailClassSubject({super.key, required this.idMonHoc});
   @override
   State<PageShowDetailClassSubject> createState() => DetailClassSubject();
 }
 
 class DetailClassSubject extends State<PageShowDetailClassSubject> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    context.read<ClassSubjectBloc>().add(
+      RequestClassSubjectEvent(id_mon_hoc: widget.idMonHoc),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -437,13 +449,13 @@ class ExamCard extends StatelessWidget {
     );
   }
 
-  Widget _checkStatusPayTuition(Function onRegister, bool flag) {
+  Widget _checkStatusPayTuition(VoidCallback onRegister, bool flag) {
     return flag
         ? Container(
             height: 50,
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: onRegister(),
+              onPressed: onRegister,
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color(0xFF10B981),
                 padding: EdgeInsets.symmetric(vertical: 12),

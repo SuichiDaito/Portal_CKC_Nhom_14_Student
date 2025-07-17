@@ -220,14 +220,11 @@ class FailedSubjectCard extends StatelessWidget {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
-                      context.read<ClassSubjectBloc>().add(
-                        RequestClassSubjectEvent(id_mon_hoc: idSubject),
-                      );
-
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => PageShowDetailClassSubject(),
+                          builder: (context) =>
+                              PageShowDetailClassSubject(idMonHoc: idSubject),
                         ),
                       );
                     },
