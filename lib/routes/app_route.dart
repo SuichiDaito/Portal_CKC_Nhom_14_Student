@@ -173,10 +173,6 @@ class RouteName {
         builder: (context, state) => ChangePasswordScreen(),
       ),
       GoRoute(
-        path: '/student/signup/class/subject',
-        builder: (context, state) => PageShowDetailClassSubject(),
-      ),
-      GoRoute(
         path: '/student/training/program',
         builder: (context, state) => TrainingProgramScreen(),
       ),

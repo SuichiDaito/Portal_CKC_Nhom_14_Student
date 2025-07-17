@@ -112,4 +112,8 @@ abstract class StudentService extends ChopperService {
 
   @DELETE(path: '/bienbanshcn/{id}')
   Future<Response> deleteReport(@Path('id') int id);
+
+  
+  @POST(path: '/bienbanshcn/confirm/{id}')
+  Future<Response> requestReport(@Path('id') int id);
 }

@@ -15,9 +15,7 @@ class ClassSubjectBloc extends Bloc<ClassSubjectEvent, ClassSubjectState> {
     RequestClassSubjectEvent event,
     Emitter emit,
   ) async {
-    print(
-      '➡️ Đang xử lý yêu cầu lấy danh sách các lớp mở môn mà sinh viên rớt',
-    );
+    print('➡️ Đang xử lý yêu cầu lấy danh sách lớp mở môn mà sinh viên rớt');
     emit(ClassSubjectStateLoading());
     try {
       final response = await _service.getListClassSubject(event.id_mon_hoc);
@@ -36,7 +34,7 @@ class ClassSubjectBloc extends Bloc<ClassSubjectEvent, ClassSubjectState> {
         if (error is Map<String, dynamic> && error.containsKey('message')) {
           emit(ClassSubjectStateError(error['message']));
         } else {
-          emit(ClassSubjectStateError('Yêu cầu đổi mật khẩu thất bại'));
+          emit(ClassSubjectStateError('Lấy danh sách các lớp mở '));
         }
       }
     } catch (e, stackTrace) {
