@@ -27,7 +27,7 @@ class _NotificationDetailPageState extends State<NotificationDetailPage> {
   void initState() {
     super.initState();
     print('Gửi FetchNotificationDetailEvent với id = ${widget.id}');
-    context.read<NotificateBloc>().add(FetchNotificationDetailEvent(widget.id));
+    context.read<NotificateBloc>().add(FetchNotificateEvent());
   }
 
   @override
@@ -76,9 +76,6 @@ class _NotificationDetailPageState extends State<NotificationDetailPage> {
                 }
 
                 final comments = tb.binhLuans;
-                final rootComments = tb.binhLuans
-                    .where((e) => e.idBinhLuanCha == null)
-                    .toList();
 
                 return SingleChildScrollView(
                   child: Column(
