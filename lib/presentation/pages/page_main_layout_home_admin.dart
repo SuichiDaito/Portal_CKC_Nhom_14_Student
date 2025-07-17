@@ -76,7 +76,7 @@ class _MainLayoutHomeAdminPageState extends State<MainLayoutHomeAdminPage> {
                     final now = DateTime.now();
 
                     final khoaNoti = state.notifications
-                        .where((e) => e.tuAi == 'admin' && e.trangThai == 1)
+                        .where((e) => e.tuAi == 'khoa' && e.trangThai == 1)
                         .toList();
                     final phongNoti = state.notifications
                         .where(
