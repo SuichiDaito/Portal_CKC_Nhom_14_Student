@@ -41,6 +41,9 @@ class _NotificationPageState extends State<NotificationPage> {
             final ctctNoti = state.notifications
                 .where((e) => e.tuAi == 'phong_ctct' && e.trangThai == 1)
                 .toList();
+            final gvNoti = state.notifications
+                .where((e) => e.tuAi == 'Giáo viên bộ môn' && e.trangThai == 1)
+                .toList();
 
             return Column(
               children: [
@@ -75,6 +78,22 @@ class _NotificationPageState extends State<NotificationPage> {
                               );
                             },
                           ),
+                        if (selectedFilter == 'Tất cả' ||
+                            selectedFilter == 'Giảng viên bộ môn')
+                          gvNoti.isNotEmpty
+                              ? NotificationsHomeAdmin(
+                                  typeNotification: 'Thông báo giảng viên',
+                                  notifications: gvNoti,
+                                  onReload: () {
+                                    setState(() {});
+                                    context.read<NotificateBloc>().add(
+                                      FetchNotificateEvent(),
+                                    );
+                                  },
+                                )
+                              : const Text(
+                                  'Chưa có thông báo từ giảng viên bộ môn',
+                                ),
                       ],
                     ),
                   ),
@@ -90,7 +109,12 @@ class _NotificationPageState extends State<NotificationPage> {
   }
 
   Widget _buildFilterTabs() {
-    final filters = ['Tất cả', 'Khoa', 'Phòng Công Tác Chính Trị'];
+    final filters = [
+      'Tất cả',
+      'Khoa',
+      'Phòng Công Tác Chính Trị',
+      'Giảng viên bộ môn',
+    ];
 
     return Container(
       color: Colors.white,
