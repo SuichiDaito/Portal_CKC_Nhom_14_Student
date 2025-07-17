@@ -164,6 +164,22 @@ class HoSo {
       updatedAt: json['updated_at'],
     );
   }
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'ho_ten': hoTen,
+      'email': email,
+      'password': password,
+      'so_dien_thoai': soDienThoai,
+      'ngay_sinh': ngaySinh,
+      'gioi_tinh': gioiTinh,
+      'cccd': cccd,
+      'dia_chi': diaChi,
+      'anh': anh,
+      'created_at': createdAt,
+      'updated_at': updatedAt,
+    };
+  }
 }
 
 class Phong {

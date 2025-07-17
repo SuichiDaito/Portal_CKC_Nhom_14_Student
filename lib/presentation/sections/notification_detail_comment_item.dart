@@ -50,6 +50,7 @@ class _NotificationCommentItemState extends State<NotificationCommentItem> {
     BinhLuan comment, {
     String? replyTo,
     bool isRootComment = true,
+    int indentLevel = 0,
   }) {
     final name = comment.nguoiBinhLuan.hoSo.hoTen;
     final noiDung = replyTo != null
@@ -60,7 +61,7 @@ class _NotificationCommentItemState extends State<NotificationCommentItem> {
     final isOwner =
         // widget.currentUserId != null &&
         // widget.currentUserType != null &&
-        comment.nguoiBinhLuan.id == widget.currentUserId;
+        comment.nguoiBinhLuan.hoSo.id == widget.currentUserId;
 
     final isQuanLy = widget.currentUserChucVu == 1;
 
@@ -76,7 +77,7 @@ class _NotificationCommentItemState extends State<NotificationCommentItem> {
                 radius: 18,
                 backgroundColor: Colors.purple[100],
                 child: Text(
-                  _getInitials(name ?? ''),
+                  _getInitials(name ?? ""),
                   style: TextStyle(
                     color: Colors.purple[700],
                     fontWeight: FontWeight.bold,
@@ -96,7 +97,7 @@ class _NotificationCommentItemState extends State<NotificationCommentItem> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        name ?? '',
+                        name ?? "",
                         style: const TextStyle(
                           fontWeight: FontWeight.w600,
                           color: Color(0xFF2D3748),
@@ -143,6 +144,12 @@ class _NotificationCommentItemState extends State<NotificationCommentItem> {
                                     color: Colors.red,
                                   ),
                                   onPressed: () {
+                                    print(
+                                      '🔑 Bình luận ID: ${comment.id}, Người bình luận ID: ${comment.nguoiBinhLuan.hoSo.id}, CurrentUserID: ${widget.currentUserId}',
+                                    );
+                                    print(
+                                      'So sánh: ${comment.nguoiBinhLuan.id == widget.currentUserId}',
+                                    );
                                     showDialog(
                                       context: context,
                                       builder: (ctx) => AlertDialog(
@@ -150,18 +157,16 @@ class _NotificationCommentItemState extends State<NotificationCommentItem> {
                                         content: const Text(
                                           'Bạn có chắc chắn muốn xóa bình luận này?',
                                         ),
+
                                         actions: [
                                           TextButton(
-                                            onPressed: () => Navigator.of(
-                                              ctx,
-                                            ).pop(), // Đóng dialog
+                                            onPressed: () =>
+                                                Navigator.of(ctx).pop(),
                                             child: const Text('Hủy'),
                                           ),
                                           TextButton(
                                             onPressed: () {
-                                              Navigator.of(
-                                                ctx,
-                                              ).pop(); // Đóng dialog
+                                              Navigator.of(ctx).pop();
                                               context.read<CommentBloc>().add(
                                                 DeleteCommentEvent(comment.id),
                                               );
@@ -236,22 +241,19 @@ class _NotificationCommentItemState extends State<NotificationCommentItem> {
             ),
 
           if (comment.binhLuanCon.isNotEmpty)
-            Padding(
-              padding: const EdgeInsets.only(left: 10.0, top: 8),
-              child: ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: comment.binhLuanCon.length,
-                itemBuilder: (context, index) {
-                  final reply = comment.binhLuanCon[index];
-                  return _buildComment(
-                    context,
-                    reply,
-                    replyTo: replyTo ?? name,
-                    isRootComment: false,
-                  );
-                },
-              ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: comment.binhLuanCon
+                  .map(
+                    (reply) => _buildComment(
+                      context,
+                      reply,
+                      replyTo: replyTo ?? name,
+                      isRootComment: false,
+                      indentLevel: indentLevel + 1,
+                    ),
+                  )
+                  .toList(),
             ),
         ],
       ),

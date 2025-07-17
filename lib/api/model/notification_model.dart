@@ -126,6 +126,26 @@ class BinhLuan {
   );
 }
 
+extension BinhLuanExt on BinhLuan {
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'noi_dung': noiDung,
+    'id_binh_luan_cha': idBinhLuanCha,
+    'trang_thai': trangThai,
+    'created_at': createdAt.toIso8601String(),
+    'nguoi_binh_luan': nguoiBinhLuan.toJson(),
+    'binh_luan_con': binhLuanCon.map((e) => e.toJson()).toList(),
+  };
+}
+
+extension NguoiBinhLuanExt on NguoiBinhLuan {
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'type': type,
+    'ho_so': hoSo.toJson(),
+  };
+}
+
 class NguoiBinhLuan {
   final int id;
   final HoSo hoSo;
