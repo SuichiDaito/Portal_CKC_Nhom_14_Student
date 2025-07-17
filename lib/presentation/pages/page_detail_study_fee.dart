@@ -14,14 +14,12 @@ class PaymentDetailScreen extends StatefulWidget {
   final int id_order;
   final int id_status;
   final String semester;
-  final int idStudent;
 
   const PaymentDetailScreen({
     super.key,
     required this.id_order,
     required this.id_status,
     required this.semester,
-    required this.idStudent,
   });
 
   State<PaymentDetailScreen> createState() => DetailScreen();
@@ -63,29 +61,12 @@ class DetailScreen extends State<PaymentDetailScreen> {
             final students = state.students.hocPhi;
             if (students != null) {
               for (var item in students) {
-                if (item.id == widget.id_order &&
-                    (item.trangThai == 1 || item.ngayDong == null)) {
-                  flag = false;
-                  // SnackBarScaffold.showToast(
-                  //   'Bạn thanh toán thất bại',
-                  //   true,
-                  //   context,
-                  // );
-                } else if (item.id == widget.id_order &&
-                    (item.trangThai == 0 || item.ngayDong == null)) {
-                  flag = false;
-                  // SnackBarScaffold.showToast(
-                  //   'Bạn thanh toán thất bại',
-                  //   true,
-                  //   context,
-                  // );
-                } else {
-                  flag = true;
-                  // SnackBarScaffold.showToast(
-                  //   'Bạn thanh toán thành công',
-                  //   false,
-                  //   context,
-                  // );
+                if (item.id == widget.id_order) {
+                  if (item.trangThai == 1) {
+                    flag = true;
+                  } else {
+                    flag = false;
+                  }
                 }
               }
             }
@@ -150,11 +131,8 @@ class DetailScreen extends State<PaymentDetailScreen> {
                               ),
                             ),
                             const SizedBox(height: 20),
+
                             // Thông tin chi tiết
-                            _buildDetailRow(
-                              'Mã thanh toán',
-                              "HD000${widget.id_order}",
-                            ),
                             BlocBuilder<StudentBloc, StudentState>(
                               builder: (context, state) {
                                 if (state is StudentInitial &&
@@ -165,26 +143,22 @@ class DetailScreen extends State<PaymentDetailScreen> {
                                     ),
                                   );
                                 } else if (state is StudentLoaded) {
-                                  if (state.student.id == widget.idStudent) {
-                                    return Column(
-                                      children: [
-                                        _buildDetailRow(
-                                          'Họ và tên: ',
-                                          "${state.student.hoSo.hoTen}",
-                                        ),
-                                        _buildDetailRow(
-                                          'MSSV',
-                                          "${state.student.maSv}",
-                                        ),
-                                        _buildDetailRow(
-                                          'Lớp',
-                                          "${state.student.danhSachSinhVien.last.lop.tenLop}",
-                                        ),
-                                      ],
-                                    );
-                                  } else {
-                                    return Container();
-                                  }
+                                  return Column(
+                                    children: [
+                                      _buildDetailRow(
+                                        'Họ và tên: ',
+                                        "${state.student.hoSo.hoTen}",
+                                      ),
+                                      _buildDetailRow(
+                                        'MSSV',
+                                        "${state.student.maSv}",
+                                      ),
+                                      _buildDetailRow(
+                                        'Lớp',
+                                        "${state.student.danhSachSinhVien.last.lop.tenLop}",
+                                      ),
+                                    ],
+                                  );
                                 } else if (state is StudentError) {
                                   return Center(child: Text(state.message));
                                 }
@@ -361,12 +335,12 @@ class DetailScreen extends State<PaymentDetailScreen> {
     IconData statusIcon;
 
     if (flag) {
-      statusColor = Colors.orange;
-      statusText = 'Chưa thanh toán';
-      statusIcon = Icons.pending;
-    } else {
       statusColor = Colors.green;
       statusText = 'Đã thanh toán';
+      statusIcon = Icons.pending;
+    } else {
+      statusColor = Colors.orange;
+      statusText = 'Chưa thanh toán';
       statusIcon = Icons.check_circle;
     }
 

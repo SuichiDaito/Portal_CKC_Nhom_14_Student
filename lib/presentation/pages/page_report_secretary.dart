@@ -4,8 +4,10 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:portal_ckc/api/model/student_report_model.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/delete_report_bloc.dart';
+import 'package:portal_ckc/bloc/bloc_event_state/request_report_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/student_report_response_bloc.dart';
 import 'package:portal_ckc/bloc/event/delete_report_event.dart';
+import 'package:portal_ckc/bloc/event/request_state_event.dart';
 import 'package:portal_ckc/bloc/event/student_report_response_event.dart';
 import 'package:portal_ckc/bloc/state/student_report_response.dart';
 import 'package:portal_ckc/presentation/pages/page_report_secretary.dart';
@@ -105,7 +107,8 @@ class _BienBanListScreenState extends State<BienBanListScreen> {
                         return BienBanCard(
                           bienBan: item,
                           onEdit: () => _editBienBan(index),
-                          onSend: () => _sendBienBan(index),
+                          onSend: () =>
+                              _sendBienBan(bienBanList[index].id ?? 0),
                           onDelete: () => _deleteBienBan(item.id ?? 0),
                         );
                       },
@@ -133,9 +136,15 @@ class _BienBanListScreenState extends State<BienBanListScreen> {
   }
 
   void _sendBienBan(int index) {
+    context.read<RequestReportBloc>().add(RequestReportFromStudentEvent(index));
+
+    setState(() {
+      context.read<StudentReportResponseBloc>().add(FetchReportResponseEvent());
+    });
+
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('Đã gửi: biên bản'),
+        content: Text('Biên bản đã được gửi cho giảng viên'),
         backgroundColor: Colors.green[600],
       ),
     );
@@ -342,7 +351,7 @@ class BienBanCard extends StatelessWidget {
       case 0:
         return 'Đã tạo';
       case 1:
-        return 'Đã gửi';
+        return 'Đã gửi giáo viên';
       case 2:
         return 'Phòng ctct đã nhận';
       default:

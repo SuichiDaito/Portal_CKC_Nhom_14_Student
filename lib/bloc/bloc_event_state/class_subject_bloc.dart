@@ -36,7 +36,7 @@ class ClassSubjectBloc extends Bloc<ClassSubjectEvent, ClassSubjectState> {
         if (error is Map<String, dynamic> && error.containsKey('message')) {
           emit(ClassSubjectStateError(error['message']));
         } else {
-          emit(ClassSubjectStateError('Yêu cầu đổi mật khẩu thất bại'));
+          emit(ClassSubjectStateError('Lấy danh sách các lớp mở '));
         }
       }
     } catch (e, stackTrace) {

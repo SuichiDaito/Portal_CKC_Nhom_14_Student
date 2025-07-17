@@ -14,14 +14,12 @@ class PaymentFinishClassScreen extends StatefulWidget {
   final int id_order;
   final int id_status;
   final String semester;
-  final int idStudent;
 
   const PaymentFinishClassScreen({
     super.key,
     required this.id_order,
     required this.id_status,
     required this.semester,
-    required this.idStudent,
   });
 
   State<PaymentFinishClassScreen> createState() => DetailScreen();
@@ -74,18 +72,10 @@ class DetailScreen extends State<PaymentFinishClassScreen> {
                 } else if (item.id == widget.id_order &&
                     (item.trangThai == 0 || item.ngayDong == null)) {
                   flag = false;
-                  // SnackBarScaffold.showToast(
-                  //   'Bạn thanh toán thất bại',
-                  //   true,
-                  //   context,
-                  // );
+               
                 } else {
                   flag = true;
-                  // SnackBarScaffold.showToast(
-                  //   'Bạn thanh toán thành công',
-                  //   false,
-                  //   context,
-                  // );
+               
                 }
               }
             }
@@ -165,26 +155,22 @@ class DetailScreen extends State<PaymentFinishClassScreen> {
                                     ),
                                   );
                                 } else if (state is StudentLoaded) {
-                                  if (state.student.id == widget.idStudent) {
-                                    return Column(
-                                      children: [
-                                        _buildDetailRow(
-                                          'Họ và tên: ',
-                                          "${state.student.hoSo.hoTen}",
-                                        ),
-                                        _buildDetailRow(
-                                          'MSSV',
-                                          "${state.student.maSv}",
-                                        ),
-                                        _buildDetailRow(
-                                          'Lớp',
-                                          "${state.student.danhSachSinhVien.last.lop.tenLop}",
-                                        ),
-                                      ],
-                                    );
-                                  } else {
-                                    return Container();
-                                  }
+                                  return Column(
+                                    children: [
+                                      _buildDetailRow(
+                                        'Họ và tên: ',
+                                        "${state.student.hoSo.hoTen}",
+                                      ),
+                                      _buildDetailRow(
+                                        'MSSV',
+                                        "${state.student.maSv}",
+                                      ),
+                                      _buildDetailRow(
+                                        'Lớp',
+                                        "${state.student.danhSachSinhVien.last.lop.tenLop}",
+                                      ),
+                                    ],
+                                  );
                                 } else if (state is StudentError) {
                                   return Center(child: Text(state.message));
                                 }

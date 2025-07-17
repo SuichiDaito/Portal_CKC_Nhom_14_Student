@@ -13,7 +13,7 @@ class SubjectFailBloc extends Bloc<ListSubjectEvent, ListSubjectFailState> {
 
   Future<void> _onFetchData(ListSubjectEvent event, Emitter emit) async {
     print('➡️ Đang xử lý lấy danh sách các môn sinh viên rớt');
-    emit(ListSubjectFailInitial());
+    emit(ListSubjectFailStateLoading());
 
     try {
       final response = await _service.requestSignupStudy();

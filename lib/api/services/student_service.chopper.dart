@@ -241,4 +241,11 @@ final class _$StudentService extends StudentService {
     final Request $request = Request('DELETE', $url, client.baseUrl);
     return client.send<dynamic, dynamic>($request);
   }
+
+  @override
+  Future<Response<dynamic>> requestReport(int id) {
+    final Uri $url = Uri.parse('/sinhvien/bienbanshcn/confirm/${id}');
+    final Request $request = Request('POST', $url, client.baseUrl);
+    return client.send<dynamic, dynamic>($request);
+  }
 }

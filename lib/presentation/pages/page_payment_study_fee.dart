@@ -101,6 +101,7 @@ class PaymentScreen extends State<StatefulWidget> {
                           endDate:
                               '${student?.hocPhi?[index].hocKy?.ngayKetThuc}' ??
                               '',
+                          id_hocky: student?.hocPhi?[index].idHocKy ?? 0,
                         );
                       },
                     ),
@@ -126,6 +127,7 @@ class TuitionFeeCard extends StatelessWidget {
   final int id_order;
   final int id_status;
   final int id_student;
+  final int id_hocky;
   bool isPaid = false;
 
   TuitionFeeCard({
@@ -137,6 +139,7 @@ class TuitionFeeCard extends StatelessWidget {
     required this.id_order,
     required this.id_status,
     required this.id_student,
+    required this.id_hocky,
   }) : super(key: key);
 
   @override
@@ -213,7 +216,7 @@ class TuitionFeeCard extends StatelessWidget {
                       endDate,
                       id_order,
                       semester,
-                      id_student,
+                      id_hocky,
                     ),
                   ),
                 ],
@@ -345,7 +348,7 @@ int checkInput(int status, String startStr, String endStr) {
       return 3; // không còn hạn đóng => hiển thị vui lòng liên hệ kế toán
     }
   }
-  return 0;
+  return 4;
 }
 
 String formatCurrencyString(String amountStr) {
@@ -376,7 +379,7 @@ List<Widget> _buildPaymentStatusWidgets(
   String endDate,
   int id_order,
   String semester,
-  int id_student,
+  int id_hocky,
 ) {
   final status = checkInput(id_status, startDate, endDate);
   if (status == 1) {
@@ -396,7 +399,7 @@ List<Widget> _buildPaymentStatusWidgets(
         child: ElevatedButton.icon(
           onPressed: () {
             context.read<RequestPaymenFee>().add(
-              RequestPaymentFee(32, 7700000),
+              RequestPaymentFee(id_hocky, 7700000),
             );
             showModalBottomSheet(
               context: context,
@@ -437,7 +440,6 @@ List<Widget> _buildPaymentStatusWidgets(
                                     id_order: id_order,
                                     id_status: id_status,
                                     semester: semester,
-                                    idStudent: id_student,
                                   ),
                                 ),
                               );

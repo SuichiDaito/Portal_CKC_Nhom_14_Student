@@ -5,6 +5,7 @@ import 'package:portal_ckc/bloc/bloc_event_state/class_subject_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/exam_second_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/payment_class_subject_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/payment_exam_second_bloc.dart';
+import 'package:portal_ckc/bloc/event/class_subject_event.dart';
 import 'package:portal_ckc/bloc/event/exam_second_event.dart';
 import 'package:portal_ckc/bloc/event/payment_class_subject_event.dart';
 import 'package:portal_ckc/bloc/event/payment_exam_second.dart';
@@ -12,6 +13,7 @@ import 'package:portal_ckc/bloc/state/class_subject_state.dart';
 import 'package:portal_ckc/bloc/state/exam_second_state.dart';
 import 'package:portal_ckc/bloc/state/payment_class_subject.dart';
 import 'package:portal_ckc/bloc/state/payment_exam_second_state.dart';
+import 'package:portal_ckc/presentation/pages/page_detail_study_fee.dart';
 import 'package:portal_ckc/presentation/sections/empty_section.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -61,8 +63,11 @@ class DetailClassSubject extends State<PageShowDetailClassSubject> {
                   if (subject == null) {
                     return SizedBox.shrink();
                   }
-                  if (subjects.checkDKHG == false &&
-                      subjects.lopHocPhanDangMo?[index].trangThai != 1) {
+                  if ((subjects.checkDKHG == false) &&
+                      (int.parse(
+                            subjects.lopHocPhanDangMo?[index].trangThai ?? "0",
+                          ) ==
+                          1)) {
                     return ExamCard(
                       nameSubject: subject[index]?.tenHocPhan ?? '',
                       flag: true,
@@ -76,16 +81,18 @@ class DetailClassSubject extends State<PageShowDetailClassSubject> {
                           0,
                       idSubject: subjects.monHoc?.id ?? 0,
                       onRegister: () {
-                        context.read<PaymentClassSubjectBloc>().add(
-                          RequestPaymentClassSubjectEvent(
-                            id_lop_hoc:
-                                subject[index]
-                                    ?.thoiKhoaBieu?[index]
-                                    .idLopHocPhan ??
-                                0,
-                            id_mon_hoc: subjects.monHoc?.id ?? 0,
-                          ),
-                        );
+                        setState(() {
+                          context.read<PaymentClassSubjectBloc>().add(
+                            RequestPaymentClassSubjectEvent(
+                              id_lop_hoc:
+                                  subject[index]
+                                      ?.thoiKhoaBieu?[index]
+                                      .idLopHocPhan ??
+                                  0,
+                              id_mon_hoc: subjects.monHoc?.id ?? 0,
+                            ),
+                          );
+                        });
                         _showPaymentDialog(
                           context,
                           subject[index]?.tenHocPhan ?? '',
@@ -218,7 +225,6 @@ class DetailClassSubject extends State<PageShowDetailClassSubject> {
                           width: double.infinity,
                           child: ElevatedButton(
                             onPressed: () {
-                              context.push('/student/detail/studyfee');
                               _processVNPayPayment(url);
                               print(url);
                             },
@@ -240,7 +246,7 @@ class DetailClassSubject extends State<PageShowDetailClassSubject> {
                                     color: Colors.white,
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
-                                  )
+                                  ),
                                 ),
                               ],
                             ),
@@ -393,30 +399,7 @@ class ExamCard extends StatelessWidget {
                 SizedBox(height: 16),
 
                 // Nút đăng ký
-                flag
-                    ? Container(
-                        height: 50,
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: onRegister,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Color(0xFF10B981),
-                            padding: EdgeInsets.symmetric(vertical: 12),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                          child: Text(
-                            'Đăng ký học ghép',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      )
-                    : SizedBox.shrink(),
+                _checkStatusPayTuition(onRegister, flag),
               ],
             ),
           ),
@@ -452,5 +435,32 @@ class ExamCard extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  Widget _checkStatusPayTuition(Function onRegister, bool flag) {
+    return flag
+        ? Container(
+            height: 50,
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: onRegister(),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFF10B981),
+                padding: EdgeInsets.symmetric(vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: Text(
+                'Đăng ký học ghép',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          )
+        : SizedBox.shrink();
   }
 }
