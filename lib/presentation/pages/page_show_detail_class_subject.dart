@@ -14,6 +14,7 @@ import 'package:portal_ckc/bloc/state/exam_second_state.dart';
 import 'package:portal_ckc/bloc/state/payment_class_subject.dart';
 import 'package:portal_ckc/bloc/state/payment_exam_second_state.dart';
 import 'package:portal_ckc/presentation/pages/page_detail_study_fee.dart';
+import 'package:portal_ckc/presentation/pages/page_finish_study_classdart.dart';
 import 'package:portal_ckc/presentation/sections/empty_section.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -109,6 +110,9 @@ class DetailClassSubject extends State<PageShowDetailClassSubject> {
                           context,
                           subject[index]?.tenHocPhan ?? '',
                           subject[index]?.lop?.tenLop ?? '',
+                          subjects.checkDKHG ?? false,
+                          subject[index].thoiKhoaBieu?[index].ngay ?? "",
+                          subjects.monHoc?.id ?? 0,
                         );
                       },
                       className: subject[index]?.lop?.tenLop ?? '',
@@ -158,6 +162,9 @@ class DetailClassSubject extends State<PageShowDetailClassSubject> {
     BuildContext context,
     String nameSubject,
     String className,
+    bool checkDKHG,
+    String startDate,
+    int idMonHoc,
   ) {
     showDialog(
       context: context,
@@ -237,6 +244,19 @@ class DetailClassSubject extends State<PageShowDetailClassSubject> {
                           width: double.infinity,
                           child: ElevatedButton(
                             onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      PaymentFinishClassScreen(
+                                        nameSubject: nameSubject,
+                                        checkDKHG: checkDKHG,
+                                        className: className,
+                                        startDate: startDate,
+                                        idMonHoc: idMonHoc ?? 0,
+                                      ),
+                                ),
+                              );
                               _processVNPayPayment(url);
                               print(url);
                             },
@@ -473,6 +493,24 @@ class ExamCard extends StatelessWidget {
               ),
             ),
           )
-        : SizedBox.shrink();
+        : Container(
+            height: 50,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: Colors.green.shade50,
+              border: Border.all(color: Colors.green),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Center(
+              child: Text(
+                'Bạn đã đăng ký lớp học này',
+                style: TextStyle(
+                  color: Colors.green,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          );
   }
 }

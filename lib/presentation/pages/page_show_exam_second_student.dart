@@ -8,6 +8,7 @@ import 'package:portal_ckc/bloc/event/exam_second_event.dart';
 import 'package:portal_ckc/bloc/event/payment_exam_second.dart';
 import 'package:portal_ckc/bloc/state/exam_second_state.dart';
 import 'package:portal_ckc/bloc/state/payment_exam_second_state.dart';
+import 'package:portal_ckc/presentation/pages/page_detail_payment_exam.dart';
 import 'package:portal_ckc/presentation/sections/empty_section.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -40,7 +41,7 @@ class _ExamSchedulePageState extends State<ExamSchedulePage> {
         ),
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => context.pop(true),
+          onPressed: () => context.go('/apps'),
         ),
         elevation: 0,
       ),
@@ -61,40 +62,64 @@ class _ExamSchedulePageState extends State<ExamSchedulePage> {
               child: ListView.builder(
                 itemCount: point.length,
                 itemBuilder: (context, index) {
-                  return ExamCard(
-                    nameSubject: point[index].lopHocPhan?.tenHocPhan,
-                    flag: true,
-                    lecture1: point[index].giamThi1?.hoSo?.hoTen ?? '',
-                    lecture2: point[index].giamThi2?.hoSo?.hoTen ?? '',
-                    date: point[index].ngayThi ?? '',
-                    distanceTime: int.parse(point[index].thoiGianThi ?? '0'),
-                    room: point[index].phong?.ten ?? '',
-                    listSignup:
-                        point[index].lopHocPhan?.dangKyHocGhepThiLai ??
-                        DangKyHocGhepThiLai(),
-                    timeExams: int.parse(point[index].lanThi ?? '0'),
-                    pointExam1:
-                        double.parse(
-                          point[index]
-                                  .lopHocPhan!
-                                  .danhSachHocPhan!
-                                  .last
-                                  .diemThiLan1 ??
-                              '0.0',
-                        ) ??
-                        0.0,
-                    onRegister: () {
-                      context.read<PaymentExamSecondBloc>().add(
-                        RequestPaymentExamSecond(
-                          id: point[index].lopHocPhan?.id ?? 0,
-                        ),
-                      );
-                      _showPaymentDialog(
-                        context,
-                        point[index].lopHocPhan?.tenHocPhan ?? '',
-                      );
-                    },
-                  );
+                  if (int.parse(point[index].lanThi ?? "0") == 2 &&
+                      point[index]
+                              .lopHocPhan
+                              ?.danhSachHocPhan
+                              ?.last
+                              .diemThiLan2 ==
+                          null) {
+                    return ExamCard(
+                      nameSubject: point[index].lopHocPhan?.tenHocPhan,
+                      flag: true,
+                      lecture1: point[index].giamThi1?.hoSo?.hoTen ?? '',
+                      lecture2: point[index].giamThi2?.hoSo?.hoTen ?? '',
+                      date: point[index].ngayThi ?? '',
+                      distanceTime: int.parse(point[index].thoiGianThi ?? '0'),
+                      room: point[index].phong?.ten ?? '',
+                      listSignup:
+                          point[index].lopHocPhan?.dangKyHocGhepThiLai ??
+                          DangKyHocGhepThiLai(),
+                      timeExams: int.parse(point[index].lanThi ?? '0'),
+                      pointExam1:
+                          double.parse(
+                            point[index]
+                                    .lopHocPhan!
+                                    .danhSachHocPhan!
+                                    .last
+                                    .diemThiLan1 ??
+                                '0.0',
+                          ) ??
+                          0.0,
+                      pointExam2:
+                          double.parse(
+                            point[index]
+                                    .lopHocPhan!
+                                    .danhSachHocPhan!
+                                    .last
+                                    .diemThiLan2 ??
+                                '0.0',
+                          ) ??
+                          0.0,
+                      onRegister: () {
+                        context.read<PaymentExamSecondBloc>().add(
+                          RequestPaymentExamSecond(
+                            id: point[index].lopHocPhan?.id ?? 0,
+                          ),
+                        );
+                        _showPaymentDialog(
+                          context,
+                          point[index].lopHocPhan?.tenHocPhan ?? '',
+                          point[index].id ?? 0,
+                          point[index].phong?.ten ?? '',
+                          point[index].lopHocPhan?.dangKyHocGhepThiLai ??
+                              DangKyHocGhepThiLai(),
+                        );
+                      },
+                    );
+                  } else {
+                    return SizedBox.shrink();
+                  }
                 },
               ),
             );
@@ -107,7 +132,13 @@ class _ExamSchedulePageState extends State<ExamSchedulePage> {
     );
   }
 
-  void _showPaymentDialog(BuildContext context, String nameSubject) {
+  void _showPaymentDialog(
+    BuildContext context,
+    String nameSubject,
+    int idExam,
+    String room,
+    DangKyHocGhepThiLai checkDKHG,
+  ) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -151,7 +182,18 @@ class _ExamSchedulePageState extends State<ExamSchedulePage> {
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
-                          Navigator.pop(context);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PaymentDetailExamStudent(
+                                nameSubject: nameSubject,
+                                checkDKHG: checkDKHG,
+                                idExam: idExam,
+                                room: room,
+                              ),
+                            ),
+                          );
+
                           print(url);
                           _processVNPayPayment(url);
                         },
@@ -241,6 +283,7 @@ class ExamCard extends StatelessWidget {
   final String room;
   final int timeExams;
   final double pointExam1;
+  final double pointExam2;
   final DangKyHocGhepThiLai listSignup;
   final VoidCallback onRegister;
 
@@ -255,20 +298,25 @@ class ExamCard extends StatelessWidget {
     required this.room,
     required this.timeExams,
     required this.pointExam1,
+    required this.pointExam2,
     required this.listSignup,
     required this.onRegister,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    bool checkButton(double pointExam1, DangKyHocGhepThiLai list) {
-      if (pointExam1 != null && list == null) {
+    bool checkButton(
+      double pointExam1,
+      DangKyHocGhepThiLai list,
+      double pointExam2,
+    ) {
+      if (pointExam1 != null && list.idLopHocPhan == null) {
         return true;
       }
       return false;
     }
 
-    flag = checkButton(pointExam1, listSignup);
+    flag = checkButton(pointExam1, listSignup, pointExam2);
 
     return Container(
       margin: EdgeInsets.only(bottom: 16),
@@ -356,7 +404,7 @@ class ExamCard extends StatelessWidget {
                             ),
                           ),
                           child: Text(
-                            'Đăng ký thi',
+                            'Đăng ký thi lần hai',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 16,

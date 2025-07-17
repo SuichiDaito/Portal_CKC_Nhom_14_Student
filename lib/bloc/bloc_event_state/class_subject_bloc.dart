@@ -15,9 +15,7 @@ class ClassSubjectBloc extends Bloc<ClassSubjectEvent, ClassSubjectState> {
     RequestClassSubjectEvent event,
     Emitter emit,
   ) async {
-    print(
-      '➡️ Đang xử lý yêu cầu lấy danh sách các lớp mở môn mà sinh viên rớt',
-    );
+    print('➡️ Đang xử lý yêu cầu lấy danh sách lớp mở môn mà sinh viên rớt');
     emit(ClassSubjectStateLoading());
     try {
       final response = await _service.getListClassSubject(event.id_mon_hoc);

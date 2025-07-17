@@ -2,45 +2,45 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:portal_ckc/api/model/exam_second_model.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/class_subject_bloc.dart';
+import 'package:portal_ckc/bloc/bloc_event_state/exam_second_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/payment_bloc.dart';
 import 'package:portal_ckc/bloc/bloc_event_state/student_bloc.dart';
 import 'package:portal_ckc/bloc/event/class_subject_event.dart';
+import 'package:portal_ckc/bloc/event/exam_second_event.dart';
 import 'package:portal_ckc/bloc/event/payment_event.dart';
 import 'package:portal_ckc/bloc/state/class_subject_state.dart';
+import 'package:portal_ckc/bloc/state/exam_second_state.dart';
 import 'package:portal_ckc/bloc/state/payment_state.dart';
 import 'package:portal_ckc/bloc/state/student_state.dart';
 import 'package:portal_ckc/constant/token.dart';
 import 'package:portal_ckc/presentation/sections/card/student_card_info.dart';
 import 'package:portal_ckc/presentation/sections/dialogs/snack_bar_scaffold.dart';
 
-class PaymentFinishClassScreen extends StatefulWidget {
+class PaymentDetailExamStudent extends StatefulWidget {
+  final int idExam;
+  final DangKyHocGhepThiLai checkDKHG;
+  final String room;
   final String nameSubject;
-  final int idMonHoc;
-  final bool checkDKHG;
-  final String className;
-  final String startDate;
 
-  PaymentFinishClassScreen({
+  PaymentDetailExamStudent({
     super.key,
     required this.nameSubject,
     required this.checkDKHG,
-    required this.idMonHoc,
-    required this.className,
-    required this.startDate,
+    required this.idExam,
+    required this.room,
   });
 
-  State<PaymentFinishClassScreen> createState() => DetailScreen();
+  State<PaymentDetailExamStudent> createState() => DetailScreen();
 }
 
-class DetailScreen extends State<PaymentFinishClassScreen> {
+class DetailScreen extends State<PaymentDetailExamStudent> {
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    context.read<ClassSubjectBloc>().add(
-      RequestClassSubjectEvent(id_mon_hoc: widget.idMonHoc),
-    );
+    context.read<ExamSecondBloc>().add(FetchExamSecondEvent());
   }
 
   @override
@@ -53,7 +53,7 @@ class DetailScreen extends State<PaymentFinishClassScreen> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => context.go('/admin/class_roster_admin'),
+          onPressed: () => context.go('/student/exam/second'),
         ),
         title: Text(
           'Chi tiết thanh toán',
@@ -65,13 +65,17 @@ class DetailScreen extends State<PaymentFinishClassScreen> {
         ),
         centerTitle: true,
       ),
-      body: BlocConsumer<ClassSubjectBloc, ClassSubjectState>(
+      body: BlocConsumer<ExamSecondBloc, ExamSecondState>(
         listener: (context, state) {
-          if (state is ClassSubjectStateLoaded) {
-            final subjects = state.classSubject;
-            if (subjects != null) {
-              if (subjects.checkDKHG == true) {
-                flag = true;
+          if (state is ExamSecondStateLoaded) {
+            final subjects = state.exams;
+            for (var item in subjects) {
+              if (item.id == widget.idExam) {
+                if (item.lopHocPhan?.dangKyHocGhepThiLai?.idLopHocPhan !=
+                    null) {
+                  flag = true;
+                  break;
+                }
               } else {
                 flag = false;
               }
@@ -79,9 +83,9 @@ class DetailScreen extends State<PaymentFinishClassScreen> {
           }
         },
         builder: (context, state) {
-          if (state is ClassSubjectStateLoading) {
+          if (state is ExamSecondStateLoading) {
             return Center(child: CircularProgressIndicator(color: Colors.blue));
-          } else if (state is ClassSubjectStateLoaded) {
+          } else if (state is ExamSecondStateLoaded) {
             return Padding(
               padding: const EdgeInsets.all(20.0),
               child: Column(
@@ -167,17 +171,11 @@ class DetailScreen extends State<PaymentFinishClassScreen> {
                               },
                             ),
                             _buildDetailRow(
-                              'Tên học phần',
+                              'Tên môn thi',
                               "${widget.nameSubject}",
                             ),
-                            _buildDetailRow(
-                              'Ngày bắt đầu',
-                              "${widget.startDate}",
-                            ),
-                            _buildDetailRow(
-                              'Lớp học ghép',
-                              "${widget.className}",
-                            ),
+                            _buildDetailRow('Lần thi', "2"),
+                            _buildDetailRow('Phòng thi', "${widget.room}"),
                             _buildDetailRow(
                               'Thời gian thanh toán',
                               '${_formatDate(DateTime.now())}',
@@ -212,7 +210,7 @@ class DetailScreen extends State<PaymentFinishClassScreen> {
                                     ),
                                   ),
                                   Text(
-                                    '${formatCurrency('400000')}',
+                                    '${formatCurrency('50000')}',
                                     // _formatCurrency(paymentDetail.tongTien),
                                     style: const TextStyle(
                                       fontSize: 20,
@@ -272,8 +270,8 @@ class DetailScreen extends State<PaymentFinishClassScreen> {
                     height: 50,
                     child: ElevatedButton(
                       onPressed: () {
-                        context.read<ClassSubjectBloc>().add(
-                          RequestClassSubjectEvent(id_mon_hoc: widget.idMonHoc),
+                        context.read<ExamSecondBloc>().add(
+                          FetchExamSecondEvent(),
                         );
                       },
                       style: ElevatedButton.styleFrom(
@@ -298,7 +296,7 @@ class DetailScreen extends State<PaymentFinishClassScreen> {
                 ],
               ),
             );
-          } else if (state is ClassSubjectStateError) {
+          } else if (state is ExamSecondStateError) {
             return Center(child: Text(state.message));
           }
           return Center(child: Text('NOT FOUND | 404'));
