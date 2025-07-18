@@ -28,13 +28,15 @@ class CommentSection extends State<NotificationCommentSection> {
   @override
   void initState() {
     super.initState();
-    _loadUserData();
+    if (currentUserId == null) {
+      _loadUserData();
+    }
   }
 
   Future<void> _loadUserData() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      currentUserId = prefs.getInt('user_id');
+      currentUserId = prefs.getInt('student_id');
     });
   }
 
@@ -78,7 +80,7 @@ class CommentSection extends State<NotificationCommentSection> {
             NotificationCommentItem(
               idThongBao: widget.idThongBao,
               comments: widget.comments,
-              currentUserId: 1,
+              currentUserId: currentUserId!,
             ),
             const SizedBox(height: 30),
           ],
