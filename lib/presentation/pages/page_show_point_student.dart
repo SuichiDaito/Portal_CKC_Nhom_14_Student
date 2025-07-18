@@ -275,6 +275,7 @@ int totalCredit(List<Subject> subject) {
 double totalAvergrade(List<Subject> subject) {
   double total = 0.0;
   double result = 0.0;
+  double kq = 0.0;
   int count = 0;
   for (int i = 0; i < subject.length; i++) {
     if (subject[i].diemTongKet != null &&
@@ -289,10 +290,9 @@ double totalAvergrade(List<Subject> subject) {
     result = total / count;
     String roundedString = result.toStringAsFixed(2);
   } else {
-    result = 0.0;
   }
-
-  return result;
+  kq = double.parse(result.toStringAsFixed(2));
+  return kq;
 }
 
 String checkCredit(String? credit) {
