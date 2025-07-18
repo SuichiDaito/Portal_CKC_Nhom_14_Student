@@ -289,8 +289,7 @@ double totalAvergrade(List<Subject> subject) {
   if (total > 0) {
     result = total / count;
     String roundedString = result.toStringAsFixed(2);
-  } else {
-  }
+  } else {}
   kq = double.parse(result.toStringAsFixed(2));
   return kq;
 }
