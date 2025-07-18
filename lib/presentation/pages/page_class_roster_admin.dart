@@ -45,7 +45,7 @@ class ListScreen extends State<ClassListScreen> {
         ),
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => context.go('/apps'),
         ),
         elevation: 0,
       ),
