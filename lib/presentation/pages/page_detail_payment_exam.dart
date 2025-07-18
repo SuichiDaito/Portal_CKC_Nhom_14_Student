@@ -53,7 +53,7 @@ class DetailScreen extends State<PaymentDetailExamStudent> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => context.go('/student/exam/second'),
+          onPressed: () => context.go('/apps'),
         ),
         title: Text(
           'Chi tiết thanh toán',
