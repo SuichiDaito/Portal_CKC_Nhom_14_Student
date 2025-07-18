@@ -106,7 +106,7 @@ class _BienBanListScreenState extends State<BienBanListScreen> {
                         final item = bienBanList[index];
                         return BienBanCard(
                           bienBan: item,
-                          onEdit: () => _editBienBan(index),
+                          // onEdit: () => _editBienBan(index),
                           onSend: () =>
                               _sendBienBan(bienBanList[index].id ?? 0),
                           onDelete: () => _deleteBienBan(item.id ?? 0),
@@ -196,14 +196,14 @@ extension on DeleteReportBloc Function() {
 
 class BienBanCard extends StatelessWidget {
   final BienBanItem bienBan;
-  final VoidCallback onEdit;
+  // final VoidCallback onEdit;
   final VoidCallback onSend;
   final VoidCallback onDelete;
 
   const BienBanCard({
     Key? key,
     required this.bienBan,
-    required this.onEdit,
+    // required this.onEdit,
     required this.onSend,
     required this.onDelete,
   }) : super(key: key);
@@ -273,12 +273,6 @@ class BienBanCard extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  _buildActionButton(
-                    icon: Icons.edit,
-                    label: 'Sửa',
-                    onTap: onEdit,
-                    color: Colors.blue[600]!,
-                  ),
                   _buildActionButton(
                     icon: Icons.send,
                     label: 'Gửi',
