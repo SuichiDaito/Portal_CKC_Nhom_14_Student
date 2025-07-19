@@ -1,8 +1,10 @@
 # Graduation Project Name: Portal_CKC
    ## Technology:
    - **UI and Process**: *Dart and Flutter*
-   - **Database**: *SQL*
-   - **Web API**: *.NET*
+   - **Database**: *SQLite*
+   - **Web API**: *Laravel*
+   - **RESTful API**: _Chopper _
+   - **Other Libraries**: _build_runner, flutter_gen, localization, json_serializable,..._
    ## Describe: 
    
    - We use several technologies in our project as follows:
