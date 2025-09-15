@@ -3,7 +3,7 @@
    - **UI and Process**: *Dart and Flutter*
    - **Database**: *SQLite*
    - **Web API**: *Laravel*
-   - **RESTful API**: _Chopper _
+   - **Service**: _Chopper _
    - **Other Libraries**: _build_runner, flutter_gen, localization, json_serializable,..._
    ## Describe: 
    
