@@ -12,6 +12,7 @@
      - In addition, we utilize **Chopper**, an **HTTP Client Generator** library, to simplify, optimize, and               automatically generate HTTP-related code, making it easier to interact with **RESTful APIs**.
       - We also implement libraries such as localizations, along with flutter_gen, which helps generate and                manage asset paths, including image references.
       - Additionally, we applied **Git Flow** for structured code management, easier control, conflict avoidance, and better teamwork
+      - In addition, all **pull requests** are discussed before merging to optimize the code structure
      
    ## Member: 
    - Tran Thi Ngoc Can - English Name:  `Gill` - **Leader**
